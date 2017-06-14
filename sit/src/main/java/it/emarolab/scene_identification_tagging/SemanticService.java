@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.Arrays;
 
-public class EpisodicService
+public class SemanticService
         extends AbstractNodeMain
     implements SITBase
 {    private static final String SERVICE_NAME="EpisodicService";
@@ -70,8 +70,8 @@ public class EpisodicService
      * @return the object that defines the computation to be performed during service call.
      */
 
-    public ServiceResponseBuilder<EpisodicInterfaceRequest, EpisodicInterfaceResponse> getService(ConnectedNode node) {
-        return new ServiceResponseBuilder<EpisodicInterfaceRequest, EpisodicInterfaceResponse>() {
+    public ServiceResponseBuilder<SemanticInterfaceRequest, SemanticInterfaceResponse> getService(ConnectedNode node) {
+        return new ServiceResponseBuilder<SemanticInterfaceRequest, SemanticInterfaceResponse>() {
 
             /**
              * This object is used to react to {@link SceneService} call,
@@ -82,7 +82,7 @@ public class EpisodicService
              */
             @Override
             public void
-            build(EpisodicInterfaceRequest request, EpisodicInterfaceResponse response) {
+            build(SemanticInterfaceRequest request, SemanticInterfaceResponse response) {
                 // load ontology
                 OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
                         ONTO_NAME, ONTO_FILE, ONTO_IRI, true);
@@ -99,51 +99,68 @@ public class EpisodicService
 
                     if (SPHERE == g.getLabel()) {
                         //TODO warning if the coefficinets are not the right number
-                        //if(coefficient.size()==4) {
+                        if(coefficient.length==4) {
                         Sphere s = new Sphere(ontoRef);
                         s.shouldAddTime(true);
                         s.setCenter(coefficient[0], coefficient[1], coefficient[2]);
                         s.setRadius(coefficient[3]);
                         objects.add(s);
-                        //}
+                        }
+                        else
+                        {
+                            System.out.println("Wrong coefficients for sphere!");
+                        }
 
                     } else if (PLANE == g.getLabel()) {
                         //to do check size =7
-                        Plane p = new Plane(ontoRef);
-                        p.shouldAddTime(true);
-                        p.setAxis(coefficient[0], coefficient[1], coefficient[2]);
-                        p.setCenter(coefficient[3], coefficient[4], coefficient[5]);
-                        p.setHessian(coefficient[6]);
-                        objects.add(p);
+                        if(coefficient.length==7) {
+                            Plane p = new Plane(ontoRef);
+                            p.shouldAddTime(true);
+                            p.setAxis(coefficient[0], coefficient[1], coefficient[2]);
+                            p.setCenter(coefficient[3], coefficient[4], coefficient[5]);
+                            p.setHessian(coefficient[6]);
+                            objects.add(p);
+                        }
+                        else
+                        {
+                         System.out.println("Wrong coefficient for Plane ");
+                        }
 
                     } else if (CYLINDER == g.getLabel()) {
-                        //TODO check size
-                        Cylinder c = new Cylinder(ontoRef);
-                        c.shouldAddTime(true);
-                        c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
-                        c.setAxis(coefficient[3], coefficient[4], coefficient[5]);
-                        c.setApex(coefficient[6], coefficient[7], coefficient[8]);
-                        c.setRadius(coefficient[9]);
-                        c.setHeight(coefficient[10]);
-                        objects.add(c);
+                        if(coefficient.length==11) {
+                            Cylinder c = new Cylinder(ontoRef);
+                            c.shouldAddTime(true);
+                            c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
+                            c.setAxis(coefficient[3], coefficient[4], coefficient[5]);
+                            c.setApex(coefficient[6], coefficient[7], coefficient[8]);
+                            c.setRadius(coefficient[9]);
+                            c.setHeight(coefficient[10]);
+                            objects.add(c);
+                        }
+                        else{
+                            System.out.println("Wrong coefficient for Cylinder");
+                        }
 
                     } else if (CONE == g.getLabel()) {
-                        //TODO check size
-                        Cone c = new Cone(ontoRef);
-                        c.shouldAddTime(true);
-                        c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
-                        c.setAxis(coefficient[3], coefficient[4], coefficient[5]);
-                        c.setApex(coefficient[6], coefficient[7], coefficient[8]);
-                        c.setRadius(coefficient[9]);
-                        c.setHeight(coefficient[10]);
-                        objects.add(c);
+                        if(coefficient.length==11) {
+                            Cone c = new Cone(ontoRef);
+                            c.shouldAddTime(true);
+                            c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
+                            c.setAxis(coefficient[3], coefficient[4], coefficient[5]);
+                            c.setApex(coefficient[6], coefficient[7], coefficient[8]);
+                            c.setRadius(coefficient[9]);
+                            c.setHeight(coefficient[10]);
+                            objects.add(c);
+                        }
+                        else{
+                            System.out.println("Wrong coefficient for Cone");
+                        }
 
                     } else {
-                        System.out.println("ciao");
+                        System.out.println("Unknwonw label");
                     }
                 }
-                //check wether it exists such objetc
-                
+
                 // add objects
                 for ( GeometricPrimitive i : objects){
                     for ( GeometricPrimitive j : objects)
@@ -160,14 +177,35 @@ public class EpisodicService
                     // it could be implemented faster
                     i.readSemantic();
                 }
-                // check whether it already exist such primitives and
-       //TODO now we know the spatial relationship existing between objects,
-                //should do the service which decide whether memorize it or not the scene
-                // the input should be geometric primitives so you should find a way how to do it
+
+                // create scene and reason for recognition
+                SceneRepresentation recognition1 = new SceneRepresentation( objects, ontoRef);
+                System.out.println( "Recognised with best confidence: " + recognition1.getRecognitionConfidence() + " should learn? " + recognition1.shouldLearn());
+                System.out.println( "Best recognised class: " + recognition1.getBestRecognitionDescriptor());
+                System.out.println( "Other recognised classes: " + recognition1.getSceneDescriptor().getTypeIndividual());
+
+                // learn the new scene if is the case
+                if ( recognition1.shouldLearn()) {
+                    System.out.println("Learning.... ");
+                    //TODO should read in the ontology the parameter to know the number of the scene and then SceneNumber
+                    recognition1.learn("TestScene");
+                }
+                // clean ontology
+                ontoRef.removeIndividual( recognition1.getSceneDescriptor().getInstance());
+                for ( GeometricPrimitive i : objects)
+                    ontoRef.removeIndividual( i.getInstance());
+                ontoRef.synchronizeReasoner();
+                //take class name
+                String scene = "scene:" +recognition1.getBestRecognitionDescriptor();
+                //take super classes
+                //take sub classes
+
+                //take description
+                //take object with also spatial relationship
+                //and coefficients !
 
             }
 
-            //end for
 
 
 
