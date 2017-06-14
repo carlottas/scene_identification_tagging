@@ -12,8 +12,6 @@
 
     <buildtool_depend>catkin</buildtool_depend>
     <build_depend>rosjava_build_tools</build_depend>
-    <build_depend>sit_msgs</build_depend>
-    <run_depend>sit_msgs</run_depend>
     
 
 <!--
