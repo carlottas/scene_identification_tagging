@@ -20,6 +20,13 @@ import it.emarolab.amor.owlInterface.OWLReferencesInterface;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneClassDescriptor;
 import it.emarolab.scene_identification_tagging.realObject.*;
 import it.emarolab.scene_identification_tagging.sceneRepresentation.SceneRepresentation;
+import it.emarolab.amor.owlInterface.OWLReferences;
+import it.emarolab.amor.owlInterface.SemanticRestriction;
+import it.emarolab.owloop.aMORDescriptor.MORAxioms;
+import it.emarolab.owloop.aMORDescriptor.MORConcept;
+import it.emarolab.owloop.aMORDescriptor.utility.MORConceptBase;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -196,13 +203,20 @@ public class SemanticService
                     ontoRef.removeIndividual( i.getInstance());
                 ontoRef.synchronizeReasoner();
                 //take class name
-                String scene = "scene:" +recognition1.getBestRecognitionDescriptor();
-                //take super classes
+                ArrayList<String> subClasses=new ArrayList<String>();
+                ArrayList<String> superClasses=new ArrayList<String>();
+                String Name= recognition1.getBestRecognitionDescriptor().getInstance().getClassExpressionType().getName();
+                //t super classes
+                for (OWLClass i: recognition1.getBestRecognitionDescriptor().getSubConcept()){
+                     subClasses.add(i.getClassExpressionType().getName());
+                }
                 //take sub classes
+                for (OWLClass i: recognition1.getBestRecognitionDescriptor().getSuperConcept()){
+                    superClasses.add(i.getClassExpressionType().getName());
+                }
 
-                //take description
-                //take object with also spatial relationship
-                //and coefficients !
+                recognition1.getSceneDescriptor().
+
 
             }
 
