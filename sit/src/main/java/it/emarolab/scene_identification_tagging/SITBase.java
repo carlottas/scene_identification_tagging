@@ -409,6 +409,7 @@ public interface SITBase {
          * unique identifier (with also {@code PREFIX}) of each individuals in the ontology.
          */
         String ID = PREFIX_HAS + "id";
+
     }
 
     /**

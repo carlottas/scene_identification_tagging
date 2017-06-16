@@ -97,8 +97,10 @@ public class SceneRepresentation
     // add the scene individual to the ontology
     private void applyScene(SceneIndividualDescriptor sceneDescriptor, Set<SpatialRelation> relations){
         for ( SpatialRelation r : relations){
-            OWLObjectProperty spatialRelation = getSpatialRelation( sceneDescriptor.getOntology(), r.getRelation());
-            sceneDescriptor.addObject( spatialRelation, r.getObject().getIndividual());
+
+                OWLObjectProperty spatialRelation = getSpatialRelation(sceneDescriptor.getOntology(), r.getRelation());
+                sceneDescriptor.addObject(spatialRelation, r.getObject().getIndividual());
+
         }
         sceneDescriptor.addTypeIndividual( CLASS.SCENE);
         if (addTime)
@@ -112,6 +114,8 @@ public class SceneRepresentation
         String sceneRelationName = OBJECT_PROPERTY.SCENE_SPATIAL_PRFIX + relationName;
         return ontology.getOWLObjectProperty( sceneRelationName);
     }
+
+
 
     // compute the best scene classification (confidence and descriptor)
     private void computeRecognitionConfidence( SceneIndividualDescriptor sceneDescriptor){

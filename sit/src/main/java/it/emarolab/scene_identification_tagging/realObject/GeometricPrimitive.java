@@ -43,6 +43,7 @@ public class GeometricPrimitive
     private Float centerY = null;
     private Float centerZ = null;
     private Long id = null;
+    //private String color= null;
 
     /**
      * Initialise and ontological object by have a name based on {@link #currentCOUNT}
@@ -111,6 +112,7 @@ public class GeometricPrimitive
         addData( getPropertyCenterY(), true);
         addData( getPropertyCenterZ(), true);
         addData( getPropertyTime(), time, true);
+       // addData( getPropertyColor(),  true);
         // add this to avoid error on bug in the SWRL
         addTypeIndividual( CLASS.PRIMITIVE);
     }
@@ -156,6 +158,10 @@ public class GeometricPrimitive
      */
     public String getPropertyCenterZ(){
         return DATA_PROPERTY.CENTER_Z;
+    }
+
+    public String getPropertyColor(){
+        return "has-color";
     }
 
     /**
@@ -276,6 +282,21 @@ public class GeometricPrimitive
     }
 
     /**
+     * Returns the {@code color}
+     */
+    //TODO solve color problem
+//    public String getColor() {
+ //       return color;
+  //  }
+
+    /**
+     * Set the {@code color}
+     */
+    //public void setColor(String c) {
+     //   this.color = c;
+     //   addData( getPropertyColor(), c, true);
+   // }
+    /**
      * Enhance the standard OWLOOP read semantic by
      * explicitly set the value of the center of mass and,
      * eventually the time stamp and unique identifier.
@@ -287,6 +308,8 @@ public class GeometricPrimitive
         centerX = getLiteral( getPropertyCenterX()).parseFloat();
         centerY = getLiteral( getPropertyCenterY()).parseFloat();
         centerZ = getLiteral( getPropertyCenterZ()).parseFloat();
+        //TODO find a way to read its value
+        // /color = getLiteral(getPropertyColor()).toString;
         if( addId)
             id = Long.valueOf( getLiteral( getPropertyId()).getLiteral());
         if( addTime)
