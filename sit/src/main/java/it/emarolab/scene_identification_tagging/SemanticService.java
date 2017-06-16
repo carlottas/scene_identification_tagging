@@ -37,12 +37,12 @@ import java.util.Arrays;
 
 public class SemanticService
         extends AbstractNodeMain
-    implements SITBase
-{    private static final String SERVICE_NAME="EpisodicService";
-     private static final String SPHERE="Sphere";
-     private static final String PLANE="Plane";
-     private static final String CYLINDER="Cyilinder";
-     private static final String CONE="Cone";
+    implements SITBase {
+    private static final String SERVICE_NAME = "SemanticService";
+    private static final String SPHERE = "Sphere";
+    private static final String PLANE = "Plane";
+    private static final String CYLINDER = "Cyilinder";
+    private static final String CONE = "Cone";
     private static final String ONTO_NAME = "ONTO_NAME"; // an arbritary name to refer the ontology
 
     public boolean initParam(ConnectedNode node) {
@@ -60,16 +60,18 @@ public class SemanticService
     public String getServerName() {
         return SERVICE_NAME;
     }
+
     @Override
     public GraphName getDefaultNodeName() {
-        return GraphName.of( getServerName());
+        return GraphName.of(getServerName());
     }
+
     @Override
-    public void onStart(ConnectedNode node){
-        super.onStart( node);
+    public void onStart(ConnectedNode node) {
+        super.onStart(node);
         // get ROS parameter
-        if( ! initParam( node))
-            System.exit( 1);
+        if (!initParam(node))
+            System.exit(1);
     }
 
     /**
@@ -91,50 +93,51 @@ public class SemanticService
             public void
             build(SemanticInterfaceRequest request, SemanticInterfaceResponse response) {
                 // load ontology
+                System.out.println("loading the ontology ");
                 OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
                         ONTO_NAME, ONTO_FILE, ONTO_IRI, true);
 
                 // suppress aMOR log
-                it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole( false);
+                it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
 
                 // initialise objects
-                Set< GeometricPrimitive> objects = new HashSet<>();
-                List<atom> geometricPrimitives=request.getGeometricPrimitives();
-                for (atom g:geometricPrimitives) {
+                Set<GeometricPrimitive> objects = new HashSet<>();
+                List<atom> geometricPrimitives = request.getGeometricPrimitives();
+                for (atom g : geometricPrimitives) {
+                    System.out.println("for all the geometric primitives received");
                     //TODO  find a way to have a vector, list instead of an array
                     float[] coefficient = g.getCoefficients();
-
-                    if (SPHERE == g.getLabel()) {
+                    System.out.println(g.getLabel());
+                    if (SPHERE.equals(g.getLabel())) {
+                        System.out.println("if it is a Sphere");
                         //TODO warning if the coefficinets are not the right number
-                        if(coefficient.length==4) {
-                        Sphere s = new Sphere(ontoRef);
-                        s.shouldAddTime(true);
-                        s.setCenter(coefficient[0], coefficient[1], coefficient[2]);
-                        s.setRadius(coefficient[3]);
-                        objects.add(s);
-                        }
-                        else
-                        {
+                        if (coefficient.length == 4) {
+                            System.out.println("correct number of coefficient");
+                            Sphere s = new Sphere(ontoRef);
+                            s.shouldAddTime(true);
+                            s.setCenter(coefficient[0], coefficient[1], coefficient[2]);
+                            s.setRadius(coefficient[3]);
+                            objects.add(s);
+                        } else {
                             System.out.println("Wrong coefficients for sphere!");
                         }
 
-                    } else if (PLANE == g.getLabel()) {
-                        //to do check size =7
-                        if(coefficient.length==7) {
+                    } else if (PLANE.equals(g.getLabel())) {
+                        System.out.println("if it is a plane");
+                        if (coefficient.length == 7) {
+                            System.out.println("correct number of coefficients");
                             Plane p = new Plane(ontoRef);
                             p.shouldAddTime(true);
                             p.setAxis(coefficient[0], coefficient[1], coefficient[2]);
                             p.setCenter(coefficient[3], coefficient[4], coefficient[5]);
                             p.setHessian(coefficient[6]);
                             objects.add(p);
-                        }
-                        else
-                        {
-                         System.out.println("Wrong coefficient for Plane ");
+                        } else {
+                            System.out.println("Wrong coefficient for Plane ");
                         }
 
-                    } else if (CYLINDER == g.getLabel()) {
-                        if(coefficient.length==11) {
+                    } else if (CYLINDER.equals(g.getLabel())) {
+                        if (coefficient.length == 11) {
                             Cylinder c = new Cylinder(ontoRef);
                             c.shouldAddTime(true);
                             c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
@@ -143,13 +146,12 @@ public class SemanticService
                             c.setRadius(coefficient[9]);
                             c.setHeight(coefficient[10]);
                             objects.add(c);
-                        }
-                        else{
+                        } else {
                             System.out.println("Wrong coefficient for Cylinder");
                         }
 
-                    } else if (CONE == g.getLabel()) {
-                        if(coefficient.length==11) {
+                    } else if (CONE.equals(g.getLabel())) {
+                        if (coefficient.length == 11) {
                             Cone c = new Cone(ontoRef);
                             c.shouldAddTime(true);
                             c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
@@ -158,8 +160,7 @@ public class SemanticService
                             c.setRadius(coefficient[9]);
                             c.setHeight(coefficient[10]);
                             objects.add(c);
-                        }
-                        else{
+                        } else {
                             System.out.println("Wrong coefficient for Cone");
                         }
 
@@ -169,10 +170,10 @@ public class SemanticService
                 }
 
                 // add objects
-                for ( GeometricPrimitive i : objects){
-                    for ( GeometricPrimitive j : objects)
+                for (GeometricPrimitive i : objects) {
+                    for (GeometricPrimitive j : objects)
                         if (!i.equals(j))
-                            j.addDisjointIndividual( i.getInstance());
+                            j.addDisjointIndividual(i.getInstance());
                     i.getObjectSemantics().clear(); // clean previus spatial relation
                     i.writeSemantic();
                 }
@@ -180,42 +181,37 @@ public class SemanticService
                 ontoRef.synchronizeReasoner();
                 // get SWRL results
                 //should get the semantic
-                for ( GeometricPrimitive i : objects) {
+                for (GeometricPrimitive i : objects) {
                     // it could be implemented faster
                     i.readSemantic();
                 }
 
                 // create scene and reason for recognition
-                SceneRepresentation recognition1 = new SceneRepresentation( objects, ontoRef);
-                System.out.println( "Recognised with best confidence: " + recognition1.getRecognitionConfidence() + " should learn? " + recognition1.shouldLearn());
-                System.out.println( "Best recognised class: " + recognition1.getBestRecognitionDescriptor());
-                System.out.println( "Other recognised classes: " + recognition1.getSceneDescriptor().getTypeIndividual());
+                SceneRepresentation recognition1 = new SceneRepresentation(objects, ontoRef);
+                System.out.println("Recognised with best confidence: " + recognition1.getRecognitionConfidence() + " should learn? " + recognition1.shouldLearn());
+                System.out.println("Best recognised class: " + recognition1.getBestRecognitionDescriptor());
+                System.out.println("Other recognised classes: " + recognition1.getSceneDescriptor().getTypeIndividual());
 
                 // learn the new scene if is the case
-                if ( recognition1.shouldLearn()) {
+                if (recognition1.shouldLearn()) {
                     System.out.println("Learning.... ");
-                    //TODO should read in the ontology the parameter to know the number of the scene and then SceneNumber
+                    //TODO change the name
                     recognition1.learn("TestScene");
                 }
                 // clean ontology
-                ontoRef.removeIndividual( recognition1.getSceneDescriptor().getInstance());
-                for ( GeometricPrimitive i : objects)
-                    ontoRef.removeIndividual( i.getInstance());
+                ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
+                for (GeometricPrimitive i : objects)
+                    ontoRef.removeIndividual(i.getInstance());
                 ontoRef.synchronizeReasoner();
-                //take class name
-                ArrayList<String> subClasses=new ArrayList<String>();
-                ArrayList<String> superClasses=new ArrayList<String>();
-                String Name= recognition1.getBestRecognitionDescriptor().getInstance().getClassExpressionType().getName();
-                //t super classes
-                for (OWLClass i: recognition1.getBestRecognitionDescriptor().getSubConcept()){
-                     subClasses.add(i.getClassExpressionType().getName());
-                }
-                //take sub classes
-                for (OWLClass i: recognition1.getBestRecognitionDescriptor().getSuperConcept()){
-                    superClasses.add(i.getClassExpressionType().getName());
-                }
+                ontoRef.saveOntology();
 
-                recognition1.getSceneDescriptor().
+                System.out.println("saving the ontology");
+                recognition1.getBestRecognitionDescriptor().saveOntology(ONTO_FILE);
+                //take class name
+                response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length()+1));
+                response.setSubClasses(recognition1.getBestRecognitionDescriptor().SubConceptToString());
+                response.setSuperClasses(recognition1.getBestRecognitionDescriptor().SuperConceptToString());
+                
 
 
             }
@@ -227,7 +223,5 @@ public class SemanticService
 
 
     }
-
-
 }
 

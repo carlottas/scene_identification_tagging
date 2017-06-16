@@ -2,7 +2,7 @@
   <node 
     pkg="scene_identification_tagging" 
     type="execute" 
-    name="test_sem"       args="it.emarolab.scene_identification_tagging.SemanticService" 
+    name="semantic_srv"       args="it.emarolab.scene_identification_tagging.SemanticService" 
     output="screen"
   />
 

@@ -28,7 +28,7 @@ public interface SITBase {
      * The path to the main t-box ontological representation
      * used by the SIT algorithm, with respect to the {@code src} folder.
      */
-    String ONTO_FILE = "../resources/t_box/empty-scene.owl";
+    String ONTO_FILE = "../catkin_ws/src/scene_identification_tagging/resources/t_box/empty-scene.owl";
 
     /**
      * The {@code IRI} domain of the main t-box ontological representation

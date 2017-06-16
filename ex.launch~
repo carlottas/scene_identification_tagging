@@ -1,7 +1,4 @@
 <launch>
-
-
-  
   <node 
     pkg="scene_identification_tagging" 
     type="execute" 

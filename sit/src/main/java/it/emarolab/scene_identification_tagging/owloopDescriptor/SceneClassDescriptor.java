@@ -8,6 +8,7 @@ import it.emarolab.owloop.aMORDescriptor.utility.MORConceptBase;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -201,5 +202,19 @@ public class SceneClassDescriptor
                 "," + NL + "\t⊃ " + subConcept +
                 "," + NL + "\t⊂ " + superConcept +
                 NL + "}";
+    }
+    public String NameToString(int i ){
+        String name=getGround().toString();
+        return getGround().toString().substring(i);
+    }
+    public List<String> SubConceptToString(){
+        String names=subConcept.toString();
+        names = names.replaceAll("\\p{P}","");
+        return Arrays.asList(names.split(","));
+    }
+    public List<String> SuperConceptToString(){
+        String names=superConcept.toString();
+        names = names.replaceAll("\\p{P}","");
+        return Arrays.asList(names.split(","));
     }
 }
