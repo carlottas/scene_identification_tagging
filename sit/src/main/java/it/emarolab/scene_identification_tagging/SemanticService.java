@@ -142,6 +142,7 @@ public class SemanticService
                             s.shouldAddTime(true);
                             s.setCenter(coefficient[0], coefficient[1], coefficient[2]);
                             s.setRadius(coefficient[3]);
+                            s.setColor(g.getColor());
                             objects.add(s);
                         } else {
                             System.out.println("Wrong coefficients for sphere!");
@@ -156,6 +157,7 @@ public class SemanticService
                             p.setAxis(coefficient[0], coefficient[1], coefficient[2]);
                             p.setCenter(coefficient[3], coefficient[4], coefficient[5]);
                             p.setHessian(coefficient[6]);
+                            p.setColor(g.getColor());
                             objects.add(p);
                         } else {
                             System.out.println("Wrong coefficient for Plane ");
@@ -170,6 +172,7 @@ public class SemanticService
                             c.setApex(coefficient[6], coefficient[7], coefficient[8]);
                             c.setRadius(coefficient[9]);
                             c.setHeight(coefficient[10]);
+                            c.setColor(g.getColor());
                             objects.add(c);
                         } else {
                             System.out.println("Wrong coefficient for Cylinder");
@@ -184,6 +187,7 @@ public class SemanticService
                             c.setApex(coefficient[6], coefficient[7], coefficient[8]);
                             c.setRadius(coefficient[9]);
                             c.setHeight(coefficient[10]);
+                            c.setColor(g.getColor());
                             objects.add(c);
                         } else {
                             System.out.println("Wrong coefficient for Cone");
@@ -249,7 +253,7 @@ public class SemanticService
                         //TODO the order of the data property has to be well defined since it is the unique indicator of the property
 
                         coefficients.add(ValueOfDataPropertyFloat(i.getDataSemantics(),SITBase.DATA_PROPERTY.RADIUS_SPHERE));
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.SPHERE,COLOR,
+                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.SPHERE,ValueOfDataPropertyString(i.getDataSemantics(),DATA_PROPERTY.COLOR),
                                 coefficients,computeSR(i));
                         atoms.add(g);
 
@@ -262,7 +266,7 @@ public class SemanticService
                         coefficients.add(ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.AXIS_X));
                         coefficients.add(ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.AXIS_Y));
                         coefficients.add(ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.AXIS_Z));
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.PLANE,COLOR,
+                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.PLANE,ValueOfDataPropertyString(i.getDataSemantics(),DATA_PROPERTY.COLOR),
                                 coefficients,computeSR(i));
                         atoms.add(g);
 
@@ -273,7 +277,7 @@ public class SemanticService
                                 ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.CYLINDER_HEIGHT));
                         coefficients.add(
                                 ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.CYLINDER_RADIUS));
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CYLINDER,COLOR,
+                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CYLINDER,ValueOfDataPropertyString(i.getDataSemantics(),DATA_PROPERTY.COLOR),
                                 coefficients,computeSR(i));
                         atoms.add(g);
 
@@ -284,37 +288,26 @@ public class SemanticService
                                 ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.CONE_HEIGHT));
                         coefficients.add(
                                 ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.CONE_RADIUS));
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CONE,COLOR,
+                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CONE,ValueOfDataPropertyString(i.getDataSemantics(),DATA_PROPERTY.COLOR),
                                 coefficients,computeSR(i));
                         atoms.add(g);
 
                     }
+                    System.out.println(ValueOfDataPropertyString(i.getDataSemantics(),DATA_PROPERTY.COLOR));
                     }
                     atoms.mapInROSMsg(node,response);
-                ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
-                for (GeometricPrimitive i : objects)
-                   ontoRef.removeIndividual(i.getInstance());
-                ontoRef.synchronizeReasoner();
+             //   ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
+            //    for (GeometricPrimitive i : objects)
+             //      ontoRef.removeIndividual(i.getInstance());
+            //    ontoRef.synchronizeReasoner();
                 recognition1.getBestRecognitionDescriptor().saveOntology(ONTO_FILE);
                 }
                 //fill the response
                 //DONE
 
-
-
-
-
             };
 
-
-
-
-
-
-
         }
-
-
 
 
     public ArrayList<Relation> computeSR(GeometricPrimitive subject){
@@ -456,6 +449,29 @@ public class SemanticService
         }
         return ((float)-1.0);
     }
+    public String ValueOfDataPropertyString(MORAxioms.DataSemantics dataProperties, String dataPropertyName){
+        //for all the input dataproperties
+        for (MORAxioms.DataSemantic i:dataProperties){
+            if(i.toString().contains(dataPropertyName)) {
+                //if the dataproperty coincides with the desired one
+                if (i.toString().contains(RED)) {
+                    return RED;
+                } else if (i.toString().contains(GREEN)) {
+                    return GREEN;
+                } else if (i.toString().contains(PINK)) {
+                    return PINK;
+                } else if (i.toString().contains(BLUE)) {
+                    return BLUE;
+                } else if (i.toString().contains(GREEN)) {
+                    return GREEN;
+                }
+            }
+            }
+            return "no-color";
+
+        }
+
+
     private class Atoms extends HashSet<Atom>{
 
         /**

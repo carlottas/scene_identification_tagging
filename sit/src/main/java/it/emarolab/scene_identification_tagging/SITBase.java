@@ -410,6 +410,8 @@ public interface SITBase {
          */
         String ID = PREFIX_HAS + "id";
 
+        String COLOR= "has-color";
+
     }
 
     /**

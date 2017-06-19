@@ -38,12 +38,11 @@ public class GeometricPrimitive
     private Long time = System.currentTimeMillis();
     private boolean addTime = false;
     private boolean addId = false;
-
+    private String color = null;
     private Float centerX = null;
     private Float centerY = null;
     private Float centerZ = null;
     private Long id = null;
-    //private String color= null;
 
     /**
      * Initialise and ontological object by have a name based on {@link #currentCOUNT}
@@ -112,7 +111,7 @@ public class GeometricPrimitive
         addData( getPropertyCenterY(), true);
         addData( getPropertyCenterZ(), true);
         addData( getPropertyTime(), time, true);
-       // addData( getPropertyColor(),  true);
+        addData( getPropertyColor(),  true);
         // add this to avoid error on bug in the SWRL
         addTypeIndividual( CLASS.PRIMITIVE);
     }
@@ -141,6 +140,9 @@ public class GeometricPrimitive
     public String getPropertyCenterX(){
         return DATA_PROPERTY.CENTER_X;
     }
+    public String getPropertyColor(){
+        return DATA_PROPERTY.COLOR;
+    }
 
     /**
      * Return the name of data property used to map the {@code Y}
@@ -158,10 +160,6 @@ public class GeometricPrimitive
      */
     public String getPropertyCenterZ(){
         return DATA_PROPERTY.CENTER_Z;
-    }
-
-    public String getPropertyColor(){
-        return "has-color";
     }
 
     /**
@@ -239,6 +237,7 @@ public class GeometricPrimitive
         addData( getPropertyCenterX(), x, true);
     }
 
+
     /**
      * Returns the {@code Y} coordinate of the
      * center of mass. Measurements should be in meters.
@@ -280,22 +279,23 @@ public class GeometricPrimitive
         this.centerZ = z;
         addData( getPropertyCenterZ(), z, true);
     }
-
-    /**
-     * Returns the {@code color}
-     */
-    //TODO solve color problem
-//    public String getColor() {
- //       return color;
-  //  }
-
     /**
      * Set the {@code color}
+     * {@link SpatialIndividualDescriptor}.
      */
-    //public void setColor(String c) {
-     //   this.color = c;
-     //   addData( getPropertyColor(), c, true);
-   // }
+    public void setColor(String Color) {
+        this.color =Color;
+        addData( getPropertyColor(), Color ,true);
+    }
+
+    /**Return the color
+     *
+     */
+    public String getColor(){
+        return this.color;
+
+
+    }
     /**
      * Enhance the standard OWLOOP read semantic by
      * explicitly set the value of the center of mass and,
@@ -309,7 +309,7 @@ public class GeometricPrimitive
         centerY = getLiteral( getPropertyCenterY()).parseFloat();
         centerZ = getLiteral( getPropertyCenterZ()).parseFloat();
         //TODO find a way to read its value
-        // /color = getLiteral(getPropertyColor()).toString;
+        color = getLiteral(getPropertyColor()).getLiteral();
         if( addId)
             id = Long.valueOf( getLiteral( getPropertyId()).getLiteral());
         if( addTime)
