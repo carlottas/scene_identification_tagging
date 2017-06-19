@@ -6,6 +6,7 @@ import it.emarolab.scene_identification_tagging.realObject.Cylinder;
 import it.emarolab.scene_identification_tagging.realObject.Sphere;
 import it.emarolab.scene_identification_tagging.sceneRepresentation.SpatialRelation;
 import javafx.scene.shape.*;
+//import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 import sit_msgs.*;
 import org.ros.node.ConnectedNode;
 import org.ros.node.service.ServiceResponseBuilder;
@@ -30,6 +31,7 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
 import java.awt.image.AreaAveragingScaleFilter;
+import java.lang.reflect.Array;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
@@ -60,6 +62,7 @@ public class SemanticService
     private static final String PROP_IS_ALONG_Z="isAlongZ";
     private static final String PROP_IS_COAXIAL_WITH="isCoaxialWith";
     private static final String PROP_HAS_RADIUS="hasRadius";
+    private static final String COLOR="toBeDefined";
 
     String YELLOW="Yellow";
     String BLUE="Blue";
@@ -124,8 +127,8 @@ public class SemanticService
 
                 // initialise objects
                 Set<GeometricPrimitive> objects = new HashSet<>();
-                List<sit_msgs.SpatialAtom> geometricPrimitives = request.getGeometricPrimitives();
-                for (sit_msgs.SpatialAtom g : geometricPrimitives) {
+                List<sit_msgs.atom> geometricPrimitives = request.getGeometricPrimitives();
+                for (sit_msgs.atom g : geometricPrimitives) {
                     System.out.println("for all the geometric primitives received");
                     //TODO  find a way to have a vector, list instead of an array
                     float[] coefficient = g.getCoefficients();
@@ -229,36 +232,70 @@ public class SemanticService
                 //ontoRef.saveOntology();
 
                 System.out.println("saving the ontology");
-                recognition1.getBestRecognitionDescriptor().saveOntology(ONTO_FILE);
+
                 //take class name
                 response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length()+1));
                 response.setSubClasses(recognition1.getBestRecognitionDescriptor().SubConceptToString());
                 response.setSuperClasses(recognition1.getBestRecognitionDescriptor().SuperConceptToString());
-                //List<atom> primitivesOutput=new ArrayList<atom>();
+                Atoms atoms = new Atoms();
                 for (GeometricPrimitive i : objects) {
-                    // TODO test , only printing on the screen to see whether they are the info i am looking for
-                    //atom g;
-                    List<Float> coefficients=new ArrayList<>();
                     i.readSemantic();
-                    //check how the name is given
-                    //g.setName(i.getGround().toString());
-                    System.out.println("name of the instance");
-                    System.out.println(i.getGround().toString().substring(ONTO_NAME.length()+1));
-                    System.out.println("\nthe label of the class");
+
+                    //g.setName(i.getGround().toString().substring(ONTO_NAME.length()+1));
                     if(i.getTypeIndividual().toString().contains(SPHERE)){
-                        System.out.println(SPHERE);
-                        System.out.println("\n radius property (so only if it is a sphere)");
-                        System.out.print(ValueOfDataPropertyFloat(i.getDataSemantics(),"has-sphere_radius"));
-                        coefficients.add(ValueOfDataPropertyFloat(i.getDataSemantics(),PROP_HAS_RADIUS));
-                    }
-                    else if (i.getTypeIndividual().toString().contains(PLANE)){
-                        System.out.println("\n"+PLANE+"\n");
-                    }
-                    computeSR(i);
+                        ArrayList<Float> coefficients=new ArrayList<>();
+                       //filling the coefficients
+                        //TODO check whether such data property exists but maybe it is useless, think about it
+                        //TODO the order of the data property has to be well defined since it is the unique indicator of the property
+
+                        coefficients.add(ValueOfDataPropertyFloat(i.getDataSemantics(),SITBase.DATA_PROPERTY.RADIUS_SPHERE));
+                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.SPHERE,COLOR,
+                                coefficients,computeSR(i));
+                        atoms.add(g);
 
                     }
+                    else if (i.getTypeIndividual().toString().contains(SITBase.CLASS.PLANE)){
+                        ArrayList<Float> coefficients=new ArrayList<>();
+                        coefficients.add(
+                                ValueOfDataPropertyFloat(i.getDataSemantics(), DATA_PROPERTY.HESSIAN)
+                        );
+                        coefficients.add(ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.AXIS_X));
+                        coefficients.add(ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.AXIS_Y));
+                        coefficients.add(ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.AXIS_Z));
+                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.PLANE,COLOR,
+                                coefficients,computeSR(i));
+                        atoms.add(g);
 
+                    }
+                    else  if (i.getTypeIndividual().toString().contains(CLASS.CYLINDER)){
+                        ArrayList<Float> coefficients = new ArrayList<>();
+                        coefficients.add(
+                                ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.CYLINDER_HEIGHT));
+                        coefficients.add(
+                                ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.CYLINDER_RADIUS));
+                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CYLINDER,COLOR,
+                                coefficients,computeSR(i));
+                        atoms.add(g);
 
+                    }
+                    else if (i.getTypeIndividual().toString().contains(CLASS.CONE)){
+                        ArrayList<Float> coefficients = new ArrayList<>();
+                        coefficients.add(
+                                ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.CONE_HEIGHT));
+                        coefficients.add(
+                                ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.CONE_RADIUS));
+                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CONE,COLOR,
+                                coefficients,computeSR(i));
+                        atoms.add(g);
+
+                    }
+                    }
+                    atoms.mapInROSMsg(node,response);
+                ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
+                for (GeometricPrimitive i : objects)
+                   ontoRef.removeIndividual(i.getInstance());
+                ontoRef.synchronizeReasoner();
+                recognition1.getBestRecognitionDescriptor().saveOntology(ONTO_FILE);
                 }
                 //fill the response
                 //DONE
@@ -280,137 +317,120 @@ public class SemanticService
 
 
 
-    public void computeSR(GeometricPrimitive subject){
-        //solve how to initialize
-        //fo it for all the properties
+    public ArrayList<Relation> computeSR(GeometricPrimitive subject){
+
+        ArrayList<Relation> rel = new ArrayList<Relation>();
         subject.readSemantic();
-        List<String> Individuals1 = new ArrayList<String>();
-        //List<spatialRelationship> sr=new ArrayList<spatialRelationship>();
+
+        ArrayList<String> Individuals1 = new ArrayList<String>();
+        //Poperty is above of
         objectProperty(subject.getObjectSemantics(),PROP_IS_ABOVE_OF,Individuals1);
-
         if(!Individuals1.isEmpty()){
-            for(String i : Individuals1) {
-                System.out.println("property is above of \n");
-                System.out.println(i);
-            }
+            Relation r= new Relation(Individuals1,PROP_IS_ABOVE_OF) ;
+            rel.add(r);
+
         }
-        List<String> Individuals2 = new ArrayList<String>();
+        //Property is along X
+        ArrayList<String> Individuals2 = new ArrayList<String>();
         objectProperty(subject.getObjectSemantics(),PROP_IS_ALONG_X,Individuals2);
-
         if(!Individuals2.isEmpty()){
-            for (String i : Individuals2){
-                System.out.println("\n"+PROP_IS_ALONG_X+"\n");
-                System.out.println(i+"\n");
-            }
+            Relation r= new Relation(Individuals2,PROP_IS_ABOVE_OF) ;
+            rel.add(r);
         }
-        List<String> Individuals3 = new ArrayList<String>();
+
+        //Property is along y
+        ArrayList<String> Individuals3 = new ArrayList<String>();
         objectProperty(subject.getObjectSemantics(),PROP_IS_ALONG_Y,Individuals3);
-
         if(!Individuals3.isEmpty()){
-
-            for (String i : Individuals3){
-                System.out.println("\n"+ PROP_IS_ALONG_Y+"\n");
-                System.out.println(i+"\n");
-            }
+            Relation r = new Relation(Individuals3,PROP_IS_ALONG_Y);
+            rel.add(r);
         }
-        List<String> Individuals4 = new ArrayList<String>();
+        //Property is along z
+        ArrayList<String> Individuals4 = new ArrayList<String>();
         objectProperty(subject.getObjectSemantics(),PROP_IS_ALONG_Z,Individuals4);
-
         if(!Individuals4.isEmpty()){
-
-            for (String i : Individuals4){
-                System.out.println("\n"+ PROP_IS_ALONG_Z+"\n");
-                System.out.println(i+"\n");
-            }
+            Relation r = new Relation (Individuals4, PROP_IS_ALONG_Z);
+            rel.add(r);
         }
-        List<String> Individuals5 = new ArrayList<String>();
+        //Property is behind of
+        ArrayList<String> Individuals5 = new ArrayList<String>();
         objectProperty(subject.getObjectSemantics(),PROP_IS_BEHIND_OF,Individuals5);
-
         if(!Individuals5.isEmpty()){
 
-            for (String i : Individuals5){
-                System.out.println("\n"+ PROP_IS_BEHIND_OF+"\n");
-                System.out.println(i+"\n");
-            }
+            Relation r = new Relation (Individuals5, PROP_IS_BEHIND_OF);
+            rel.add(r);
+
         }
-        List<String> Individuals6 = new ArrayList<String>();
+        //Property is below of
+        ArrayList<String> Individuals6 = new ArrayList<String>();
         objectProperty(subject.getObjectSemantics(),PROP_IS_BELOW_OF,Individuals6);
 
         if(!Individuals6.isEmpty()){
 
-            for (String i : Individuals6){
-                System.out.println("\n"+ PROP_IS_BELOW_OF+"\n");
-                System.out.println(i+"\n");
-            }
+            Relation r = new Relation (Individuals6,PROP_IS_BELOW_OF);
+            rel.add(r);
         }
-        List<String> Individuals7 = new ArrayList<String>();
+
+        //Property is coaxial with
+        ArrayList<String> Individuals7 = new ArrayList<String>();
         objectProperty(subject.getObjectSemantics(),PROP_IS_COAXIAL_WITH,Individuals7);
 
         if(!Individuals7.isEmpty()){
 
-            for (String i : Individuals7){
-                System.out.println("\n"+ PROP_IS_COAXIAL_WITH+"\n");
-                System.out.println(i+"\n");
-            }
+            Relation r = new Relation (Individuals7, PROP_IS_COAXIAL_WITH);
+            rel.add(r);
         }
-        List<String> Individuals8 = new ArrayList<String>();
+        //Property is in front of
 
-
+        ArrayList<String> Individuals8 = new ArrayList<String>();
+        objectProperty(subject.getObjectSemantics(),PROP_IS_IN_FRONT_OF,Individuals8);
         if(!Individuals8.isEmpty()){
-            System.out.println("\n"+ PROP_IS_IN_FRONT_OF+"\n");
-            for (String i : Individuals8){
-                objectProperty(subject.getObjectSemantics(),PROP_IS_IN_FRONT_OF,Individuals8);
-                System.out.println(i+"\n");
-            }
+            Relation r = new Relation (Individuals8, PROP_IS_IN_FRONT_OF);
+            rel.add(r);
         }
-        List<String> Individuals9 = new ArrayList<String>();
 
-
+        //Property  Left
+        ArrayList<String> Individuals9 = new ArrayList<String>();
+        objectProperty(subject.getObjectSemantics(),PROP_LEFT,Individuals9);
         if(!Individuals9.isEmpty()){
-            System.out.println("\n"+ PROP_LEFT+"\n");
-            for (String i : Individuals9){
-                objectProperty(subject.getObjectSemantics(),PROP_LEFT,Individuals9);
-                System.out.println(i+"\n");
-            }
+            Relation r = new Relation (Individuals9,PROP_LEFT);
+            rel.add(r);
         }
-        List<String> Individuals10 = new ArrayList<String>();
+
+        //Property parallel
+        ArrayList<String> Individuals10 = new ArrayList<String>();
         objectProperty(subject.getObjectSemantics(),PROP_PARALLEL,Individuals10);
 
         if(!Individuals10.isEmpty()){
-
-            for (String i : Individuals10){
-                System.out.println("\n"+ PROP_PARALLEL+"\n");
-                System.out.println(i+"\n");
-            }
+            Relation r = new Relation (Individuals10, PROP_PARALLEL);
+            rel.add(r);
         }
-        List<String> Individuals11 = new ArrayList<String>();
+
+        //Property perpendicular
+        ArrayList<String> Individuals11 = new ArrayList<String>();
         objectProperty(subject.getObjectSemantics(),PROP_PERPENDICULAR,Individuals11);
 
         if(!Individuals11.isEmpty()){
 
-            for (String i : Individuals11){
-                System.out.println("\n"+ PROP_PERPENDICULAR+"\n");
-                System.out.println(i+"\n");
-            }
+            Relation r = new Relation (Individuals11, PROP_PERPENDICULAR);
+            rel.add(r);
+
         }
-        List<String> Individuals12 = new ArrayList<String>();
+
+        //Property right
+        ArrayList<String> Individuals12 = new ArrayList<String>();
         objectProperty(subject.getObjectSemantics(),PROP_RIGHT,Individuals12);
 
         if(!Individuals12.isEmpty()){
-
-            for (String i : Individuals12){
-                System.out.println("\n"+ PROP_RIGHT+"\n");
-                System.out.println(i+"\n");
-            }
+            Relation r = new Relation (Individuals12, PROP_RIGHT);
+            rel.add(r);
         }
-        //spatialRelationship above=new spatialRelationship();
-        //above.setObjectProperty(PROP_IS_ABOVE_OF);
-        //above.setObjects(Individuals);
-        //sr.add(above);
+
+        return rel ;
 
 
     }
-    public void objectProperty(MORAxioms.ObjectSemantics objProp,String property,List<String> individuals){
+    public void objectProperty(MORAxioms.ObjectSemantics objProp, String property, ArrayList<String> individuals){
         for (MORAxioms.ObjectSemantic obj : objProp) {
             if (obj.toString().contains(property)) {
                 MORAxioms.Individuals ind = obj.getValues();
@@ -459,8 +479,13 @@ public class SemanticService
                 rosAtom.setRelations(rel);
                 rosAtom.setName(s.getName());
                 rosAtom.setColor(s.getColor());
-                //TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-                rosAtom.setCoefficients((float)(s.getCoefficients().toArray()));
+                float[] floatArray = new float[s.getCoefficients().size()];
+                int i = 0;
+
+                for (Float f : s.getCoefficients()) {
+                    floatArray[i++] = (f != null ? f : Float.NaN); // Or whatever default you want.
+                }
+                rosAtom.setCoefficients(floatArray);
                 rosAtom.setType(s.getType());
                 rosAtoms.add(rosAtom);
 
@@ -504,6 +529,9 @@ public class SemanticService
             this.object = obj;
             this.relation = rel;
         }
+        private Relation (String relation){
+            this.relation=relation;
+        }
 
         /**
          * @return the subject of this spatial relation (set on constructor).
@@ -515,6 +543,7 @@ public class SemanticService
         private ArrayList<String> getObject() {
             return object;
         }
+
         /**
          * @return the name of this spatial relation (set on constructor).
          */

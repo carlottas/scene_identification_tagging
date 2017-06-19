@@ -51,18 +51,6 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAboveOf">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene"/>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAboveOf"/>
-                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
-                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
-                    </owl:Restriction>
-                </owl:intersectionOf>
-            </owl:Class>
-        </rdfs:domain>
         <rdfs:range rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
     </owl:ObjectProperty>
     
@@ -74,18 +62,6 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAlongX">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene"/>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAlongX"/>
-                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
-                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
-                    </owl:Restriction>
-                </owl:intersectionOf>
-            </owl:Class>
-        </rdfs:domain>
         <rdfs:range rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
     </owl:ObjectProperty>
     
@@ -97,18 +73,6 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAlongY">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene"/>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAlongY"/>
-                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
-                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
-                    </owl:Restriction>
-                </owl:intersectionOf>
-            </owl:Class>
-        </rdfs:domain>
         <rdfs:range rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
     </owl:ObjectProperty>
     
@@ -120,18 +84,6 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAlongZ">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene"/>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAlongZ"/>
-                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
-                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
-                    </owl:Restriction>
-                </owl:intersectionOf>
-            </owl:Class>
-        </rdfs:domain>
         <rdfs:range rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
     </owl:ObjectProperty>
     
@@ -143,18 +95,6 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isBehindOf">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene"/>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isBehindOf"/>
-                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
-                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
-                    </owl:Restriction>
-                </owl:intersectionOf>
-            </owl:Class>
-        </rdfs:domain>
         <rdfs:range rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
     </owl:ObjectProperty>
     
@@ -173,18 +113,6 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isCoaxialWith">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene"/>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isCoaxialWith"/>
-                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
-                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
-                    </owl:Restriction>
-                </owl:intersectionOf>
-            </owl:Class>
-        </rdfs:domain>
         <rdfs:range rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
     </owl:ObjectProperty>
     
@@ -203,18 +131,6 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isParallelTo">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene"/>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isParallelTo"/>
-                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
-                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
-                    </owl:Restriction>
-                </owl:intersectionOf>
-            </owl:Class>
-        </rdfs:domain>
         <rdfs:range rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
     </owl:ObjectProperty>
     
@@ -226,18 +142,6 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isPerpendicularTo">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene"/>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isPerpendicularTo"/>
-                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
-                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
-                    </owl:Restriction>
-                </owl:intersectionOf>
-            </owl:Class>
-        </rdfs:domain>
         <rdfs:range rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
     </owl:ObjectProperty>
     
@@ -249,18 +153,6 @@
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isRightOf">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
-        <rdfs:domain>
-            <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene"/>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isRightOf"/>
-                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">2</owl:minQualifiedCardinality>
-                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
-                    </owl:Restriction>
-                </owl:intersectionOf>
-            </owl:Class>
-        </rdfs:domain>
         <rdfs:range rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
     </owl:ObjectProperty>
     
@@ -1113,9 +1005,44 @@
                         <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Plane"/>
                     </owl:Restriction>
                     <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAlongX"/>
+                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Cone"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAlongX"/>
+                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Sphere"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAlongY"/>
+                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Cone"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAlongY"/>
+                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Sphere"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAlongZ"/>
+                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Cone"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isAlongZ"/>
+                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Sphere"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
                         <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isBehindOf"/>
                         <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
                         <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Plane"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isBelowOf"/>
+                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Cone"/>
                     </owl:Restriction>
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isBelowOf"/>
@@ -1125,7 +1052,32 @@
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isInFrontOf"/>
                         <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Cone"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isInFrontOf"/>
+                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
                         <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Sphere"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isParallelTo"/>
+                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Cone"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isParallelTo"/>
+                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Plane"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isPerpendicularTo"/>
+                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Cone"/>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_isPerpendicularTo"/>
+                        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+                        <owl:onClass rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Plane"/>
                     </owl:Restriction>
                 </owl:intersectionOf>
             </owl:Class>
@@ -1162,53 +1114,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#P-1 -->
-
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#P-1">
-        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Orientable"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Plane"/>
-        <has-geometric_axisX rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.5</has-geometric_axisX>
-        <has-geometric_axisY rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.4</has-geometric_axisY>
-        <has-geometric_axisZ rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.1</has-geometric_axisZ>
-        <has-geometric_centerX rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.3</has-geometric_centerX>
-        <has-geometric_centerY rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.1</has-geometric_centerY>
-        <has-geometric_centerZ rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.1</has-geometric_centerZ>
-        <has-geometric_hessian rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.5</has-geometric_hessian>
-        <has-time rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1497841870571</has-time>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#S-0 -->
-
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#S-0">
-        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
-        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Sphere"/>
-        <has-geometric_centerX rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.3</has-geometric_centerX>
-        <has-geometric_centerY rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.3</has-geometric_centerY>
-        <has-geometric_centerZ rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.3</has-geometric_centerZ>
-        <has-sphere_radius rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.1</has-sphere_radius>
-        <has-time rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1497841870559</has-time>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Sn-0 -->
-
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Sn-0">
-        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene"/>
-        <has-scene_isAboveOf rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#P-1"/>
-        <has-scene_isBehindOf rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#P-1"/>
-        <has-scene_isBelowOf rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#S-0"/>
-        <has-scene_isInFrontOf rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#S-0"/>
-    </owl:NamedIndividual>
-    
-
-
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -1226,21 +1131,6 @@
             <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Plane"/>
             <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Sphere"/>
         </owl:members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
-        <owl:members rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Parameter"/>
-            <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#RealObject"/>
-            <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene"/>
-        </owl:members>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDifferent"/>
-        <owl:distinctMembers rdf:parseType="Collection">
-            <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#P-1"/>
-            <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#S-0"/>
-        </owl:distinctMembers>
     </rdf:Description>
     
 
