@@ -1100,10 +1100,10 @@
     
 
 
-    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#TestScene -->
+    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#testScene -->
 
 
-    <owl:Class rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#TestScene">
+    <owl:Class rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#testScene">
         <owl:equivalentClass>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
@@ -1162,6 +1162,53 @@
     
 
 
+    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#P-1 -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#P-1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Orientable"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Plane"/>
+        <has-geometric_axisX rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.5</has-geometric_axisX>
+        <has-geometric_axisY rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.4</has-geometric_axisY>
+        <has-geometric_axisZ rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.1</has-geometric_axisZ>
+        <has-geometric_centerX rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.3</has-geometric_centerX>
+        <has-geometric_centerY rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.1</has-geometric_centerY>
+        <has-geometric_centerZ rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.1</has-geometric_centerZ>
+        <has-geometric_hessian rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.5</has-geometric_hessian>
+        <has-time rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1497841870571</has-time>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#S-0 -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#S-0">
+        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#GeometricPrimitive"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Sphere"/>
+        <has-geometric_centerX rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.3</has-geometric_centerX>
+        <has-geometric_centerY rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.3</has-geometric_centerY>
+        <has-geometric_centerZ rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.3</has-geometric_centerZ>
+        <has-sphere_radius rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.1</has-sphere_radius>
+        <has-time rdf:datatype="http://www.w3.org/2001/XMLSchema#long">1497841870559</has-time>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Sn-0 -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Sn-0">
+        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene"/>
+        <has-scene_isAboveOf rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#P-1"/>
+        <has-scene_isBehindOf rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#P-1"/>
+        <has-scene_isBelowOf rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#S-0"/>
+        <has-scene_isInFrontOf rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#S-0"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -1187,6 +1234,13 @@
             <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#RealObject"/>
             <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene"/>
         </owl:members>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDifferent"/>
+        <owl:distinctMembers rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#P-1"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#S-0"/>
+        </owl:distinctMembers>
     </rdf:Description>
     
 
