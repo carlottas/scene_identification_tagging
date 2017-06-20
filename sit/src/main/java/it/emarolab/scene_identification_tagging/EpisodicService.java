@@ -1,10 +1,16 @@
-
 package it.emarolab.scene_identification_tagging;
 
-
+import it.emarolab.owloop.aMORDescriptor.MORAxioms;
 import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;
+import it.emarolab.owloop.core.ObjectProperty;
 import it.emarolab.scene_identification_tagging.realObject.Cylinder;
+import it.emarolab.scene_identification_tagging.realObject.GeometricPrimitive;
 import it.emarolab.scene_identification_tagging.realObject.Sphere;
+import it.emarolab.scene_identification_tagging.sceneRepresentation.SpatialRelation;
+import javafx.scene.shape.*;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
+//import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 import sit_msgs.*;
 import org.ros.node.ConnectedNode;
 import org.ros.node.service.ServiceResponseBuilder;
@@ -13,31 +19,29 @@ import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
 import org.ros.node.Node;
 import org.ros.node.parameter.ParameterTree;
-import it.emarolab.amor.owlInterface.OWLReferences;
-import it.emarolab.amor.owlInterface.OWLReferencesInterface;
-import it.emarolab.scene_identification_tagging.realObject.*;
-import it.emarolab.scene_identification_tagging.sceneRepresentation.SceneRepresentation;
-import it.emarolab.owloop.aMORDescriptor.MORAxioms;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import java.awt.image.AreaAveragingScaleFilter;
+import java.lang.reflect.Array;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 
-public class SemanticService
+
+public class EpisodicService
         extends AbstractNodeMain
-    implements SITBase {
-    private static final String SERVICE_NAME = "SemanticService";
+        implements SITBase {
+
+    private static final String SERVICE_NAME = "EpisodicService";
     private static final String ONTO_NAME = "ONTO_NAME"; // an arbritary name to refer the ontology
+    private static final String NAME = "testScene";
 
     public boolean initParam(ConnectedNode node) {
 
         // stat the service
         node.newServiceServer(
                 getServerName(), // set service name
-                SemanticInterface._TYPE, // set ROS service message
+                EpisodicInterface._TYPE, // set ROS service message
                 getService(node) // set ROS service response
         );
         return true;
@@ -61,16 +65,17 @@ public class SemanticService
             System.exit(1);
     }
 
+
     /**
      * @param node the bridge to the standard ROS service
      * @return the object that defines the computation to be performed during service call.
      */
 
-    public ServiceResponseBuilder<SemanticInterfaceRequest, SemanticInterfaceResponse> getService(ConnectedNode node) {
-        return new ServiceResponseBuilder<SemanticInterfaceRequest, SemanticInterfaceResponse>() {
+    public ServiceResponseBuilder<EpisodicInterfaceRequest, EpisodicInterfaceResponse> getService(ConnectedNode node) {
+        return new ServiceResponseBuilder<EpisodicInterfaceRequest, EpisodicInterfaceResponse>() {
 
             /**
-             * This object is used to react to {@link SceneService} call,
+             * This object is used to react to {@link EpisodicService} call,
              * it defines the computation to be performed.
              *
              * @param request  an initialised ROS message for the server request
@@ -78,177 +83,24 @@ public class SemanticService
              */
             @Override
             public void
-            build(SemanticInterfaceRequest request, SemanticInterfaceResponse response) {
-                // load ontology
-                System.out.println("loading the ontology ");
-                OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
-                        ONTO_NAME, ONTO_FILE, ONTO_IRI, true);
+            build(EpisodicInterfaceRequest request, EpisodicInterfaceResponse response) {
 
-                // suppress aMOR log
-                it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
+             String SceneName=request.getSceneName();
+             List<String> SubClasses=request.getSubClasses();
+             List<String> SuperClasses=request.getSuperClasses();
+             String SupportName=request.getSupportName();
+             Atoms object= new Atoms();
+             object.MapFromRosMsg(request.getObject());
 
-                // initialise objects
-                Set<GeometricPrimitive> objects = new HashSet<>();
-                List<sit_msgs.atom> geometricPrimitives = request.getGeometricPrimitives();
-                for (sit_msgs.atom g : geometricPrimitives) {
-                    float[] coefficient = g.getCoefficients();
-                    System.out.println(g.getType());
-                    if (SITBase.CLASS.SPHERE.equals(g.getType())) {
-                        if (coefficient.length == 4) {
-                            Sphere s = new Sphere(ontoRef);
-                            s.shouldAddTime(true);
-                            s.setCenter(coefficient[0], coefficient[1], coefficient[2]);
-                            s.setRadius(coefficient[3]);
-                            s.setColor(g.getColor());
-                            objects.add(s);
-                        } else {
-                            System.out.println("Wrong coefficients for sphere!");
-                        }
-
-                    } else if (SITBase.CLASS.PLANE.equals(g.getType())) {
-                        if (coefficient.length == 7) {
-                            Plane p = new Plane(ontoRef);
-                            p.shouldAddTime(true);
-                            p.setAxis(coefficient[0], coefficient[1], coefficient[2]);
-                            p.setCenter(coefficient[3], coefficient[4], coefficient[5]);
-                            p.setHessian(coefficient[6]);
-                            p.setColor(g.getColor());
-                            objects.add(p);
-                        } else {
-                            System.out.println("Wrong coefficient for Plane ");
-                        }
-
-                    } else if (SITBase.CLASS.CYLINDER.equals(g.getType())) {
-                        if (coefficient.length == 11) {
-                            Cylinder c = new Cylinder(ontoRef);
-                            c.shouldAddTime(true);
-                            c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
-                            c.setAxis(coefficient[3], coefficient[4], coefficient[5]);
-                            c.setApex(coefficient[6], coefficient[7], coefficient[8]);
-                            c.setRadius(coefficient[9]);
-                            c.setHeight(coefficient[10]);
-                            c.setColor(g.getColor());
-                            objects.add(c);
-                        } else {
-                            System.out.println("Wrong coefficient for Cylinder");
-                        }
-
-                    } else if (SITBase.CLASS.CONE.equals(g.getType())) {
-                        if (coefficient.length == 11) {
-                            Cone c = new Cone(ontoRef);
-                            c.shouldAddTime(true);
-                            c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
-                            c.setAxis(coefficient[3], coefficient[4], coefficient[5]);
-                            c.setApex(coefficient[6], coefficient[7], coefficient[8]);
-                            c.setRadius(coefficient[9]);
-                            c.setHeight(coefficient[10]);
-                            c.setColor(g.getColor());
-                            objects.add(c);
-                        } else {
-                            System.out.println("Wrong coefficient for Cone");
-                        }
-
-                    } else {
-                        System.out.println("Unknwonw label");
-                    }
-                }
-
-                // add objects
-                for (GeometricPrimitive i : objects) {
-                    for (GeometricPrimitive j : objects)
-                        if (!i.equals(j))
-                            j.addDisjointIndividual(i.getInstance());
-                    i.getObjectSemantics().clear(); // clean previus spatial relation
-                    i.writeSemantic();
-                }
-                // run SWRL
-                ontoRef.synchronizeReasoner();
-                // get SWRL results
-                //should get the semantic
-                for (GeometricPrimitive i : objects) {
-                    // it could be implemented faster
-                    i.readSemantic();
-                }
-
-                // create scene and reason for recognition
-                SceneRepresentation recognition1 = new SceneRepresentation(objects, ontoRef);
-                System.out.println("Recognised with best confidence: " + recognition1.getRecognitionConfidence() + " should learn? " + recognition1.shouldLearn());
-                System.out.println("Best recognised class: " + recognition1.getBestRecognitionDescriptor());
-                System.out.println("Other recognised classes: " + recognition1.getSceneDescriptor().getTypeIndividual());
-
-                // learn the new scene if is the case
-                if (recognition1.shouldLearn()) {
-                    System.out.println("Learning.... ");
-                    recognition1.learn(computeSceneName());
-                }
-
-                ontoRef.synchronizeReasoner();
-                //take class name
-                response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length()+1));
-                response.setSubClasses(recognition1.getBestRecognitionDescriptor().SubConceptToString());
-                response.setSuperClasses(recognition1.getBestRecognitionDescriptor().SuperConceptToString());
-                Atoms atoms = new Atoms();
-                for (GeometricPrimitive i : objects) {
-                    i.readSemantic();
-
-                    if(i.getTypeIndividual().toString().contains(SITBase.CLASS.SPHERE)){
-                        ArrayList<Float> coefficients=new ArrayList<>();
-                       //filling the coefficients
-                        coefficients.add(i.getLiteral(SITBase.DATA_PROPERTY.RADIUS_SPHERE).parseFloat());
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.SPHERE,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
-                                coefficients,computeSR(i));
-                        atoms.add(g);
-
-                    }
-                    else if (i.getTypeIndividual().toString().contains(SITBase.CLASS.PLANE)){
-                        ArrayList<Float> coefficients=new ArrayList<>();
-                        coefficients.add(
-                                i.getLiteral(DATA_PROPERTY.HESSIAN).parseFloat()
-                        );
-                        coefficients.add(i.getLiteral(DATA_PROPERTY.AXIS_X).parseFloat());
-                        coefficients.add(i.getLiteral(DATA_PROPERTY.AXIS_Y).parseFloat());
-                        coefficients.add(i.getLiteral(DATA_PROPERTY.AXIS_Z).parseFloat());
-                        Atom g = new Atom(i.getGround().toString().substring(ONTO_NAME.length()+1),CLASS.PLANE,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
-                                coefficients,computeSR(i));
-                        atoms.add(g);
-
-                    }
-                    else  if (i.getTypeIndividual().toString().contains(CLASS.CYLINDER)){
-                        ArrayList<Float> coefficients = new ArrayList<>();
-                        coefficients.add(
-                                i.getLiteral(DATA_PROPERTY.CYLINDER_HEIGHT).parseFloat());
-                        coefficients.add(
-                                i.getLiteral(DATA_PROPERTY.CYLINDER_RADIUS).parseFloat());
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CYLINDER,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
-                                coefficients,computeSR(i));
-                        atoms.add(g);
-
-                    }
-                    else if (i.getTypeIndividual().toString().contains(CLASS.CONE)){
-                        ArrayList<Float> coefficients = new ArrayList<>();
-                        coefficients.add(
-                                i.getLiteral(DATA_PROPERTY.CONE_HEIGHT).parseFloat());
-                        coefficients.add(
-                                i.getLiteral(DATA_PROPERTY.CONE_RADIUS).parseFloat());
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CONE,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
-                                coefficients,computeSR(i));
-                        atoms.add(g);
-
-                    }
-                    }
-                    atoms.mapInROSMsg(node,response);
-                    ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
-                    for (GeometricPrimitive i : objects)
-                       ontoRef.removeIndividual(i.getInstance());
-                     ontoRef.synchronizeReasoner();
-                    recognition1.getBestRecognitionDescriptor().saveOntology(ONTO_FILE);
-                }
-
-            };
-
-        }
+            }
 
 
+
+        };
+
+
+
+    }
     public ArrayList<Relation> computeSR(GeometricPrimitive subject){
 
         ArrayList<Relation> rel = new ArrayList<Relation>();
@@ -393,7 +245,7 @@ public class SemanticService
          * @param res the service response to be set with the data contained in this set.
          */
 
-    private void mapInROSMsg(ConnectedNode node, SemanticInterfaceResponse res){
+        private void mapInROSMsg(ConnectedNode node, SemanticInterfaceResponse res){
             ArrayList<sit_msgs.SpatialAtom> rosAtoms= new ArrayList<sit_msgs.SpatialAtom>();
             for ( Atom s : this){
                 sit_msgs.SpatialAtom rosAtom=node.getTopicMessageFactory().newFromType( SpatialAtom._TYPE);
@@ -418,23 +270,23 @@ public class SemanticService
         }
         public void MapFromRosMsg(List<sit_msgs.SpatialAtom> rosAtoms){
 
-        for(sit_msgs.SpatialAtom a: rosAtoms){
-            ArrayList<Relation> rel= new ArrayList<>();
-            for (sit_msgs.SpatialRelationship rosSR:a.getRelations()) {
-                ArrayList<String> objects= new ArrayList<>();
-                for(int i=0; i<rosSR.getObject().size();i++){
-                    objects.add(rosSR.getObject().get(i));
+            for(sit_msgs.SpatialAtom a: rosAtoms){
+                ArrayList<Relation> rel= new ArrayList<>();
+                for (sit_msgs.SpatialRelationship rosSR:a.getRelations()) {
+                    ArrayList<String> objects= new ArrayList<>();
+                    for(int i=0; i<rosSR.getObject().size();i++){
+                        objects.add(rosSR.getObject().get(i));
+                    }
+                    Relation r = new Relation(objects,rosSR.getRelation());
+                    rel.add(r);
                 }
-                Relation r = new Relation(objects,rosSR.getRelation());
-                rel.add(r);
-            }
-            ArrayList<Float> coefficients=new ArrayList<>();
-            for ( int i = 0; i<a.getCoefficients().length;i++){
-               coefficients.add(a.getCoefficients()[i]);
+                ArrayList<Float> coefficients=new ArrayList<>();
+                for ( int i = 0; i<a.getCoefficients().length;i++){
+                    coefficients.add(a.getCoefficients()[i]);
 
+                }
+                this.add(new Atom(a.getName(),a.getType(),a.getColor(),coefficients,rel));
             }
-            this.add(new Atom(a.getName(),a.getType(),a.getColor(),coefficients,rel));
-        }
         }
 
 
@@ -469,7 +321,7 @@ public class SemanticService
         private ArrayList<String> object ;
 
 
-       public Relation(ArrayList<String> obj, String rel ) {
+        public Relation(ArrayList<String> obj, String rel ) {
             this.object = obj;
             this.relation = rel;
         }
@@ -522,8 +374,8 @@ public class SemanticService
          * It is used to implement {@link #equals(Object)} method.
          * @return a hash code value for this object.
          */
-      //  @Override
-       // public int hashCode() {
+        //  @Override
+        // public int hashCode() {
         //    return Objects.hashCode( getObject(), getRelation());
         //}
 
@@ -622,8 +474,8 @@ public class SemanticService
         //TODO
         //@Override
         //public int hashCode() {
-            //return getObjectId() != null ? getObjectId().hashCode() : 0;
-       // }
+        //return getObjectId() != null ? getObjectId().hashCode() : 0;
+        // }
         /**
          * @return the textual description of this spatial relation.
          */
@@ -635,20 +487,5 @@ public class SemanticService
 
     }
 
-    private String computeSceneName(){
-        MORFullIndividual counter = new MORFullIndividual(COUNTER.SCENE_COUNTER,
-                ONTO_NAME,
-                ONTO_FILE,
-                ONTO_IRI);
-        counter.readSemantic();
-        int current_count =counter.getLiteral(COUNTER.VALUE_DATA_PROPERTY).parseInteger();
-        counter.removeData(COUNTER.VALUE_DATA_PROPERTY);
-        counter.addData(COUNTER.VALUE_DATA_PROPERTY,current_count+1);
-        counter.writeSemantic();
-        return "Scene"+current_count;
 
-    }
 }
-
-
-
