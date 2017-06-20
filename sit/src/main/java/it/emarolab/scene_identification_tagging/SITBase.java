@@ -29,13 +29,15 @@ public interface SITBase {
      * used by the SIT algorithm, with respect to the {@code src} folder.
      */
     String ONTO_FILE = "../catkin_ws/src/scene_identification_tagging/resources/t_box/empty-scene.owl";
+    String EPISODIC_ONTO_FILE = "../catkin_ws/src/scene_identification_tagging/resources/t_box/episodic-onto.owl";
 
     /**
      * The {@code IRI} domain of the main t-box ontological representation
      * used by the SIT algorithm.
      */
     String ONTO_IRI = "http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit";
-
+    String EPISODIC_ONTO_IRI = "http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit";
+    String EPISODIC_ONTO_NAME="Episodic";
     /**
      * The base interface for the SIT constants.
      * <p>
@@ -482,7 +484,12 @@ public interface SITBase {
     interface COUNTER
     extends VOCABOLARY{
         String SCENE_COUNTER="Scene-Counter";
+        String SPHERE_COUNTER="Sphere-Counter";
+        String PLANE_COUNTER="Plane-Counter";
+        String CYLINDER_COUNTER="Cylinder-Counter";
+        String CONE_COUNTER="Cone-Counter";
         String VALUE_DATA_PROPERTY="has-value";
 
     }
+
 }

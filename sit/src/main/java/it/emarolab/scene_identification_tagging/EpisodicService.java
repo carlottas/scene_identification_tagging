@@ -1,12 +1,15 @@
 package it.emarolab.scene_identification_tagging;
 
+import it.emarolab.amor.owlInterface.OWLReferences;
+import it.emarolab.amor.owlInterface.OWLReferencesInterface;
 import it.emarolab.owloop.aMORDescriptor.MORAxioms;
 import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;
 import it.emarolab.owloop.core.ObjectProperty;
+import it.emarolab.scene_identification_tagging.realObject.*;
 import it.emarolab.scene_identification_tagging.realObject.Cylinder;
-import it.emarolab.scene_identification_tagging.realObject.GeometricPrimitive;
 import it.emarolab.scene_identification_tagging.realObject.Sphere;
 import it.emarolab.scene_identification_tagging.sceneRepresentation.SpatialRelation;
+import it.emarolab.scene_identification_tagging.sceneRepresentation.Relation;
 import javafx.scene.shape.*;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
@@ -84,17 +87,98 @@ public class EpisodicService
             @Override
             public void
             build(EpisodicInterfaceRequest request, EpisodicInterfaceResponse response) {
+                OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
+                        EPISODIC_ONTO_NAME, EPISODIC_ONTO_FILE, EPISODIC_ONTO_IRI, true);
 
-             String SceneName=request.getSceneName();
-             List<String> SubClasses=request.getSubClasses();
-             List<String> SuperClasses=request.getSuperClasses();
-             String SupportName=request.getSupportName();
-             Atoms object= new Atoms();
-             object.MapFromRosMsg(request.getObject());
+                // suppress aMOR log
+                it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
+                String SceneName=request.getSceneName();
+                //List<String> SubClasses=request.getSubClasses();
+                //List<String> SuperClasses=request.getSuperClasses();
+                String SupportName=request.getSupportName();
+                Atoms object= new Atoms();
+                object.MapFromRosMsg(request.getObject());
+                ArrayList<EpisodicPrimitive> Primitives= new ArrayList<>();
+                for (Atom a : object){
+                     if(a.getType().equals(CLASS.SPHERE)){
+                         EpisodicSphere s= new EpisodicSphere(ComputeName(CLASS.SPHERE),ontoRef);
+                         s.setColor(a.getColor());
+                         s.setRadius(a.getCoefficients().get(0));
+                         s.setRelations(a.getRelations());
+                         s.setName(a.getName());
+                         Primitives.add(s);
+                     }
+                     else if (a.getType().equals(CLASS.PLANE)){
+                         EpisodicPlane p = new EpisodicPlane(ComputeName(CLASS.PLANE),ontoRef);
+                         p.setColor(a.getColor());
+                         p.setHessian(a.coefficients.get(0));
+                         p.setName(a.getName());
+                         p.setRelations(a.getRelations());
+                         Primitives.add(p);
+
+                     }
+                     else if (a.getType().equals(CLASS.CYLINDER)){
+                         EpisodicCylinder c = new EpisodicCylinder(ComputeName(CLASS.CYLINDER),ontoRef);
+                         c.setColor(a.getColor());
+                         c.setHeight(a.getCoefficients().get(0));
+                         c.setRadius(a.getCoefficients().get(1));
+                         c.setName(a.getName());
+                         c.setRelations(a.getRelations());
+                         Primitives.add(c);
+                     }
+                     else if (a.getType().equals(CLASS.CONE)){
+                         EpisodicCone c = new EpisodicCone(ComputeName(CLASS.CONE),ontoRef);
+                         c.setColor(a.getColor());
+                         c.setHeight(a.getCoefficients().get(0));
+                         c.setRadius(a.getCoefficients().get(1));
+                         c.setName(a.getName());
+                         c.setRelations(a.getRelations());
+                         Primitives.add(c);
+                     }
+                }
+
+                //update the name with the new name computed
+                for (EpisodicPrimitive i : Primitives){
+                    ArrayList<Relation> newRelation = new ArrayList<>();
+                    for (EpisodicPrimitive j:Primitives){
+                        if(!i.equals(j)){
+                            for(Relation r : i.getRelations()){
+                                ArrayList<String> newObjects= new ArrayList<>();
+                                for (String s: r.getObject()){
+                                    if (s.equals(j.getName())){
+                                        newObjects.add(j.getGround().toString().substring(EPISODIC_ONTO_NAME.length()+1));
+                                    }
+                                    else{
+                                        newObjects.add(s);
+                                    }
+
+                                }
+                                newRelation.add(new Relation( newObjects,r.getRelation()));
+
+                            }
+
+                        }
+                    }
+                    i.setRelations(newRelation);
+                }
+                // add objects
+                for (EpisodicPrimitive i : Primitives) {
+                    for (EpisodicPrimitive j : Primitives)
+                        if (!i.equals(j))
+                            j.addDisjointIndividual(i.getInstance());
+                    i.getObjectSemantics().clear(); // clean previus spatial relation
+                    i.writeSemantic();
+                }
+                //adding the ObjectProperty
+                for (EpisodicPrimitive i : Primitives){
+                    System.out.println("Adding Object Properties");
+                 i.ApplyRelations();
+                 i.writeSemantic();
+                 i.saveOntology(EPISODIC_ONTO_FILE);
+                }
+
 
             }
-
-
 
         };
 
@@ -315,78 +399,6 @@ public class EpisodicService
             return out + "}";
         }
     }
-    public class Relation {
-
-        private String relation;
-        private ArrayList<String> object ;
-
-
-        public Relation(ArrayList<String> obj, String rel ) {
-            this.object = obj;
-            this.relation = rel;
-        }
-        public Relation (String relation){
-            this.relation=relation;
-        }
-
-        /**
-         * @return the subject of this spatial relation (set on constructor).
-         */
-
-        /**
-         * @return the object of this spatial relation (set on constructor).
-         */
-        public ArrayList<String> getObject() {
-            return object;
-        }
-
-        /**
-         * @return the name of this spatial relation (set on constructor).
-         */
-        public String getRelation() {
-            return relation;
-        }
-        /**
-         * @return the name of the inverse relation of this spatial relation (set on constructor).
-         */
-
-        /**
-         * Set two {@link Relation}s to be equal if those have the same
-         * {@code object}s and {@code subjects} as well as {@code relation}.
-         * Or, if it is equal to its inverse.
-         * @param o the {@link Relation} to test for equality.
-         * @return {@code true} if this relation is equal to the given object
-         * or if it is equal to the inverse property.
-         */
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Relation)) return false;
-            Relation that = (Relation) o;
-
-            boolean direct =getObject().equals(that.getObject())
-                    & getRelation().equals(that.getRelation());
-
-            return  direct;
-
-        }
-        /**
-         * It is used to implement {@link #equals(Object)} method.
-         * @return a hash code value for this object.
-         */
-        //  @Override
-        // public int hashCode() {
-        //    return Objects.hashCode( getObject(), getRelation());
-        //}
-
-        /**
-         * @return the textual description of this spatial relation.
-         */
-        @Override
-        public String toString() {
-            return object+relation.toString();
-        }
-    }
     public class Atom {
 
         private String name;
@@ -485,6 +497,41 @@ public class EpisodicService
         //}
 
 
+    }
+    public String ComputeName (String Type){
+        String Counter= new String ();
+        String Prefix= new String ();
+        if (Type.equals(CLASS.SPHERE)){
+            Counter = COUNTER.SPHERE_COUNTER;
+            Prefix = INDIVIDUAL.PREFIX_SPHERE;
+        }
+        else if (Type.equals(CLASS.PLANE)){
+            Counter = COUNTER.PLANE_COUNTER;
+            Prefix = INDIVIDUAL.PREFIX_PLANE;
+        }
+        else if (Type.equals(CLASS.CONE)){
+            Counter = COUNTER.CONE_COUNTER;
+            Prefix = INDIVIDUAL.PREFIX_CONE;
+        }
+        else if (Type.equals(CLASS.CYLINDER)){
+            Counter = COUNTER.CYLINDER_COUNTER;
+            Prefix = INDIVIDUAL.PREFIX_CYLINDER;
+
+        }
+        else {
+            return null;
+        }
+        MORFullIndividual counter = new MORFullIndividual(Counter,
+                EPISODIC_ONTO_NAME,
+                EPISODIC_ONTO_FILE,
+                EPISODIC_ONTO_IRI);
+        counter.readSemantic();
+        int current_count =counter.getLiteral(COUNTER.VALUE_DATA_PROPERTY).parseInteger();
+        counter.removeData(COUNTER.VALUE_DATA_PROPERTY);
+        counter.addData(COUNTER.VALUE_DATA_PROPERTY,current_count+1);
+        counter.writeSemantic();
+
+        return Prefix +current_count;
     }
 
 
