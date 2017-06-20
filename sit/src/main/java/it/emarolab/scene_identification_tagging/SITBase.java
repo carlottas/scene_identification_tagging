@@ -410,7 +410,7 @@ public interface SITBase {
          */
         String ID = PREFIX_HAS + "id";
 
-        String COLOR= "has-color";
+
 
     }
 
@@ -445,6 +445,44 @@ public interface SITBase {
          * individual identifying real objects, obtained a run time.
          */
         String SCENE_SPATIAL_PRFIX = "has-scene_";
+
+    }
+    interface COLOR
+    extends  VOCABOLARY{
+        /**
+         * The name used to identify the different colors
+         */
+        String YELLOW="yellow";
+        String BLUE="blue";
+        String GREEN="green";
+        String PINK="pink";
+        String RED="red";
+
+        /**
+         * The name of the data property for geometric primitives related to color
+         */
+        String COLOR_DATA_PROPERTY= "has-color";
+    }
+    interface SPATIAL_RELATIONS
+    extends VOCABOLARY{
+        String PROP_LEFT="isLeftOf";
+        String PROP_RIGHT="isRightOf";
+        String PROP_PERPENDICULAR="isPerpendicularTo";
+        String PROP_PARALLEL="isParallelTo";
+        String PROP_IS_IN_FRONT_OF="isInFrontOf";
+        String PROP_IS_BEHIND_OF="isBehindOf";
+        String PROP_IS_BELOW_OF="isBelowOf";
+        String PROP_IS_ABOVE_OF="isAboveOf";
+        String PROP_IS_ALONG_X="isAlongX";
+        String PROP_IS_ALONG_Y="isAlongY";
+        String PROP_IS_ALONG_Z="isAlongZ";
+        String PROP_IS_COAXIAL_WITH="isCoaxialWith";
+    }
+
+    interface COUNTER
+    extends VOCABOLARY{
+        String SCENE_COUNTER="Scene-Counter";
+        String VALUE_DATA_PROPERTY="has-value";
 
     }
 }

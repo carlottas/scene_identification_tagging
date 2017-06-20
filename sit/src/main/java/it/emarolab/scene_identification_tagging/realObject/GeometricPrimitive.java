@@ -140,9 +140,6 @@ public class GeometricPrimitive
     public String getPropertyCenterX(){
         return DATA_PROPERTY.CENTER_X;
     }
-    public String getPropertyColor(){
-        return DATA_PROPERTY.COLOR;
-    }
 
     /**
      * Return the name of data property used to map the {@code Y}
@@ -160,6 +157,14 @@ public class GeometricPrimitive
      */
     public String getPropertyCenterZ(){
         return DATA_PROPERTY.CENTER_Z;
+    }
+
+    /**
+     * return the name of the data property used to define the geometric primitive color
+     * @return{@link COLOR#COLOR_DATA_PROPERTY}
+     */
+    public String getPropertyColor(){
+        return COLOR.COLOR_DATA_PROPERTY;
     }
 
     /**

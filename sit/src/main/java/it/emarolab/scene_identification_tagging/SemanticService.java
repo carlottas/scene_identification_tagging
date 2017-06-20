@@ -2,6 +2,7 @@
 package it.emarolab.scene_identification_tagging;
 
 
+import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;
 import it.emarolab.scene_identification_tagging.realObject.Cylinder;
 import it.emarolab.scene_identification_tagging.realObject.Sphere;
 import it.emarolab.scene_identification_tagging.sceneRepresentation.SpatialRelation;
@@ -43,33 +44,8 @@ public class SemanticService
         extends AbstractNodeMain
     implements SITBase {
     private static final String SERVICE_NAME = "SemanticService";
-    private static final String SPHERE = "Sphere";
-    private static final String PLANE = "Plane";
-    private static final String CYLINDER = "Cyilinder";
-    private static final String CONE = "Cone";
     private static final String ONTO_NAME = "ONTO_NAME"; // an arbritary name to refer the ontology
     private static final String NAME = "testScene";
-    private static final String PROP_LEFT="isLeftOf";
-    private static final String PROP_RIGHT="isRightOf";
-    private static final String PROP_PERPENDICULAR="isPerpendicularTo";
-    private static final String PROP_PARALLEL="isParallelTo";
-    private static final String PROP_IS_IN_FRONT_OF="isInFrontOf";
-    private static final String PROP_IS_BEHIND_OF="isBehindOf";
-    private static final String PROP_IS_BELOW_OF="isBelowOf";
-    private static final String PROP_IS_ABOVE_OF="isAboveOf";
-    private static final String PROP_IS_ALONG_X="isAlongX";
-    private static final String PROP_IS_ALONG_Y="isAlongY";
-    private static final String PROP_IS_ALONG_Z="isAlongZ";
-    private static final String PROP_IS_COAXIAL_WITH="isCoaxialWith";
-    private static final String PROP_HAS_RADIUS="hasRadius";
-    private static final String COLOR="toBeDefined";
-
-    String YELLOW="Yellow";
-    String BLUE="Blue";
-    String GREEN="Green";
-    String PINK="Pink";
-    String RED="Red";
-
     public boolean initParam(ConnectedNode node) {
 
         // stat the service
@@ -129,15 +105,10 @@ public class SemanticService
                 Set<GeometricPrimitive> objects = new HashSet<>();
                 List<sit_msgs.atom> geometricPrimitives = request.getGeometricPrimitives();
                 for (sit_msgs.atom g : geometricPrimitives) {
-                    System.out.println("for all the geometric primitives received");
-                    //TODO  find a way to have a vector, list instead of an array
                     float[] coefficient = g.getCoefficients();
                     System.out.println(g.getType());
-                    if (SPHERE.equals(g.getType())) {
-                        System.out.println("if it is a Sphere");
-                        //TODO warning if the coefficinets are not the right number
+                    if (SITBase.CLASS.SPHERE.equals(g.getType())) {
                         if (coefficient.length == 4) {
-                            System.out.println("correct number of coefficient");
                             Sphere s = new Sphere(ontoRef);
                             s.shouldAddTime(true);
                             s.setCenter(coefficient[0], coefficient[1], coefficient[2]);
@@ -148,10 +119,8 @@ public class SemanticService
                             System.out.println("Wrong coefficients for sphere!");
                         }
 
-                    } else if (PLANE.equals(g.getType())) {
-                        System.out.println("if it is a plane");
+                    } else if (SITBase.CLASS.PLANE.equals(g.getType())) {
                         if (coefficient.length == 7) {
-                            System.out.println("correct number of coefficients");
                             Plane p = new Plane(ontoRef);
                             p.shouldAddTime(true);
                             p.setAxis(coefficient[0], coefficient[1], coefficient[2]);
@@ -163,7 +132,7 @@ public class SemanticService
                             System.out.println("Wrong coefficient for Plane ");
                         }
 
-                    } else if (CYLINDER.equals(g.getType())) {
+                    } else if (SITBase.CLASS.CYLINDER.equals(g.getType())) {
                         if (coefficient.length == 11) {
                             Cylinder c = new Cylinder(ontoRef);
                             c.shouldAddTime(true);
@@ -178,7 +147,7 @@ public class SemanticService
                             System.out.println("Wrong coefficient for Cylinder");
                         }
 
-                    } else if (CONE.equals(g.getType())) {
+                    } else if (SITBase.CLASS.CONE.equals(g.getType())) {
                         if (coefficient.length == 11) {
                             Cone c = new Cone(ontoRef);
                             c.shouldAddTime(true);
@@ -224,19 +193,10 @@ public class SemanticService
                 // learn the new scene if is the case
                 if (recognition1.shouldLearn()) {
                     System.out.println("Learning.... ");
-                    //TODO change the name
-                    recognition1.learn(NAME);
+                    recognition1.learn(computeSceneName());
                 }
 
-                // clean ontology
-                //ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
-                //for (GeometricPrimitive i : objects)
-                 //   ontoRef.removeIndividual(i.getInstance());
                 ontoRef.synchronizeReasoner();
-                //ontoRef.saveOntology();
-
-                System.out.println("saving the ontology");
-
                 //take class name
                 response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length()+1));
                 response.setSubClasses(recognition1.getBestRecognitionDescriptor().SubConceptToString());
@@ -245,15 +205,11 @@ public class SemanticService
                 for (GeometricPrimitive i : objects) {
                     i.readSemantic();
 
-                    //g.setName(i.getGround().toString().substring(ONTO_NAME.length()+1));
-                    if(i.getTypeIndividual().toString().contains(SPHERE)){
+                    if(i.getTypeIndividual().toString().contains(SITBase.CLASS.SPHERE)){
                         ArrayList<Float> coefficients=new ArrayList<>();
                        //filling the coefficients
-                        //TODO check whether such data property exists but maybe it is useless, think about it
-                        //TODO the order of the data property has to be well defined since it is the unique indicator of the property
-
-                        coefficients.add(ValueOfDataPropertyFloat(i.getDataSemantics(),SITBase.DATA_PROPERTY.RADIUS_SPHERE));
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.SPHERE,ValueOfDataPropertyString(i.getDataSemantics(),DATA_PROPERTY.COLOR),
+                        coefficients.add(i.getLiteral(SITBase.DATA_PROPERTY.RADIUS_SPHERE).parseFloat());
+                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.SPHERE,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
                                 coefficients,computeSR(i));
                         atoms.add(g);
 
@@ -261,12 +217,12 @@ public class SemanticService
                     else if (i.getTypeIndividual().toString().contains(SITBase.CLASS.PLANE)){
                         ArrayList<Float> coefficients=new ArrayList<>();
                         coefficients.add(
-                                ValueOfDataPropertyFloat(i.getDataSemantics(), DATA_PROPERTY.HESSIAN)
+                                i.getLiteral(DATA_PROPERTY.HESSIAN).parseFloat()
                         );
-                        coefficients.add(ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.AXIS_X));
-                        coefficients.add(ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.AXIS_Y));
-                        coefficients.add(ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.AXIS_Z));
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.PLANE,ValueOfDataPropertyString(i.getDataSemantics(),DATA_PROPERTY.COLOR),
+                        coefficients.add(i.getLiteral(DATA_PROPERTY.AXIS_X).parseFloat());
+                        coefficients.add(i.getLiteral(DATA_PROPERTY.AXIS_Y).parseFloat());
+                        coefficients.add(i.getLiteral(DATA_PROPERTY.AXIS_Z).parseFloat());
+                        Atom g = new Atom(i.getGround().toString().substring(ONTO_NAME.length()+1),CLASS.PLANE,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
                                 coefficients,computeSR(i));
                         atoms.add(g);
 
@@ -274,10 +230,10 @@ public class SemanticService
                     else  if (i.getTypeIndividual().toString().contains(CLASS.CYLINDER)){
                         ArrayList<Float> coefficients = new ArrayList<>();
                         coefficients.add(
-                                ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.CYLINDER_HEIGHT));
+                                i.getLiteral(DATA_PROPERTY.CYLINDER_HEIGHT).parseFloat());
                         coefficients.add(
-                                ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.CYLINDER_RADIUS));
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CYLINDER,ValueOfDataPropertyString(i.getDataSemantics(),DATA_PROPERTY.COLOR),
+                                i.getLiteral(DATA_PROPERTY.CYLINDER_RADIUS).parseFloat());
+                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CYLINDER,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
                                 coefficients,computeSR(i));
                         atoms.add(g);
 
@@ -285,25 +241,22 @@ public class SemanticService
                     else if (i.getTypeIndividual().toString().contains(CLASS.CONE)){
                         ArrayList<Float> coefficients = new ArrayList<>();
                         coefficients.add(
-                                ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.CONE_HEIGHT));
+                                i.getLiteral(DATA_PROPERTY.CONE_HEIGHT).parseFloat());
                         coefficients.add(
-                                ValueOfDataPropertyFloat(i.getDataSemantics(),DATA_PROPERTY.CONE_RADIUS));
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CONE,ValueOfDataPropertyString(i.getDataSemantics(),DATA_PROPERTY.COLOR),
+                                i.getLiteral(DATA_PROPERTY.CONE_RADIUS).parseFloat());
+                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CONE,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
                                 coefficients,computeSR(i));
                         atoms.add(g);
 
                     }
-                    System.out.println(ValueOfDataPropertyString(i.getDataSemantics(),DATA_PROPERTY.COLOR));
                     }
                     atoms.mapInROSMsg(node,response);
-             //   ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
-            //    for (GeometricPrimitive i : objects)
-             //      ontoRef.removeIndividual(i.getInstance());
-            //    ontoRef.synchronizeReasoner();
-                recognition1.getBestRecognitionDescriptor().saveOntology(ONTO_FILE);
+                    ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
+                    for (GeometricPrimitive i : objects)
+                       ontoRef.removeIndividual(i.getInstance());
+                     ontoRef.synchronizeReasoner();
+                    recognition1.getBestRecognitionDescriptor().saveOntology(ONTO_FILE);
                 }
-                //fill the response
-                //DONE
 
             };
 
@@ -317,105 +270,105 @@ public class SemanticService
 
         ArrayList<String> Individuals1 = new ArrayList<String>();
         //Poperty is above of
-        objectProperty(subject.getObjectSemantics(),PROP_IS_ABOVE_OF,Individuals1);
+        objectProperty(subject.getObjectSemantics(),SITBase.SPATIAL_RELATIONS.PROP_IS_ABOVE_OF,Individuals1);
         if(!Individuals1.isEmpty()){
-            Relation r= new Relation(Individuals1,PROP_IS_ABOVE_OF) ;
+            Relation r= new Relation(Individuals1,SITBase.SPATIAL_RELATIONS.PROP_IS_ABOVE_OF) ;
             rel.add(r);
 
         }
         //Property is along X
         ArrayList<String> Individuals2 = new ArrayList<String>();
-        objectProperty(subject.getObjectSemantics(),PROP_IS_ALONG_X,Individuals2);
+        objectProperty(subject.getObjectSemantics(),SITBase.SPATIAL_RELATIONS.PROP_IS_ALONG_X,Individuals2);
         if(!Individuals2.isEmpty()){
-            Relation r= new Relation(Individuals2,PROP_IS_ABOVE_OF) ;
+            Relation r= new Relation(Individuals2,SITBase.SPATIAL_RELATIONS.PROP_IS_ABOVE_OF) ;
             rel.add(r);
         }
 
         //Property is along y
         ArrayList<String> Individuals3 = new ArrayList<String>();
-        objectProperty(subject.getObjectSemantics(),PROP_IS_ALONG_Y,Individuals3);
+        objectProperty(subject.getObjectSemantics(),SITBase.SPATIAL_RELATIONS.PROP_IS_ALONG_Y,Individuals3);
         if(!Individuals3.isEmpty()){
-            Relation r = new Relation(Individuals3,PROP_IS_ALONG_Y);
+            Relation r = new Relation(Individuals3,SITBase.SPATIAL_RELATIONS.PROP_IS_ALONG_Y);
             rel.add(r);
         }
         //Property is along z
         ArrayList<String> Individuals4 = new ArrayList<String>();
-        objectProperty(subject.getObjectSemantics(),PROP_IS_ALONG_Z,Individuals4);
+        objectProperty(subject.getObjectSemantics(),SITBase.SPATIAL_RELATIONS.PROP_IS_ALONG_Z,Individuals4);
         if(!Individuals4.isEmpty()){
-            Relation r = new Relation (Individuals4, PROP_IS_ALONG_Z);
+            Relation r = new Relation (Individuals4, SITBase.SPATIAL_RELATIONS.PROP_IS_ALONG_Z);
             rel.add(r);
         }
         //Property is behind of
         ArrayList<String> Individuals5 = new ArrayList<String>();
-        objectProperty(subject.getObjectSemantics(),PROP_IS_BEHIND_OF,Individuals5);
+        objectProperty(subject.getObjectSemantics(),SITBase.SPATIAL_RELATIONS.PROP_IS_BEHIND_OF,Individuals5);
         if(!Individuals5.isEmpty()){
 
-            Relation r = new Relation (Individuals5, PROP_IS_BEHIND_OF);
+            Relation r = new Relation (Individuals5, SITBase.SPATIAL_RELATIONS.PROP_IS_BEHIND_OF);
             rel.add(r);
 
         }
         //Property is below of
         ArrayList<String> Individuals6 = new ArrayList<String>();
-        objectProperty(subject.getObjectSemantics(),PROP_IS_BELOW_OF,Individuals6);
+        objectProperty(subject.getObjectSemantics(),SITBase.SPATIAL_RELATIONS.PROP_IS_BELOW_OF,Individuals6);
 
         if(!Individuals6.isEmpty()){
 
-            Relation r = new Relation (Individuals6,PROP_IS_BELOW_OF);
+            Relation r = new Relation (Individuals6,SITBase.SPATIAL_RELATIONS.PROP_IS_BELOW_OF);
             rel.add(r);
         }
 
         //Property is coaxial with
         ArrayList<String> Individuals7 = new ArrayList<String>();
-        objectProperty(subject.getObjectSemantics(),PROP_IS_COAXIAL_WITH,Individuals7);
+        objectProperty(subject.getObjectSemantics(),SITBase.SPATIAL_RELATIONS.PROP_IS_COAXIAL_WITH,Individuals7);
 
         if(!Individuals7.isEmpty()){
 
-            Relation r = new Relation (Individuals7, PROP_IS_COAXIAL_WITH);
+            Relation r = new Relation (Individuals7, SITBase.SPATIAL_RELATIONS.PROP_IS_COAXIAL_WITH);
             rel.add(r);
         }
         //Property is in front of
 
         ArrayList<String> Individuals8 = new ArrayList<String>();
-        objectProperty(subject.getObjectSemantics(),PROP_IS_IN_FRONT_OF,Individuals8);
+        objectProperty(subject.getObjectSemantics(),SITBase.SPATIAL_RELATIONS.PROP_IS_IN_FRONT_OF,Individuals8);
         if(!Individuals8.isEmpty()){
-            Relation r = new Relation (Individuals8, PROP_IS_IN_FRONT_OF);
+            Relation r = new Relation (Individuals8, SITBase.SPATIAL_RELATIONS.PROP_IS_IN_FRONT_OF);
             rel.add(r);
         }
 
         //Property  Left
         ArrayList<String> Individuals9 = new ArrayList<String>();
-        objectProperty(subject.getObjectSemantics(),PROP_LEFT,Individuals9);
+        objectProperty(subject.getObjectSemantics(),SITBase.SPATIAL_RELATIONS.PROP_LEFT,Individuals9);
         if(!Individuals9.isEmpty()){
-            Relation r = new Relation (Individuals9,PROP_LEFT);
+            Relation r = new Relation (Individuals9,SITBase.SPATIAL_RELATIONS.PROP_LEFT);
             rel.add(r);
         }
 
         //Property parallel
         ArrayList<String> Individuals10 = new ArrayList<String>();
-        objectProperty(subject.getObjectSemantics(),PROP_PARALLEL,Individuals10);
+        objectProperty(subject.getObjectSemantics(),SITBase.SPATIAL_RELATIONS.PROP_PARALLEL,Individuals10);
 
         if(!Individuals10.isEmpty()){
-            Relation r = new Relation (Individuals10, PROP_PARALLEL);
+            Relation r = new Relation (Individuals10, SITBase.SPATIAL_RELATIONS.PROP_PARALLEL);
             rel.add(r);
         }
 
         //Property perpendicular
         ArrayList<String> Individuals11 = new ArrayList<String>();
-        objectProperty(subject.getObjectSemantics(),PROP_PERPENDICULAR,Individuals11);
+        objectProperty(subject.getObjectSemantics(),SITBase.SPATIAL_RELATIONS.PROP_PERPENDICULAR,Individuals11);
 
         if(!Individuals11.isEmpty()){
 
-            Relation r = new Relation (Individuals11, PROP_PERPENDICULAR);
+            Relation r = new Relation (Individuals11, SITBase.SPATIAL_RELATIONS.PROP_PERPENDICULAR);
             rel.add(r);
 
         }
 
         //Property right
         ArrayList<String> Individuals12 = new ArrayList<String>();
-        objectProperty(subject.getObjectSemantics(),PROP_RIGHT,Individuals12);
+        objectProperty(subject.getObjectSemantics(),SITBase.SPATIAL_RELATIONS.PROP_RIGHT,Individuals12);
 
         if(!Individuals12.isEmpty()){
-            Relation r = new Relation (Individuals12, PROP_RIGHT);
+            Relation r = new Relation (Individuals12, SITBase.SPATIAL_RELATIONS.PROP_RIGHT);
             rel.add(r);
         }
 
@@ -435,43 +388,16 @@ public class SemanticService
             }
         }
     }
-    public float ValueOfDataPropertyFloat(MORAxioms.DataSemantics dataProperties, String dataPropertyName){
-        //for all the input dataproperties
-        for (MORAxioms.DataSemantic i:dataProperties){
-            //if the dataproperty coincides with the desired one
-            if(i.toString().contains(dataPropertyName)){
-                //take only the number
-                String str = i.toString().replaceAll("[^\\d.]","");
-                //return the number as float
-                return Float.parseFloat(str.substring(1));
-            }
+    public float[] ListToArray(ArrayList<Float> floatList){
+        float[] floatArray = new float[floatList.size()];
+        int i = 0;
 
+        for (Float f : floatList) {
+            floatArray[i++] = (f != null ? f : Float.NaN); // Or whatever default you want.
         }
-        return ((float)-1.0);
+        return floatArray;
+
     }
-    public String ValueOfDataPropertyString(MORAxioms.DataSemantics dataProperties, String dataPropertyName){
-        //for all the input dataproperties
-        for (MORAxioms.DataSemantic i:dataProperties){
-            if(i.toString().contains(dataPropertyName)) {
-                //if the dataproperty coincides with the desired one
-                if (i.toString().contains(RED)) {
-                    return RED;
-                } else if (i.toString().contains(GREEN)) {
-                    return GREEN;
-                } else if (i.toString().contains(PINK)) {
-                    return PINK;
-                } else if (i.toString().contains(BLUE)) {
-                    return BLUE;
-                } else if (i.toString().contains(GREEN)) {
-                    return GREEN;
-                }
-            }
-            }
-            return "no-color";
-
-        }
-
-
     private class Atoms extends HashSet<Atom>{
 
         /**
@@ -495,12 +421,7 @@ public class SemanticService
                 rosAtom.setRelations(rel);
                 rosAtom.setName(s.getName());
                 rosAtom.setColor(s.getColor());
-                float[] floatArray = new float[s.getCoefficients().size()];
-                int i = 0;
-
-                for (Float f : s.getCoefficients()) {
-                    floatArray[i++] = (f != null ? f : Float.NaN); // Or whatever default you want.
-                }
+                float[] floatArray = ListToArray(s.getCoefficients());
                 rosAtom.setCoefficients(floatArray);
                 rosAtom.setType(s.getType());
                 rosAtoms.add(rosAtom);
@@ -704,6 +625,20 @@ public class SemanticService
         //   return objectId + ":'" + shape + "' ";
         //}
 
+
+    }
+
+    private String computeSceneName(){
+        MORFullIndividual counter = new MORFullIndividual(COUNTER.SCENE_COUNTER,
+                ONTO_NAME,
+                ONTO_FILE,
+                ONTO_IRI);
+        counter.readSemantic();
+        int current_count =counter.getLiteral(COUNTER.VALUE_DATA_PROPERTY).parseInteger();
+        counter.removeData(COUNTER.VALUE_DATA_PROPERTY);
+        counter.addData(COUNTER.VALUE_DATA_PROPERTY,current_count+1);
+        counter.writeSemantic();
+        return "Scene"+current_count;
 
     }
 }
