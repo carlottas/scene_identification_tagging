@@ -25,6 +25,12 @@ public interface SITBase {
     double CONFIDENCE_THRESHOLD = .8;
 
     /**
+     * Value for differentiate between different geometric features
+     */
+    float FIVE=(float)0.05;
+    float TEN=(float) 0.10 ;
+
+    /**
      * The path to the main t-box ontological representation
      * used by the SIT algorithm, with respect to the {@code src} folder.
      */
@@ -158,6 +164,8 @@ public interface SITBase {
          * (i.e.: belonging to the {@link CLASS#SPHERE}).
          */
         String SCENE = "Sn-";
+
+        String EPISODIC_SCENE="SnEp-";
     }
 
     /**
@@ -192,6 +200,14 @@ public interface SITBase {
         String SPHERE = "Sphere";
 
         /**
+         * The name of the classes that defines the SPHERE with respect to its radius
+         *
+         */
+        String SPHERE_RADIUS_SMALLER_THAN_FIVE="SphereRadiusSmallerThanFive";
+        String SPHERE_RADIUS_INCLUDED_IN_TEN_FIVE="SphereRadiusIncludedInTenFive";
+        String SPHERE_RADIUS_BIGGER_THAN_TEN="SphereRadiusBiggerThanTen";
+
+        /**
          * The name of the class containing all the object
          * with coefficients related to a plane
          * (i.e.: {@link it.emarolab.scene_identification_tagging.realObject.Plane}).
@@ -211,7 +227,16 @@ public interface SITBase {
          * (i.e.: {@link it.emarolab.scene_identification_tagging.realObject.Cone})
          */
         String CONE = "Cone";
-
+        /**
+         * The name of the classes that describe the Cone with respect to its
+         * Height and Radius
+         */
+        String CONE_RADIUS_SMALLER_THAN_FIVE="ConeRadiusSmallerThanFive";
+        String CONE_RADIUS_INCLUDED_IN_TEN_FIVE="ConeRadiusIncludedInTenFive";
+        String CONE_RADIUS_BIGGER_THAN_TEN="ConeRadiusBiggerThanTen";
+        String CONE_HEIGHT_SMALLER_THAN_FIVE="ConeHeightSmallerThanFive";
+        String CONE_HEIGHT_INCLUDED_IN_TEN_FIVE="ConeHeightIncludedInTenFive";
+        String CONE_HEIGHT_BIGGER_THAN_TEN="ConeHeightBiggerThanTen";
         /**
          * The name of the class containing all the object
          * with coefficients related to a cylinder
@@ -219,6 +244,16 @@ public interface SITBase {
          */
         String CYLINDER = "Cylinder";
 
+        /**
+         * The name of the classes that describe the Cylinder with respect to its
+         * Height and Radius
+         */
+        String CYLINDER_RADIUS_SMALLER_THAN_FIVE="CylinderRadiusSmallerThanFive";
+        String CYLINDER_RADIUS_INCLUDED_IN_TEN_FIVE="CylinderRadiusIncludedInTenFive";
+        String CYLINDER_RADIUS_BIGGER_THAN_TEN="CylinderRadiusBiggerThanTen";
+        String CYLINDER_HEIGHT_SMALLER_THAN_FIVE="CylinderHeightSmallerThanFive";
+        String CYLINDER_HEIGHT_INCLUDED_IN_TEN_FIVE="CylinderHeightIncludedInTenFive";
+        String CYLINDER_HEIGHT_BIGGER_THAN_TEN="CylinderHeightBiggerThanTen";
         /**
          * The name of the class containing all the object
          * with coefficients related to a primitive shape
@@ -412,6 +447,8 @@ public interface SITBase {
          */
         String ID = PREFIX_HAS + "id";
 
+        String BELONG_TO_SCENE="belong_to_Scene";
+
 
 
     }
@@ -489,7 +526,6 @@ public interface SITBase {
         String CYLINDER_COUNTER="Cylinder-Counter";
         String CONE_COUNTER="Cone-Counter";
         String VALUE_DATA_PROPERTY="has-value";
-
+        String EPISODIC_SCENE_COUNTER="Episodic-Scene-Counter";
     }
-
 }

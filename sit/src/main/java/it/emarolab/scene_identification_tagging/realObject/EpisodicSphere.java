@@ -77,6 +77,15 @@ public class EpisodicSphere extends EpisodicPrimitive
     private void initialiseProperty(){
         addData( getPropertyRadius(), true);
         addTypeIndividual( CLASS.SPHERE);
+        if(radius>FIVE && radius<TEN){
+            addTypeIndividual(CLASS.SPHERE_RADIUS_INCLUDED_IN_TEN_FIVE);
+        }
+        else if(radius<FIVE){
+            addTypeIndividual(CLASS.SPHERE_RADIUS_SMALLER_THAN_FIVE);
+        }
+        else if (radius>TEN){
+            addTypeIndividual(CLASS.SPHERE_RADIUS_BIGGER_THAN_TEN);
+        }
     }
 
     /**
@@ -119,6 +128,18 @@ public class EpisodicSphere extends EpisodicPrimitive
         List<MappingIntent> r = super.readSemantic();
         radius = getLiteral( getPropertyRadius()).parseFloat();
         return r;
+    }
+
+    @Override
+    public boolean equals(Object o ){
+        if(this == o) return true;
+        if (!(o instanceof  EpisodicSphere)) return false;
+
+        EpisodicSphere that= (EpisodicSphere) o;
+        if(this.getTypeIndividual().toString().equals(that.getTypeIndividual().toString())) return true;
+        else return false;
+
+
     }
 
 }

@@ -8,6 +8,7 @@ import it.emarolab.owloop.core.ObjectProperty;
 import it.emarolab.scene_identification_tagging.realObject.*;
 import it.emarolab.scene_identification_tagging.realObject.Cylinder;
 import it.emarolab.scene_identification_tagging.realObject.Sphere;
+import it.emarolab.scene_identification_tagging.sceneRepresentation.EpisodicScene;
 import it.emarolab.scene_identification_tagging.sceneRepresentation.SpatialRelation;
 import it.emarolab.scene_identification_tagging.sceneRepresentation.Relation;
 import javafx.scene.shape.*;
@@ -93,8 +94,8 @@ public class EpisodicService
                 // suppress aMOR log
                 it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
                 String SceneName=request.getSceneName();
-                //List<String> SubClasses=request.getSubClasses();
-                //List<String> SuperClasses=request.getSuperClasses();
+                List<String> SubClasses=request.getSubClasses();
+                List<String> SuperClasses=request.getSuperClasses();
                 String SupportName=request.getSupportName();
                 Atoms object= new Atoms();
                 object.MapFromRosMsg(request.getObject());
@@ -106,6 +107,7 @@ public class EpisodicService
                          s.setRadius(a.getCoefficients().get(0));
                          s.setRelations(a.getRelations());
                          s.setName(a.getName());
+                         s.shouldAddTime(true);
                          Primitives.add(s);
                      }
                      else if (a.getType().equals(CLASS.PLANE)){
@@ -114,6 +116,7 @@ public class EpisodicService
                          p.setHessian(a.coefficients.get(0));
                          p.setName(a.getName());
                          p.setRelations(a.getRelations());
+                         p.shouldAddTime(true);
                          Primitives.add(p);
 
                      }
@@ -124,6 +127,7 @@ public class EpisodicService
                          c.setRadius(a.getCoefficients().get(1));
                          c.setName(a.getName());
                          c.setRelations(a.getRelations());
+                         c.shouldAddTime(true);
                          Primitives.add(c);
                      }
                      else if (a.getType().equals(CLASS.CONE)){
@@ -133,6 +137,7 @@ public class EpisodicService
                          c.setRadius(a.getCoefficients().get(1));
                          c.setName(a.getName());
                          c.setRelations(a.getRelations());
+                         c.shouldAddTime(true);
                          Primitives.add(c);
                      }
                 }
@@ -171,10 +176,26 @@ public class EpisodicService
                 }
                 //adding the ObjectProperty
                 for (EpisodicPrimitive i : Primitives){
-                    System.out.println("Adding Object Properties");
+
                  i.ApplyRelations();
                  i.writeSemantic();
                  i.saveOntology(EPISODIC_ONTO_FILE);
+                }
+
+                //initialize the scene
+                EpisodicScene episodicScene= new EpisodicScene(Primitives,ontoRef,SceneName);
+                episodicScene.setSubClasses(SubClasses);
+                episodicScene.setSuperClasses(SuperClasses);
+                episodicScene.setAddingTime(true);
+                episodicScene.InitializeClasses(ontoRef);
+                if(episodicScene.ShouldLearn(ontoRef)) {
+                    episodicScene.Learn(ontoRef,ComputeName(CLASS.SCENE));
+                }
+                for (EpisodicPrimitive i:Primitives){
+                    i.setSceneName(episodicScene.getEpisodicSceneName());
+                    i.ApplySceneName();
+                    i.writeSemantic();
+                    i.saveOntology(EPISODIC_ONTO_FILE);
                 }
 
 
@@ -517,6 +538,10 @@ public class EpisodicService
             Counter = COUNTER.CYLINDER_COUNTER;
             Prefix = INDIVIDUAL.PREFIX_CYLINDER;
 
+        }
+        else if (Type.contains(CLASS.SCENE)){
+            Counter=COUNTER.EPISODIC_SCENE_COUNTER;
+            Prefix=INDIVIDUAL.EPISODIC_SCENE;
         }
         else {
             return null;

@@ -6,7 +6,7 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      ontologyIRI="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit">
-    <Prefix name="" IRI="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit"/>
+    <Prefix name="" IRI="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#"/>
     <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
     <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
     <Prefix name="sit" IRI="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#"/>
@@ -17,34 +17,163 @@
     <Prefix name="swrla" IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#"/>
     <Prefix name="swrlb" IRI="http://www.w3.org/2003/11/swrlb#"/>
     <Declaration>
-        <Class IRI="#Cone"/>
+        <Class IRI="#ConeHeightIncludedInTenFive"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Cylinder"/>
+        <ObjectProperty IRI="#has-scene_isParallelTo"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#GeometricPrimitive"/>
+        <DataProperty IRI="#has-geometric_axisZ"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Orientable"/>
+        <DataProperty IRI="#belong_to_Scene"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#defines-th_alignedZ"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CylinderHeightIncludedInTenFive"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#defines-th_parallelism"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has-scene_yellow"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isLeftOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has-scene_isPerpendicularTo"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isInFrontOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isAboveOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has-scene_isInFrontOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isAlongZ"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Define-Recognition"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Parameter"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Plane"/>
+        <DataProperty IRI="#has_time"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#RealObject"/>
+        <DataProperty IRI="#has_id"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-cylinder_radius"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ConeHeightSmallerThanFive"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ConeRadiusIncludedInTenFive"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has-scene_isCoaxialWith"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has-scene_green"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-geometric_hessian"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CylinderRadiusBiggerThanTen"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-geometric_pointX"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has-scene_isBelowOf"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CylinderHeightBiggerThanTen"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-color"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SphereRadiusSmallerThanFive"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-cone_apexZ"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Scene"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Scene1"/>
+        <ObjectProperty IRI="#has-scene_isRightOf"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Scene2"/>
+        <DataProperty IRI="#has-value"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ConeRadiusBiggerThanTen"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-cylinder-pointZ"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has-scene_red"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isCoaxialWith"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#defines-th_perpendicularity"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-geometric_pointY"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#RealObject"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ConeHeightBiggerThanTen"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-geometric_centerZ"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ConeRadiusSmallerThanFive"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Cylinder-Counter"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-cone_apexY"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Episodic-Scene-Counter"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Plane-Counter"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-geometric_pointZ"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-geometric_height"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Cone-Counter"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#defines-th_coaxiality"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SphereRadiusIncludedInTenFive"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Sphere"/>
@@ -53,223 +182,136 @@
         <ObjectProperty IRI="#has-scene_Red"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_blue"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_green"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_isAboveOf"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_isAlongX"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_isAlongY"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_isAlongZ"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_isBehindOf"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_isBelowOf"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_isCoaxialWith"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_isInFrontOf"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_isParallelTo"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_isPerpendicularTo"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_isRightOf"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_pink"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_red"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#has-scene_yellow"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isAboveOf"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isAlongX"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isAlongY"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isAlongZ"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isBehindOf"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isBelowOf"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isCoaxialWith"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isInFrontOf"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isLeftOf"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isParallelTo"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isPerpendicularTo"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isRightOf"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty abbreviatedIRI="owl:differentFrom"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#defines-cardinality_"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#defines-th_alignedX"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#defines-th_alignedY"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#defines-th_alignedZ"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#defines-th_coaxiality"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#defines-th_parallelism"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#defines-th_perpendicularity"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-color"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-cone_apexX"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-cone_apexY"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-cone_apexZ"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-cone_height"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-cone_radius"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-cylinder-pointX"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-cylinder-pointY"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-cylinder-pointZ"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-cylinder_height"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-cylinder_radius"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-geometric_axisX"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-geometric_axisY"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-geometric_axisZ"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-geometric_centerX"/>
+        <DataProperty IRI="#has-geometric_radius"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#has-geometric_centerY"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_centerZ"/>
+        <DataProperty IRI="#has-cone_apexX"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_height"/>
+        <DataProperty IRI="#has-cylinder-pointX"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_hessian"/>
+        <ObjectProperty IRI="#has-scene_isAboveOf"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_pointX"/>
+        <ObjectProperty IRI="#has-scene_isBehindOf"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_pointY"/>
+        <Class IRI="#CylinderRadiusSmallerThanFive"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_pointZ"/>
+        <ObjectProperty IRI="#isPerpendicularTo"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_radius"/>
+        <ObjectProperty IRI="#has-scene_isAlongZ"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-sphere_radius"/>
+        <Class IRI="#Cylinder"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-cone_radius"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-geometric_centerX"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-cylinder-pointY"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Scene1"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Orientable"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CylinderRadiusIncludedInTenFive"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty abbreviatedIRI="owl:differentFrom"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Cone"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has-scene_isAlongY"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isAlongY"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-geometric_axisX"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#has-time"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-value"/>
+        <ObjectProperty IRI="#isBelowOf"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has_id"/>
+        <DataProperty IRI="#defines-th_alignedX"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has_time"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#Cone-Counter"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#Cylinder-Counter"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#Define-Recognition"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#Plane-Counter"/>
+        <DataProperty IRI="#has-cylinder_height"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#Sphere-Counter"/>
     </Declaration>
     <Declaration>
+        <ObjectProperty IRI="#has-scene_blue"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Scene2"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#GeometricPrimitive"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isRightOf"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Plane"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-geometric_axisY"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-cone_height"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#defines-th_alignedY"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isAlongX"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has-scene_isAlongX"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isParallelTo"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#defines-cardinality_"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CylinderHeightSmallerThanFive"/>
+    </Declaration>
+    <Declaration>
         <AnnotationProperty abbreviatedIRI="swrla:isRuleEnabled"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#S-2"/>
+        <ObjectProperty IRI="#isBehindOf"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#C-2"/>
+        <ObjectProperty IRI="#has-scene_pink"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#P-2"/>
+        <DataProperty IRI="#has-sphere_radius"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SphereRadiusBiggerThanTen"/>
     </Declaration>
     <EquivalentClasses>
         <Class IRI="#Cone"/>
@@ -545,8 +587,56 @@
         <Class IRI="#Orientable"/>
     </SubClassOf>
     <SubClassOf>
+        <Class IRI="#ConeHeightBiggerThanTen"/>
+        <Class IRI="#Cone"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ConeHeightIncludedInTenFive"/>
+        <Class IRI="#Cone"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ConeHeightSmallerThanFive"/>
+        <Class IRI="#Cone"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ConeRadiusBiggerThanTen"/>
+        <Class IRI="#Cone"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ConeRadiusIncludedInTenFive"/>
+        <Class IRI="#Cone"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ConeRadiusSmallerThanFive"/>
+        <Class IRI="#Cone"/>
+    </SubClassOf>
+    <SubClassOf>
         <Class IRI="#Cylinder"/>
         <Class IRI="#Orientable"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#CylinderHeightBiggerThanTen"/>
+        <Class IRI="#Cylinder"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#CylinderHeightIncludedInTenFive"/>
+        <Class IRI="#Cylinder"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#CylinderHeightSmallerThanFive"/>
+        <Class IRI="#Cylinder"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#CylinderRadiusBiggerThanTen"/>
+        <Class IRI="#Cylinder"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#CylinderRadiusIncludedInTenFive"/>
+        <Class IRI="#Cylinder"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#CylinderRadiusSmallerThanFive"/>
+        <Class IRI="#Cylinder"/>
     </SubClassOf>
     <SubClassOf>
         <Class IRI="#GeometricPrimitive"/>
@@ -572,6 +662,18 @@
         <Class IRI="#Sphere"/>
         <Class IRI="#GeometricPrimitive"/>
     </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SphereRadiusBiggerThanTen"/>
+        <Class IRI="#Sphere"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SphereRadiusIncludedInTenFive"/>
+        <Class IRI="#Sphere"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SphereRadiusSmallerThanFive"/>
+        <Class IRI="#Sphere"/>
+    </SubClassOf>
     <DisjointClasses>
         <Class IRI="#Cone"/>
         <Class IRI="#Cylinder"/>
@@ -579,17 +681,64 @@
         <Class IRI="#Sphere"/>
     </DisjointClasses>
     <DisjointClasses>
+        <Class IRI="#ConeHeightBiggerThanTen"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#ConeHeightIncludedInTenFive"/>
+            <Class IRI="#ConeHeightSmallerThanFive"/>
+        </ObjectIntersectionOf>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#ConeHeightIncludedInTenFive"/>
+        <Class IRI="#ConeHeightSmallerThanFive"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#ConeRadiusBiggerThanTen"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#ConeRadiusIncludedInTenFive"/>
+            <Class IRI="#ConeRadiusSmallerThanFive"/>
+        </ObjectIntersectionOf>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#ConeRadiusIncludedInTenFive"/>
+        <Class IRI="#ConeRadiusSmallerThanFive"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#CylinderHeightBiggerThanTen"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#CylinderHeightIncludedInTenFive"/>
+            <Class IRI="#CylinderHeightSmallerThanFive"/>
+        </ObjectIntersectionOf>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#CylinderHeightIncludedInTenFive"/>
+        <Class IRI="#CylinderHeightSmallerThanFive"/>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#CylinderRadiusBiggerThanTen"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#CylinderRadiusIncludedInTenFive"/>
+            <Class IRI="#CylinderRadiusSmallerThanFive"/>
+        </ObjectIntersectionOf>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#CylinderRadiusIncludedInTenFive"/>
+        <Class IRI="#CylinderRadiusSmallerThanFive"/>
+    </DisjointClasses>
+    <DisjointClasses>
         <Class IRI="#Orientable"/>
         <Class IRI="#Sphere"/>
     </DisjointClasses>
-    <ClassAssertion>
-        <Class IRI="#Cone"/>
-        <NamedIndividual IRI="#C-2"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="#GeometricPrimitive"/>
-        <NamedIndividual IRI="#C-2"/>
-    </ClassAssertion>
+    <DisjointClasses>
+        <Class IRI="#SphereRadiusBiggerThanTen"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#SphereRadiusIncludedInTenFive"/>
+            <Class IRI="#SphereRadiusSmallerThanFive"/>
+        </ObjectIntersectionOf>
+    </DisjointClasses>
+    <DisjointClasses>
+        <Class IRI="#SphereRadiusIncludedInTenFive"/>
+        <Class IRI="#SphereRadiusSmallerThanFive"/>
+    </DisjointClasses>
     <ClassAssertion>
         <Class IRI="#Parameter"/>
         <NamedIndividual IRI="#Cone-Counter"/>
@@ -603,65 +752,21 @@
         <NamedIndividual IRI="#Define-Recognition"/>
     </ClassAssertion>
     <ClassAssertion>
-        <Class IRI="#GeometricPrimitive"/>
-        <NamedIndividual IRI="#P-2"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="#Plane"/>
-        <NamedIndividual IRI="#P-2"/>
+        <Class IRI="#Parameter"/>
+        <NamedIndividual IRI="#Episodic-Scene-Counter"/>
     </ClassAssertion>
     <ClassAssertion>
         <Class IRI="#Parameter"/>
         <NamedIndividual IRI="#Plane-Counter"/>
     </ClassAssertion>
     <ClassAssertion>
-        <Class IRI="#GeometricPrimitive"/>
-        <NamedIndividual IRI="#S-2"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="#Sphere"/>
-        <NamedIndividual IRI="#S-2"/>
-    </ClassAssertion>
-    <ClassAssertion>
         <Class IRI="#Parameter"/>
         <NamedIndividual IRI="#Sphere-Counter"/>
     </ClassAssertion>
-    <DifferentIndividuals>
-        <NamedIndividual IRI="#C-2"/>
-        <NamedIndividual IRI="#P-2"/>
-    </DifferentIndividuals>
-    <DifferentIndividuals>
-        <NamedIndividual IRI="#C-2"/>
-        <NamedIndividual IRI="#S-2"/>
-    </DifferentIndividuals>
-    <DifferentIndividuals>
-        <NamedIndividual IRI="#P-2"/>
-        <NamedIndividual IRI="#S-2"/>
-    </DifferentIndividuals>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-color"/>
-        <NamedIndividual IRI="#C-2"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">blue</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-cone_height"/>
-        <NamedIndividual IRI="#C-2"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.3</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-cone_radius"/>
-        <NamedIndividual IRI="#C-2"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.3</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-time"/>
-        <NamedIndividual IRI="#C-2"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1497952126921</Literal>
-    </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#has-value"/>
         <NamedIndividual IRI="#Cone-Counter"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">4</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#has-value"/>
@@ -699,19 +804,9 @@
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.7</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
-        <DataProperty IRI="#has-color"/>
-        <NamedIndividual IRI="#P-2"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">blue</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-geometric_hessian"/>
-        <NamedIndividual IRI="#P-2"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.5</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-time"/>
-        <NamedIndividual IRI="#P-2"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1497952126809</Literal>
+        <DataProperty IRI="#has-value"/>
+        <NamedIndividual IRI="#Episodic-Scene-Counter"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#has-value"/>
@@ -719,24 +814,9 @@
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
-        <DataProperty IRI="#has-color"/>
-        <NamedIndividual IRI="#S-2"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">blue</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-sphere_radius"/>
-        <NamedIndividual IRI="#S-2"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.3</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-time"/>
-        <NamedIndividual IRI="#S-2"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1497952126870</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
         <DataProperty IRI="#has-value"/>
         <NamedIndividual IRI="#Sphere-Counter"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">4</Literal>
     </DataPropertyAssertion>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#has-scene_blue"/>
@@ -1071,6 +1151,10 @@
         <ObjectProperty IRI="#isRightOf"/>
         <Class IRI="#GeometricPrimitive"/>
     </ObjectPropertyRange>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#belong_to_Scene"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
     <SubDataPropertyOf>
         <DataProperty IRI="#defines-cardinality_"/>
         <DataProperty abbreviatedIRI="owl:topDataProperty"/>
@@ -1207,6 +1291,13 @@
         <DataProperty IRI="#has_time"/>
         <DataProperty abbreviatedIRI="owl:topDataProperty"/>
     </SubDataPropertyOf>
+    <DataPropertyDomain>
+        <DataProperty IRI="#belong_to_Scene"/>
+        <DataExactCardinality cardinality="1">
+            <DataProperty IRI="#belong_to_Scene"/>
+            <Datatype abbreviatedIRI="xsd:string"/>
+        </DataExactCardinality>
+    </DataPropertyDomain>
     <DataPropertyDomain>
         <DataProperty IRI="#defines-th_alignedX"/>
         <DataExactCardinality cardinality="1">
@@ -1362,6 +1453,10 @@
         </DataExactCardinality>
     </DataPropertyDomain>
     <DataPropertyRange>
+        <DataProperty IRI="#belong_to_Scene"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
         <DataProperty IRI="#defines-th_alignedX"/>
         <Datatype abbreviatedIRI="xsd:float"/>
     </DataPropertyRange>
@@ -1453,6 +1548,5 @@
 
 
 
-<!-- Generated by the OWL API (version 5.0.2.20160507-1747) https://github.com/owlcs/owlapi/ -->
-
+<!-- Generated by the OWL API (version 4.2.6.20160910-2108) https://github.com/owlcs/owlapi -->
 

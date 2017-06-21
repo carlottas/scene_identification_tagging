@@ -75,6 +75,25 @@ public class EpisodicCone
             addData( getPropertyHeight(), true);
             addData( getPropertyRadius(), true);
             addTypeIndividual( CLASS.CONE);
+            if(radius>FIVE && radius<TEN){
+                addTypeIndividual(CLASS.CONE_RADIUS_INCLUDED_IN_TEN_FIVE);
+            }
+            else if(radius<FIVE){
+                addTypeIndividual(CLASS.CONE_RADIUS_SMALLER_THAN_FIVE);
+            }
+            else if (radius>TEN){
+                addTypeIndividual(CLASS.CONE_RADIUS_BIGGER_THAN_TEN);
+            }
+            if(height>FIVE && height<TEN){
+                addTypeIndividual(CLASS.CONE_HEIGHT_INCLUDED_IN_TEN_FIVE);
+            }
+            else if(height<FIVE){
+                addTypeIndividual(CLASS.CONE_HEIGHT_SMALLER_THAN_FIVE);
+            }
+            else if (height>TEN){
+                addTypeIndividual(CLASS.CONE_HEIGHT_BIGGER_THAN_TEN);
+            }
+
         }
 
 
@@ -151,4 +170,13 @@ public class EpisodicCone
             radius = getLiteral( getPropertyRadius()).parseFloat();
             return r;
         }
+    @Override
+    public boolean equals(Object o ){
+        if(this == o) return true;
+        if (!(o instanceof  EpisodicCone)) return false;
+
+        EpisodicCone that= (EpisodicCone) o;
+        if(this.getTypeIndividual().toString().equals(that.getTypeIndividual().toString())) return true;
+        else return false;
+    }
 }

@@ -19,6 +19,7 @@ public class EpisodicPrimitive extends SpatialIndividualDescriptor
     private Long id = null;
     private ArrayList<Relation>relations;
     private String Name = null;
+    private String SceneName= null ;
 
     /**
      * Initialise and ontological object by have a name based on {@link #currentCOUNT}
@@ -175,6 +176,9 @@ public class EpisodicPrimitive extends SpatialIndividualDescriptor
      * @return the changes done during reading.
      */
 
+    public void setSceneName(String SceneName){this.SceneName=SceneName;}
+    public String getSceneName(){return(this.SceneName);}
+
     public void setRelations(ArrayList<Relation> relations){
         this.relations= relations;
     }
@@ -238,11 +242,14 @@ public class EpisodicPrimitive extends SpatialIndividualDescriptor
         for (Relation r : relations){
             for(String s : r.getObject()){
                 this.addObject(r.getRelation(),s,true);
-                System.out.print("Adding Object Property, inside the class");
             }
         }
+    }
 
-
+    public  void ApplySceneName(){
+        this.readSemantic();
+        this.addData(DATA_PROPERTY.BELONG_TO_SCENE,this.SceneName);
+        this.writeSemantic();
     }
 
 
