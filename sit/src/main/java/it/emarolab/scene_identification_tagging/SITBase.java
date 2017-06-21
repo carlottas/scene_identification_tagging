@@ -528,4 +528,10 @@ public interface SITBase {
         String VALUE_DATA_PROPERTY="has-value";
         String EPISODIC_SCENE_COUNTER="Episodic-Scene-Counter";
     }
+    interface SUPPORT
+    extends VOCABOLARY{
+        String SUPPORT_CLASS_NAME="Support";
+        String OBJECT_PROPERTY_IS_SUPPORT_OF="is-support-of_scene";
+        String HAS_SCENE_SUPPORT="has-scene_support";
+    }
 }

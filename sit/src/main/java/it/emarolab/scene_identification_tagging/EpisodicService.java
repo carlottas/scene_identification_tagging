@@ -100,7 +100,7 @@ public class EpisodicService
                 Atoms object= new Atoms();
                 object.MapFromRosMsg(request.getObject());
                 ArrayList<EpisodicPrimitive> Primitives= new ArrayList<>();
-                System.out.println("ADDING THE OBJECT");
+
                 for (Atom a : object){
                      if(a.getType().equals(CLASS.SPHERE)){
                          EpisodicSphere s= new EpisodicSphere(ComputeName(CLASS.SPHERE),ontoRef);
@@ -146,24 +146,17 @@ public class EpisodicService
                 //update the name with the new name computed
                 for (EpisodicPrimitive i : Primitives){
                     ArrayList<Relation> newRelation = new ArrayList<>();
-                    for (EpisodicPrimitive j:Primitives){
-                        if(!i.equals(j)){
-                            for(Relation r : i.getRelations()){
-                                ArrayList<String> newObjects= new ArrayList<>();
-                                for (String s: r.getObject()){
-                                    if (s.equals(j.getName())){
-                                        newObjects.add(j.getGround().toString().substring(EPISODIC_ONTO_NAME.length()+1));
-                                    }
-                                    else{
-                                        newObjects.add(s);
-                                    }
-
+                    for(Relation r : i.getRelations()){
+                        ArrayList<String> newObjects= new ArrayList<>();
+                        for (EpisodicPrimitive j:Primitives) {
+                            for (String s : r.getObject()) {
+                                if (s.equals(j.getName())) {
+                                    newObjects.add(j.getGround().toString().substring(EPISODIC_ONTO_NAME.length() + 1));
                                 }
-                                newRelation.add(new Relation( newObjects,r.getRelation()));
 
                             }
-
                         }
+                        newRelation.add(new Relation( newObjects,r.getRelation()));
                     }
                     i.setRelations(newRelation);
                 }
@@ -181,32 +174,34 @@ public class EpisodicService
                  i.writeSemantic();
                  //i.saveOntology(EPISODIC_ONTO_FILE);
                 }
-                System.out.println("UNTIL HERE YOU HAVE ALREADY TESTED AND WORKS ");
                 ontoRef.synchronizeReasoner();
                 //initialize the scene
-                System.out.println("INTIALIZE THE EPISODIC SCENE WITH THE PRIMITIVES");
                 EpisodicScene episodicScene= new EpisodicScene(Primitives,ontoRef,SceneName);
-                System.out.println("SETTING SUB CLASSES");
                 episodicScene.setSubClasses(SubClasses);
-                System.out.println("SETTING SUPER CLASSES");
                 episodicScene.setSuperClasses(SuperClasses);
-                System.out.println("ADDING TIME");
+                episodicScene.setSupportName(SupportName);
                 episodicScene.setAddingTime(true);
-                System.out.println("INTIALIZE CLASSES");
                 episodicScene.InitializeClasses(ontoRef);
-                System.out.println("IF IT SHOULD BE LEARN");
-                if(episodicScene.ShouldLearn(ontoRef)) {
-                   System.out.println("LEARNING");
+                episodicScene.InitializeSupport(ontoRef);
+                if(episodicScene.ShouldLearn(ontoRef)){
                     episodicScene.Learn(ontoRef,ComputeName(CLASS.SCENE));
+                    for (EpisodicPrimitive i:Primitives){
+                        i.setSceneName(episodicScene.getEpisodicSceneName());
+                        i.ApplySceneName();
+                        i.writeSemantic();
+                        i.saveOntology(EPISODIC_ONTO_FILE);
+                    }
                 }
-                System.out.println("APPLING THE RELATION CLASSES SCENE NAME");
-                for (EpisodicPrimitive i:Primitives){
-                    i.setSceneName(episodicScene.getEpisodicSceneName());
-                    i.ApplySceneName();
-                   i.writeSemantic();
-                   System.out.println("SAVING");
-                   i.saveOntology(EPISODIC_ONTO_FILE);
+                else {
+                    //removing the individual of geometric primitives
+                    for (EpisodicPrimitive i : Primitives){
+                        ontoRef.removeIndividual(i.getInstance());
+                        ontoRef.synchronizeReasoner();
+                    }
+
                 }
+
+
 
 
             }

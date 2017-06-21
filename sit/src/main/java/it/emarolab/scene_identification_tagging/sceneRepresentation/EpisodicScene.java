@@ -25,10 +25,12 @@ public class EpisodicScene implements SITBase{
     private Set<colorRelation> colorRelations;
     private String EpisodicSceneName;
     private String SemanticSceneName;
+    private String SupportName ;
     private List<String> SubClasses;
     private List <String> SuperClasses;
     private long time = System.currentTimeMillis();
     private boolean addTime = false;
+    private boolean newSupport;
 
     /**
      * This constructor assume that the given {@code object} have all object property that
@@ -104,6 +106,7 @@ public class EpisodicScene implements SITBase{
 
     }
     public boolean ShouldLearn(OWLReferences ontoRef){
+        if(newSupport){return true;}
         ArrayList<EpisodicLearn> description = new ArrayList<>();
         ArrayList<EpisodicLearn> ColorDescription = new ArrayList<>();
         for (SpatialRelation r:relations){
@@ -145,6 +148,7 @@ public class EpisodicScene implements SITBase{
         }
         if (addTime)
             scene.addData( DATA_PROPERTY.TIME, time, true);
+        scene.addObject(SUPPORT.HAS_SCENE_SUPPORT,SupportName);
         scene.writeSemantic();
 
     }
@@ -162,10 +166,6 @@ public class EpisodicScene implements SITBase{
                        ind1.readSemantic();
                        MORFullIndividual ind2 = new MORFullIndividual(j.getIndividual(), ontoRef);
                        ind2.readSemantic();
-                       System.out.println("FIRST INDIVIDUAL");
-                       System.out.println(ind1.getTypeIndividual().toString());
-                       System.out.println("\n SECOND INDIVIDUAL");
-                       System.out.println(ind2.getTypeIndividual().toString());
                        if (ind1.getTypeIndividual().equals(ind2.getTypeIndividual()) &&
                                ind1.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral().equals(ind2.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral())) {
                            count++;
@@ -202,7 +202,8 @@ public class EpisodicScene implements SITBase{
     public void setAddingTime(boolean addTime) {
         this.addTime = addTime;
     }
-
+    public void setSupportName(String SupportName){this.SupportName=SupportName;}
+    public String getSupportName(){return this.SupportName;}
     public void setEpisodicSceneName(String EpisodicSceneName){this.EpisodicSceneName=EpisodicSceneName;}
     public void setSemanticSceneName(String SemanticSceneName){this.SemanticSceneName=SemanticSceneName;}
     public void setSubClasses(List<String> SubClasses){this.SubClasses=SubClasses;}
@@ -211,6 +212,23 @@ public class EpisodicScene implements SITBase{
     public String getSemanticSceneName(){return this.SemanticSceneName;}
     public List<String> getSubClasses(){return this.SubClasses;}
     public List<String> getSuperClasses(){return this.SuperClasses;}
+    public void InitializeSupport(OWLReferences ontoRef){
+        MORFullConcept suppClass= new MORFullConcept(SUPPORT.SUPPORT_CLASS_NAME,ontoRef);
+        suppClass.readSemantic();
+        for(OWLNamedIndividual i : suppClass.getIndividualClassified()) {
+            MORFullIndividual ind = new MORFullIndividual(i,ontoRef);
+            ind.readSemantic();
+            if(ind.getGround().toString().substring(EPISODIC_ONTO_NAME.length()+1).equals(SupportName)){
+                newSupport=false;
+                return;
+            }
+        }
+        MORFullIndividual supp=new MORFullIndividual(SupportName,ontoRef);
+        supp.addTypeIndividual(SUPPORT.SUPPORT_CLASS_NAME);
+        supp.writeSemantic();
+        newSupport=true;
+    }
+
 
     private class EpisodicLearn{
 
