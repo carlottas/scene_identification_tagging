@@ -75,24 +75,9 @@ public class EpisodicCone
             addData( getPropertyHeight(), true);
             addData( getPropertyRadius(), true);
             addTypeIndividual( CLASS.CONE);
-            if(radius>FIVE && radius<TEN){
-                addTypeIndividual(CLASS.CONE_RADIUS_INCLUDED_IN_TEN_FIVE);
-            }
-            else if(radius<FIVE){
-                addTypeIndividual(CLASS.CONE_RADIUS_SMALLER_THAN_FIVE);
-            }
-            else if (radius>TEN){
-                addTypeIndividual(CLASS.CONE_RADIUS_BIGGER_THAN_TEN);
-            }
-            if(height>FIVE && height<TEN){
-                addTypeIndividual(CLASS.CONE_HEIGHT_INCLUDED_IN_TEN_FIVE);
-            }
-            else if(height<FIVE){
-                addTypeIndividual(CLASS.CONE_HEIGHT_SMALLER_THAN_FIVE);
-            }
-            else if (height>TEN){
-                addTypeIndividual(CLASS.CONE_HEIGHT_BIGGER_THAN_TEN);
-            }
+            System.out.println("INITIALIZE THE PROPERY");
+
+
 
         }
 
@@ -134,6 +119,15 @@ public class EpisodicCone
         public void setHeight(Float h) {
             this.height = h;
             addData( getPropertyHeight(), h, true);
+            if(height>FIVE && height<TEN){
+                addTypeIndividual(CLASS.CONE_HEIGHT_INCLUDED_IN_TEN_FIVE);
+            }
+            else if(height<=FIVE){
+                addTypeIndividual(CLASS.CONE_HEIGHT_SMALLER_THAN_FIVE);
+            }
+            else if (height>=TEN){
+                addTypeIndividual(CLASS.CONE_HEIGHT_BIGGER_THAN_TEN);
+            }
         }
 
         /**
@@ -155,6 +149,15 @@ public class EpisodicCone
         public void setRadius(Float r) {
             this.radius = r;
             addData( getPropertyRadius(), r, true);
+            if(radius>FIVE && radius<TEN){
+                addTypeIndividual(CLASS.CONE_RADIUS_INCLUDED_IN_TEN_FIVE);
+            }
+            else if(radius<=FIVE){
+                addTypeIndividual(CLASS.CONE_RADIUS_SMALLER_THAN_FIVE);
+            }
+            else if (radius>=TEN){
+                addTypeIndividual(CLASS.CONE_RADIUS_BIGGER_THAN_TEN);
+            }
         }
 
         /**

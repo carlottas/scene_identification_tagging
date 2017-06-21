@@ -25,6 +25,7 @@ public class EpisodicSphere extends EpisodicPrimitive
      */
     public EpisodicSphere(OWLReferences onto) {
         super( INDIVIDUAL.PREFIX_SPHERE+currentCOUNT, onto);
+
         initialiseProperty();
     }
     /**
@@ -77,15 +78,6 @@ public class EpisodicSphere extends EpisodicPrimitive
     private void initialiseProperty(){
         addData( getPropertyRadius(), true);
         addTypeIndividual( CLASS.SPHERE);
-        if(radius>FIVE && radius<TEN){
-            addTypeIndividual(CLASS.SPHERE_RADIUS_INCLUDED_IN_TEN_FIVE);
-        }
-        else if(radius<FIVE){
-            addTypeIndividual(CLASS.SPHERE_RADIUS_SMALLER_THAN_FIVE);
-        }
-        else if (radius>TEN){
-            addTypeIndividual(CLASS.SPHERE_RADIUS_BIGGER_THAN_TEN);
-        }
     }
 
     /**
@@ -115,6 +107,15 @@ public class EpisodicSphere extends EpisodicPrimitive
     public void setRadius(Float r) {
         this.radius = r;
         addData( getPropertyRadius(), r, true);
+        if(radius>FIVE && radius<TEN){
+            addTypeIndividual(CLASS.SPHERE_RADIUS_INCLUDED_IN_TEN_FIVE);
+        }
+        else if(radius<=FIVE){
+            addTypeIndividual(CLASS.SPHERE_RADIUS_SMALLER_THAN_FIVE);
+        }
+        else if (radius>=TEN){
+            addTypeIndividual(CLASS.SPHERE_RADIUS_BIGGER_THAN_TEN);
+        }
     }
 
     /**

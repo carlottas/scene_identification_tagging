@@ -80,6 +80,9 @@ public class EpisodicScene implements SITBase{
     }
     //return true if the class has been initialed, false if it already exists
     public boolean InitializeClasses(OWLReferences ontoRef){
+        if(this.SemanticSceneName.equals(CLASS.SCENE)){
+            return false;
+        }
         MORFullConcept SuperClass= new MORFullConcept(CLASS.SCENE,ontoRef);
         SuperClass.readSemantic();
         System.out.println(SuperClass.getSubConcept().toString());
@@ -159,6 +162,10 @@ public class EpisodicScene implements SITBase{
                        ind1.readSemantic();
                        MORFullIndividual ind2 = new MORFullIndividual(j.getIndividual(), ontoRef);
                        ind2.readSemantic();
+                       System.out.println("FIRST INDIVIDUAL");
+                       System.out.println(ind1.getTypeIndividual().toString());
+                       System.out.println("\n SECOND INDIVIDUAL");
+                       System.out.println(ind2.getTypeIndividual().toString());
                        if (ind1.getTypeIndividual().equals(ind2.getTypeIndividual()) &&
                                ind1.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral().equals(ind2.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral())) {
                            count++;
