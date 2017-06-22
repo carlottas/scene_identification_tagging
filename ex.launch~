@@ -6,6 +6,13 @@
     output="screen"
   />
 
+ <node 
+    pkg="scene_identification_tagging" 
+    type="execute" 
+    name="episodic_srv"       args="it.emarolab.scene_identification_tagging.EpisodicService" 
+    output="screen"
+  />
+
 
 
 </launch>
