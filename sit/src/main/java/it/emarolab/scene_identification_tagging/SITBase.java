@@ -534,4 +534,59 @@ public interface SITBase {
         String OBJECT_PROPERTY_IS_SUPPORT_OF="is-support-of_scene";
         String HAS_SCENE_SUPPORT="has-scene_support";
     }
+    interface SCORE{
+        String SCORE_ONTO_NAME="score-ontology";
+        String SCORE_FILE_PATH="../catkin_ws/src/scene_identification_tagging/resources/t_box/carlotta/score-ontology.owl";
+        String SCORE_IRI_ONTO="http://www.semanticweb.org/carlotta-sartore/scoreOntology";
+
+        String SCORE_PROP_HAS_TIME="hasTime";
+        String SCORE_PROP_HAS_VALUE="hasValue";
+        String SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL="NumberBelongingIndividual";
+        String SCORE_PROP_NUMBER_EPISODIC_RETRIEVAL="NumberEpisodicRetrieval";
+        String SCORE_PROP_NUMBER_RETRIEVAL="NumberRetrieval";
+        String SCORE_PROP_NUMBER_SEMANTIC_RETRIEVAL="NumberSemanticRetrieval";
+        String SCORE_PROP_NUMBER_SUB_CLASSES="NumberSubClasses";
+        String SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL="SumScoreBelongingIndividual";
+        String SCORE_PROP_SCORE_BELONGING_INDIVIDUAL="ScoreBelongingIndividual";
+        String SCORE_PROP_SCORE_SUM_SUB_CLASSES="SumScoreSubClasses";
+        String SCORE_PROP_SCORE_SUB_CLASSES="ScoreSubClasses";
+        String SCORE_PROP_TIMES_FORGOTTEN="TimesForgotten";
+        String SCORE_PROP_TIMES_LOW_SCORE="TimesLowScore";
+        String SCORE_PROP_USER_NO_FORGET="UserNoForget";
+        //Object Property
+        String SCORE_PROP_HAS_SCORE="hasScore";
+        String SCORE_PROP_IS_SCORE_OF="isScoreOf";
+        //Classes
+        String SCORE_CLASS_SCENE="Scene";
+        String SCORE_CLASS_SCORE="Score";
+        String SCORE_CLASS_EPISODIC_SCORE="EpisodicScore";
+        String SCORE_CLASS_SEMANTIC_SCORE="SemanticScore";
+        String SCORE_CLASS_TOTAL_EPISODIC_SCORE="TotalEpisodicScore";
+        String SCORE_CLASS_TOTAL_SEMANTIC_SCORE="TotalSemanticScore";
+        String SCORE_CLASS_HIGH_SCORE="ScoreHigh";
+        String SCORE_CLASS_EPISODIC_HIGH_SCORE="EpisodicScoreHigh";
+        String SCORE_CLASS_SEMANTIC_HIGH_SCORE="SemanticScoreHigh";
+        String SCORE_CLASS_LOW_SCORE="ScoreLow";
+        String SCORE_CLASS_EPISODIC_LOW_SCORE="EpisodicScoreLow";
+        String SCORE_CLASS_SEMANTIC_LOW_SCORE="SemanticScoreLow";
+        String SCORE_CLASS_TO_BE_FORGOTTEN="ToBeForgotten";
+        String SCORE_CLASS_EPISODIC_TO_BE_FORGOTTEN="EpisodicToBeForgotten";
+        String SCORE_CLASS_SEMANTIC_TO_BE_FORGOTTEN="SemanticToBeForgotten";
+        //individuals
+        String SCORE_INDIVIDUAL_TOTAL_EPISODIC="totalEpisodic";
+        String SCORE_INDIVIDUAL_TOTAL_SEMANTIC="totalSemantic";
+        String SCORE_OBJ_PROP_IS_SUB_CLASS_OF="isSubClassOf";
+        String SCORE_OBJ_PROP_IS_SUPER_CLASS_OF="isSuperClassOf";
+        String SCORE_OBJ_PROP_IS_INDIVIDUAL_OF="isIndividualOf";
+        String SCORE_OBJ_PROP_HAS_INDIVIDUAL="hasIndividual";
+        //wheights
+        double SCORE_SEMANTIC_WEIGHT_1=0.15;
+        double SCORE_SEMANTIC_WEIGHT_2=0.15;
+        double SCORE_SEMANTIC_WEIGHT_3=0.15;
+        double SCORE_SEMANTIC_WEIGHT_4=0.15;
+        double SCORE_SEMANTIC_WEIGHT_5=0.4;
+        double SCORE_EPISODIC_WEIGHT_1=0.4;
+        double SCORE_EPISODIC_WEIGHT_2=0.6;
+
+    }
 }
