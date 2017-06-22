@@ -19,10 +19,10 @@
         <DataProperty IRI="#TimesForgotten"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isFirstSuperCLassOf"/>
+        <DataProperty IRI="#DefinesForgettingThreshold"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#DefinesForgettingThreshold"/>
+        <ObjectProperty IRI="#isFirstSuperCLassOf"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#LowerBoundTime"/>
@@ -34,16 +34,16 @@
         <DataProperty IRI="#NumberEpisodicRetrieval"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isIndividualOf"/>
-    </Declaration>
-    <Declaration>
         <DataProperty IRI="#DefinesLowerThreshold"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Score"/>
+        <ObjectProperty IRI="#isIndividualOf"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#NumberSubClasses"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Score"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#DefinesThreshold"/>
@@ -52,10 +52,10 @@
         <ObjectProperty IRI="#isSubClassOf"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#ToBeForgotten"/>
+        <DataProperty IRI="#TimesLowScore"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#TimesLowScore"/>
+        <Class IRI="#ToBeForgotten"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#ScoreSubClasses"/>
@@ -64,10 +64,10 @@
         <ObjectProperty IRI="#isSuperClassOf"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#EpisodicForgotten"/>
+        <Class IRI="#SemanticScoreLow"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#SemanticScoreLow"/>
+        <Class IRI="#EpisodicForgotten"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#totalEpisodic"/>
@@ -82,22 +82,22 @@
         <Class IRI="#ScoreLow"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#hasValue"/>
-    </Declaration>
-    <Declaration>
         <DataProperty IRI="#DefinesFalse"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#hasScore"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#hasTime"/>
+        <DataProperty IRI="#hasValue"/>
     </Declaration>
     <Declaration>
         <Class IRI="#EpisodicScoreLow"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Parameters"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasTime"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#totalSemantic"/>
@@ -115,10 +115,10 @@
         <DataProperty IRI="#DefinesHigherThreshold"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#SumScoreBelongingIndividual"/>
+        <DataProperty IRI="#NumberSemanticRetrieval"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#NumberSemanticRetrieval"/>
+        <DataProperty IRI="#SumScoreBelongingIndividual"/>
     </Declaration>
     <Declaration>
         <Class IRI="#SemanticForgotten"/>
@@ -127,28 +127,28 @@
         <Class IRI="#Forgotten"/>
     </Declaration>
     <Declaration>
-        <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+        <Class IRI="#EpisodicToBeForgotten"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#EpisodicToBeForgotten"/>
+        <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
     </Declaration>
     <Declaration>
         <Class IRI="#TimeWindow"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#NumberBelongingIndividual"/>
+        <DataProperty IRI="#UserNoForget"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#UserNoForget"/>
+        <DataProperty IRI="#NumberBelongingIndividual"/>
     </Declaration>
     <Declaration>
         <Class IRI="#EpisodicScore"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#firstSuperClass"/>
+        <DataProperty IRI="#SumScoreSubClasses"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#SumScoreSubClasses"/>
+        <ObjectProperty IRI="#firstSuperClass"/>
     </Declaration>
     <SubClassOf>
         <Class IRI="#EpisodicForgotten"/>
@@ -818,90 +818,6 @@
                 <Class IRI="#SemanticScoreLow"/>
                 <Variable IRI="#s"/>
             </ClassAtom>
-        </Head>
-    </DLSafeRule>
-    <DLSafeRule>
-        <Annotation>
-            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
-        </Annotation>
-        <Annotation>
-            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
-        </Annotation>
-        <Annotation>
-            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SCORE_BEL_IND</Literal>
-        </Annotation>
-        <Body>
-            <ClassAtom>
-                <Class IRI="#SemanticScore"/>
-                <Variable IRI="#s"/>
-            </ClassAtom>
-            <DataPropertyAtom>
-                <DataProperty IRI="#hasValue"/>
-                <NamedIndividual IRI="#totalEpisodic"/>
-                <Variable IRI="#t"/>
-            </DataPropertyAtom>
-            <DataPropertyAtom>
-                <DataProperty IRI="#SumScoreBelongingIndividual"/>
-                <Variable IRI="#s"/>
-                <Variable IRI="#v"/>
-            </DataPropertyAtom>
-            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#divide">
-                <Variable IRI="#r"/>
-                <Variable IRI="#v"/>
-                <Variable IRI="#t"/>
-            </BuiltInAtom>
-        </Body>
-        <Head>
-            <DataPropertyAtom>
-                <DataProperty IRI="#ScoreBelongingIndividual"/>
-                <Variable IRI="#s"/>
-                <Variable IRI="#r"/>
-            </DataPropertyAtom>
-        </Head>
-    </DLSafeRule>
-    <DLSafeRule>
-        <Annotation>
-            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
-        </Annotation>
-        <Annotation>
-            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
-        </Annotation>
-        <Annotation>
-            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SCORE_SUB</Literal>
-        </Annotation>
-        <Body>
-            <ClassAtom>
-                <Class IRI="#SemanticScore"/>
-                <Variable IRI="#s"/>
-            </ClassAtom>
-            <DataPropertyAtom>
-                <DataProperty IRI="#hasValue"/>
-                <NamedIndividual IRI="#totalSemantic"/>
-                <Variable IRI="#t"/>
-            </DataPropertyAtom>
-            <DataPropertyAtom>
-                <DataProperty IRI="#SumScoreSubClasses"/>
-                <Variable IRI="#s"/>
-                <Variable IRI="#v"/>
-            </DataPropertyAtom>
-            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#divide">
-                <Variable IRI="#r"/>
-                <Variable IRI="#v"/>
-                <Variable IRI="#t"/>
-            </BuiltInAtom>
-        </Body>
-        <Head>
-            <DataPropertyAtom>
-                <DataProperty IRI="#ScoreSubClasses"/>
-                <Variable IRI="#s"/>
-                <Variable IRI="#r"/>
-            </DataPropertyAtom>
         </Head>
     </DLSafeRule>
     <DLSafeRule>

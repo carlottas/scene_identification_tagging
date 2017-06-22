@@ -90,15 +90,18 @@ public class ScoreService extends AbstractNodeMain
 
                 EpisodicScoreItem episodic=request.getEpisodic();
                 SemanticScoreItem semantic=request.getSemantic();
+                OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
+                        SCORE.SCORE_ONTO_NAME, SCORE.SCORE_FILE_PATH, SCORE.SCORE_IRI_ONTO, true);
+                // suppress aMOR log
+                it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole( false);
 
                 if(!semantic.getName().isEmpty()) {
-                    SemanticScore semanticScore = new SemanticScore(semantic.getName(), semantic.getSubClasses(), semantic.getSuperClasses());
+                    SemanticScore semanticScore = new SemanticScore(semantic.getName(), semantic.getSubClasses(), semantic.getSuperClasses(),ontoRef);
                     semanticScore.semanticInitialization();
                 }
                 if(!episodic.getName().isEmpty()){
-                    EpisodicScore episodicScore= new EpisodicScore(episodic.getName(),episodic.getNameSemanticItem());
+                    EpisodicScore episodicScore= new EpisodicScore(episodic.getName(),episodic.getNameSemanticItem(),ontoRef);
                     episodicScore.episodicInitialization();
-
 
                 }
 
@@ -110,9 +113,6 @@ public class ScoreService extends AbstractNodeMain
 
 
     }
-
-
-
     private class SemanticScore{
         private String Name;
         private List<String> subClasses;
@@ -120,57 +120,21 @@ public class ScoreService extends AbstractNodeMain
         MORFullIndividual scoreSemantic;
         MORFullIndividual totalScoreSemantic;
         MORFullIndividual totalScoreEpisodic;
+        OWLReferences ontoRef;
 
-
-
-        public SemanticScore(String Name,List<String> subClasses,List<String> superClasses){
-            this.Name=Name;
-            scoreSemantic = new MORFullIndividual(Name,
-                    SCORE.SCORE_ONTO_NAME,
-                    SCORE.SCORE_FILE_PATH,
-                    SCORE.SCORE_IRI_ONTO);
-            totalScoreSemantic = new MORFullIndividual(SCORE.SCORE_INDIVIDUAL_TOTAL_SEMANTIC,
-                    SCORE.SCORE_ONTO_NAME,
-                    SCORE.SCORE_FILE_PATH,
-                    SCORE.SCORE_IRI_ONTO);
-            totalScoreEpisodic = new MORFullIndividual(SCORE.SCORE_INDIVIDUAL_TOTAL_EPISODIC,
-                    SCORE.SCORE_ONTO_NAME,
-                    SCORE.SCORE_FILE_PATH,
-                    SCORE.SCORE_IRI_ONTO);
-
-            this.subClasses=subClasses;
-            this.superClasses=superClasses;
-        }
-        public SemanticScore(String Name){
-            scoreSemantic = new MORFullIndividual(Name,
-                    SCORE.SCORE_ONTO_NAME,
-                    SCORE.SCORE_FILE_PATH,
-                    SCORE.SCORE_IRI_ONTO);
-            totalScoreSemantic = new MORFullIndividual(SCORE.SCORE_INDIVIDUAL_TOTAL_SEMANTIC,
-                    SCORE.SCORE_ONTO_NAME,
-                    SCORE.SCORE_FILE_PATH,
-                    SCORE.SCORE_IRI_ONTO);
-            totalScoreEpisodic = new MORFullIndividual(SCORE.SCORE_INDIVIDUAL_TOTAL_EPISODIC,
-                    SCORE.SCORE_ONTO_NAME,
-                    SCORE.SCORE_FILE_PATH,
-                    SCORE.SCORE_IRI_ONTO);
-
-            scoreSemantic.readSemantic();
-            objectPropertyValues(scoreSemantic.getObjectSemantics(),SCORE.SCORE_OBJ_PROP_IS_SUPER_CLASS_OF,subClasses);
-            objectPropertyValues(scoreSemantic.getObjectSemantics(),SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF,superClasses);
-        }
         public SemanticScore(String Name,List<String> SubClasses,List<String> SuperClasses,OWLReferences ontoRef){
-            this.Name=Name;
             scoreSemantic = new MORFullIndividual(Name,
                     ontoRef);
             totalScoreSemantic = new MORFullIndividual(SCORE.SCORE_INDIVIDUAL_TOTAL_SEMANTIC,
                     ontoRef);
             totalScoreEpisodic = new MORFullIndividual(SCORE.SCORE_INDIVIDUAL_TOTAL_EPISODIC,
                     ontoRef);
-
+            this.ontoRef=ontoRef;
+            this.Name=Name;
             this.subClasses=SubClasses;
             this.superClasses=SuperClasses;
         }
+
         public SemanticScore(String Name, OWLReferences ontoRef){
             scoreSemantic = new MORFullIndividual(Name,
                     ontoRef);
@@ -178,6 +142,8 @@ public class ScoreService extends AbstractNodeMain
                     ontoRef);
             totalScoreEpisodic = new MORFullIndividual(SCORE.SCORE_INDIVIDUAL_TOTAL_EPISODIC,
                     ontoRef);
+            this.ontoRef=ontoRef;
+            this.Name=Name;
 
         }
         public void semanticInitialization(){
@@ -196,12 +162,13 @@ public class ScoreService extends AbstractNodeMain
             scoreSemantic.addData(SCORE.SCORE_PROP_NUMBER_RETRIEVAL,1);
             scoreSemantic.addData(SCORE.SCORE_PROP_NUMBER_SUB_CLASSES,subClasses.size());
             scoreSemantic.addData(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES,computeSubClassesScore());
+            System.out.println(computeSubClassesScore());
             scoreSemantic.addData(SCORE.SCORE_PROP_TIMES_FORGOTTEN,0);
             scoreSemantic.addData(SCORE.SCORE_PROP_TIMES_LOW_SCORE,0);
             scoreSemantic.addData(SCORE.SCORE_PROP_USER_NO_FORGET,false,true);
             scoreSemantic.writeSemantic();
-
             scoreSemantic.readSemantic();
+            ontoRef.synchronizeReasoner();
             //compute the score
             System.out.println("Computing and adding the score...");
             float scoreComputed=computeScore(scoreSemantic);
@@ -211,6 +178,7 @@ public class ScoreService extends AbstractNodeMain
 
             //Updating total score
             System.out.println("Updating total score..");
+            System.out.println("UPDATING TOTAL IN SCORE INITIALIZATION");
             UpdateTotalSemanticScore( scoreComputed);
             //adding the property is superClassOf
                 for (String s : subClasses) {
@@ -241,10 +209,7 @@ public class ScoreService extends AbstractNodeMain
             float total=0;
             //for all the subclasses
             for(String nameSubClass:subClasses){
-                MORFullIndividual ind= new MORFullIndividual(nameSubClass,
-                        SCORE.SCORE_ONTO_NAME,
-                        SCORE.SCORE_FILE_PATH,
-                        SCORE.SCORE_IRI_ONTO);
+                MORFullIndividual ind= new MORFullIndividual(nameSubClass, ontoRef);
                 //read the current state of the individual
                 ind.readSemantic();
                 //adding to the total the value of dataproperty hasScore
@@ -264,25 +229,28 @@ public class ScoreService extends AbstractNodeMain
             int numberBelongingIndividual=ind.getLiteral(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL).parseInteger();
             int numberSubClasses= ind.getLiteral(SCORE.SCORE_PROP_NUMBER_SUB_CLASSES).parseInteger();
             //if the total semantic is equal to 0
-            //TODO test this part cuz it is different from the first one
-            if(totalScoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_VALUE).parseFloat()==0.0){
+            //TODO alla fine hai deciso di dividerlo per il numero di persone ecc perchè cosi e ceoerente se no in qualunque caso
+            //sarebbe stato uno score sbagliato che avresti dovuto computare ogni volta che cambiava qualunque cosa
+            // l'unica soluzione potrebbe essere computare lo score direttamente antraverso una SWRL rule
+            ontoRef.synchronizeReasoner();
+
+           if(numberSubClasses==0){
                 scoreSubClasses=0;
             }
-            else {
-                scoreSubClasses=ind.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES).parseFloat();
-
+           else {
+                scoreSubClasses=ind.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES).parseFloat()/scoreSubClasses;
             }
             // if the total episodic is equal to 0
-            if(totalScoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_VALUE).parseFloat()==0.0) {
-                scoreIndividual= 1;
+
+            if(numberBelongingIndividual==0) {
+                scoreIndividual= 0;
             }
             else{
-                scoreIndividual=ind.getLiteral(SCORE.SCORE_PROP_SCORE_BELONGING_INDIVIDUAL).parseFloat();
+                scoreIndividual=ind.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL).parseFloat()/numberBelongingIndividual;
             }
             ind.removeData(SCORE.SCORE_PROP_SCORE_SUB_CLASSES);
             ind.removeData(SCORE.SCORE_PROP_SCORE_BELONGING_INDIVIDUAL);
             ind.writeSemantic();
-
             return  ((float ) (SCORE.SCORE_SEMANTIC_WEIGHT_1 * numberBelongingIndividual +
                     SCORE.SCORE_SEMANTIC_WEIGHT_2 * scoreIndividual +
                     SCORE.SCORE_SEMANTIC_WEIGHT_3 * numberSubClasses +
@@ -295,9 +263,10 @@ public class ScoreService extends AbstractNodeMain
             //read the current state of the total semnatic score
 
             totalScoreSemantic.readSemantic();
-
+            System.out.println("UPDATING TOTAL SEMANTIC SCORE!!!!!!!!!");
             //reading the data property has value
             float oldTotal=totalScoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_VALUE).parseFloat();
+            System.out.println("\n\n OLD " +oldTotal);
             if(oldTotal==0.0){
                 oldTotal=scoreComputed;
             }
@@ -305,7 +274,7 @@ public class ScoreService extends AbstractNodeMain
                 //change the value by adding the new score
                 oldTotal+=scoreComputed;
             }
-
+            System.out.println("\n\n NEW " +oldTotal);
             //change the dataproperty value
             totalScoreSemantic.removeData(SCORE.SCORE_PROP_HAS_VALUE);
             totalScoreSemantic.writeSemantic();
@@ -319,13 +288,15 @@ public class ScoreService extends AbstractNodeMain
         //-new score of the semantic item modified
         public void UpdateTotalSemanticScore(float oldScore, float newScore){
             //read the current state of total semantic item
-
             totalScoreSemantic.readSemantic();
+            System.out.println("updatingTotalSemanticSCORE!!!!!!!!!!!!");
             //reading the value of hasValue dataproperty
             float total=totalScoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_VALUE).parseFloat();
             //updating the value
+            System.out.println("\n\n old "+total);
             total-=oldScore;
             total+=newScore;
+            System.out.println("\n\n\n\n new "+ total);
             //updating the data property with the new value just computed
             totalScoreSemantic.removeData(SCORE.SCORE_PROP_HAS_VALUE);
             totalScoreSemantic.writeSemantic();
@@ -350,9 +321,7 @@ public class ScoreService extends AbstractNodeMain
                 //define the MOR individual of such superclass
                 MORFullIndividual superClass = new MORFullIndividual(
                         name,
-                        SCORE.SCORE_ONTO_NAME,
-                        SCORE.SCORE_FILE_PATH,
-                        SCORE.SCORE_IRI_ONTO
+                       ontoRef
                 );
                 //read the ontology
                 superClass.readSemantic();
@@ -364,6 +333,7 @@ public class ScoreService extends AbstractNodeMain
                 superClass.addData(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES,scoreSubClasses);
                 superClass.writeSemantic();
                 //compute the new score
+                System.out.println("COMPUTING SCORE FROM UPDATING SUPERCLASSES");
                 float newScore=computeScore(superClass);
                 //store the old score
                 float oldScore=superClass.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
@@ -380,6 +350,7 @@ public class ScoreService extends AbstractNodeMain
                 List<String> classes = new ArrayList<>();
                 objectPropertyValues(objProp,SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF,classes);
                 //update total semantic score
+                System.out.println("UPDATING TOTAL IN UPDATING SUPER CLASSES");
                 UpdateTotalSemanticScore(oldScore,newScore);
                 //update superclasses score
                 updateSuperClassScore(classes,oldScore,newScore);
@@ -401,9 +372,7 @@ public class ScoreService extends AbstractNodeMain
                 //define the MOR individual of such superclass
                 MORFullIndividual superClass = new MORFullIndividual(
                         name,
-                        SCORE.SCORE_ONTO_NAME,
-                        SCORE.SCORE_FILE_PATH,
-                        SCORE.SCORE_IRI_ONTO
+                     ontoRef
                 );
                 //read the ontology
                 superClass.readSemantic();
@@ -433,6 +402,7 @@ public class ScoreService extends AbstractNodeMain
                 List<String> classes = new ArrayList<>();
                 objectPropertyValues(objProp,SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF,classes);
                 //update total semantic score
+                System.out.println("UPDATING TOTAL IN UPDATING SUPERCLASSES SCORE");
                 UpdateTotalSemanticScore(oldScore,newScore);
                 //update superclasses score
                 updateSuperClassScore(classes,oldScore,newScore);
@@ -454,18 +424,16 @@ public class ScoreService extends AbstractNodeMain
         private SemanticScore SemanticItem;
         MORFullIndividual scoreEpisodic;
         MORFullIndividual totalScoreEpisodic;
+        OWLReferences ontoRef;
 
-        public EpisodicScore(String Name, String SemanticName) {
+        public EpisodicScore(String Name, String SemanticName,OWLReferences ontoRef) {
             this.Name = Name;
             scoreEpisodic = new MORFullIndividual(Name,
-                    SCORE.SCORE_ONTO_NAME,
-                    SCORE.SCORE_FILE_PATH,
-                    SCORE.SCORE_IRI_ONTO);
+                    ontoRef);
             totalScoreEpisodic = new MORFullIndividual(SCORE.SCORE_INDIVIDUAL_TOTAL_EPISODIC,
-                    SCORE.SCORE_ONTO_NAME,
-                    SCORE.SCORE_FILE_PATH,
-                    SCORE.SCORE_IRI_ONTO);
-            SemanticItem = new SemanticScore(SemanticName);
+                    ontoRef);
+            SemanticItem = new SemanticScore(SemanticName,ontoRef);
+            this.ontoRef=ontoRef;
         }
 
         public void episodicInitialization() {
@@ -489,13 +457,13 @@ public class ScoreService extends AbstractNodeMain
             //write the semantic
             scoreEpisodic.writeSemantic();
             scoreEpisodic.readSemantic();
-            //assertSemantic();
             System.out.println("added data prop");
             scoreEpisodic.writeSemantic();
-            //assertSemantic();
             System.out.println("added score property");
             updateTotalEpisodicScore(scoreComputed);
+            System.out.println("updatinf semantic from individual");
             updateSemanticFromIndividual(Name, scoreComputed);
+            scoreEpisodic.saveOntology(SCORE.SCORE_FILE_PATH);
         }
 
         private float computeScore(int semantic_retrieval,
@@ -532,16 +500,19 @@ public class ScoreService extends AbstractNodeMain
         public void updateSemanticFromIndividual(String episodicName,float Score){
             MORFullIndividual semanticIndividual=SemanticItem.getScoreSemantic();
             semanticIndividual.readSemantic();
+            System.out.println("Updating score  semantic from individual");
             float scoreBelongingIndividual=semanticIndividual.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL).parseFloat();
             scoreBelongingIndividual+=Score;
             semanticIndividual.removeData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL);
             semanticIndividual.addData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL,scoreBelongingIndividual);
-            int numberBelongingIndividual=(int) semanticIndividual.getLiteral(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL).parseInteger();
+            int numberBelongingIndividual=semanticIndividual.getLiteral(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL).parseInteger();
             numberBelongingIndividual++;
             semanticIndividual.removeData(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL);
             semanticIndividual.addData(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL,numberBelongingIndividual);
             semanticIndividual.writeSemantic();
             float newScoreSemantic=SemanticItem.computeScore(semanticIndividual);
+            System.out.println("writing the semantic and computing the new score...");
+            System.out.println("UPDATING TOTAL IN UPDATING SEMANTIC FROM INDIVIDUAL !!!");
             SemanticItem.UpdateTotalSemanticScore(semanticIndividual.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(),newScoreSemantic);
             List<String> classes =new ArrayList<>();
             objectPropertyValues(semanticIndividual.getObjectSemantics(),SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF,classes);
