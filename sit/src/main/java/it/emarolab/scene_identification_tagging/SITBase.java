@@ -572,6 +572,10 @@ public interface SITBase {
         String SCORE_CLASS_TO_BE_FORGOTTEN="ToBeForgotten";
         String SCORE_CLASS_EPISODIC_TO_BE_FORGOTTEN="EpisodicToBeForgotten";
         String SCORE_CLASS_SEMANTIC_TO_BE_FORGOTTEN="SemanticToBeForgotten";
+        String SCORE_CLASS_FORGOTTEN_EPISODIC="EpisodicForgotten";
+        String SCORE_CLASS_FORGOTTEN_SEMANTIC="SemanticForgotten";
+        String SCORE_OBJ_PROP_FIRST_SUPERCLASS="firstSuperClass";
+        String SCORE_OBJ_PROP_IS_FIRST_SUPER_CLASS_OF="isFirstSuperClassOf";
         //individuals
         String SCORE_INDIVIDUAL_TOTAL_EPISODIC="totalEpisodic";
         String SCORE_INDIVIDUAL_TOTAL_SEMANTIC="totalSemantic";
