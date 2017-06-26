@@ -178,15 +178,23 @@ public class SemanticService
 
                 // learn the new scene if is the case
                 if (recognition1.shouldLearn()) {
+                    response.setLearnt(true);
                     System.out.println("Learning.... ");
                     recognition1.learn(computeSceneName());
+                }
+                else {
+                    response.setLearnt(false);
                 }
 
                 ontoRef.synchronizeReasoner();
                 //take class name
-                response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length()+1));
-                response.setSubClasses(recognition1.getBestRecognitionDescriptor().SubConceptToString());
-                response.setSuperClasses(recognition1.getBestRecognitionDescriptor().SuperConceptToString());
+                List<String> subClasses= recognition1.getBestRecognitionDescriptor().SubConceptToString();
+                List<String> superClasses=recognition1.getBestRecognitionDescriptor().SuperConceptToString();
+                 response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length()+1));
+                response.setSubClasses(subClasses);
+                response.setSuperClasses(superClasses);
+                response.setFirstSuperClass(superClasses.get(superClasses.size()-1));
+                response.setIsFirstSuperClassOf(subClasses.get(0));
                 Atoms atoms = new Atoms();
                 for (GeometricPrimitive i : objects) {
                     i.readSemantic();

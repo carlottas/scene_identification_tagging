@@ -227,6 +227,8 @@ public class ScoreService extends AbstractNodeMain
             }
             //adding obj property first super Class
             scoreSemantic.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, this.firstSuperClass);
+            //TODO change it has to be a single string , it can be first super class of one thing
+            //at the time ,
             for (String s:isFirstSuperCLassOf){
                 MORFullIndividual ind= new MORFullIndividual(s, ontoRef);
                 ind.readSemantic();
