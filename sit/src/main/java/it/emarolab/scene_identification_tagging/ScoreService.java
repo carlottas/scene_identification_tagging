@@ -84,16 +84,17 @@ public class ScoreService extends AbstractNodeMain
                 if(!semantic.getName().isEmpty()) {
                     SemanticScore semanticScore = new SemanticScore(semantic.getName(), semantic.getSubClasses(), semantic.getSuperClasses(),semantic.getFirstSuperClass(),semantic.getIsFirstSuperCLassOf(),ontoRef,true);
                     //if retrieval
-                    semanticScore.semanticRetrieval();
+                    //semanticScore.semanticRetrieval();
                 }
                 if(!episodic.getName().isEmpty()){
                     EpisodicScore episodicScore= new EpisodicScore(episodic.getName(),episodic.getNameSemanticItem(),ontoRef,true);
                     //if initialization
                     episodicScore.episodicInitialization();
                     //if retrieval
-                    episodicScore.episodicRetrieval();
+                    //(episodicScore.episodicRetrieval();
 
                 }
+                /*
                 Forgetting forgetting= new Forgetting(ontoRef);
                 List<String> toBeForgottenSemantic=forgetting.getToBeForgottenSemantic();
                 List<String> toBeForgottenEpisodic=forgetting.getToBeForgottenEpisodic();
@@ -104,6 +105,7 @@ public class ScoreService extends AbstractNodeMain
                 forgetting.deleteEpisodic();
                 forgetting.deleteSemantic();
                 forgetting.updateTimes();
+                */
 
             }
 

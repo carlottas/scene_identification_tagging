@@ -24,7 +24,6 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
 import java.util.*;
-import java.util.Arrays.*;
 
 
 public class SemanticService
@@ -84,76 +83,10 @@ public class SemanticService
                 System.out.println("loading the ontology ");
                 OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
                         ONTO_NAME, ONTO_FILE, ONTO_IRI, true);
-
                 // suppress aMOR log
                 it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
-
                 // initialise objects
-                Set<GeometricPrimitive> objects = new HashSet<>();
-                List<sit_msgs.atom> geometricPrimitives = request.getGeometricPrimitives();
-                for (sit_msgs.atom g : geometricPrimitives) {
-                    float[] coefficient = g.getCoefficients();
-                    System.out.println(g.getType());
-                    if (SITBase.CLASS.SPHERE.equals(g.getType())) {
-                        if (coefficient.length == 4) {
-                            Sphere s = new Sphere(ontoRef);
-                            s.shouldAddTime(true);
-                            s.setCenter(coefficient[0], coefficient[1], coefficient[2]);
-                            s.setRadius(coefficient[3]);
-                            s.setColor(g.getColor());
-                            objects.add(s);
-                        } else {
-                            System.out.println("Wrong coefficients for sphere!");
-                        }
-
-                    } else if (SITBase.CLASS.PLANE.equals(g.getType())) {
-                        if (coefficient.length == 7) {
-                            Plane p = new Plane(ontoRef);
-                            p.shouldAddTime(true);
-                            p.setAxis(coefficient[0], coefficient[1], coefficient[2]);
-                            p.setCenter(coefficient[3], coefficient[4], coefficient[5]);
-                            p.setHessian(coefficient[6]);
-                            p.setColor(g.getColor());
-                            objects.add(p);
-                        } else {
-                            System.out.println("Wrong coefficient for Plane ");
-                        }
-
-                    } else if (SITBase.CLASS.CYLINDER.equals(g.getType())) {
-                        if (coefficient.length == 11) {
-                            Cylinder c = new Cylinder(ontoRef);
-                            c.shouldAddTime(true);
-                            c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
-                            c.setAxis(coefficient[3], coefficient[4], coefficient[5]);
-                            c.setApex(coefficient[6], coefficient[7], coefficient[8]);
-                            c.setRadius(coefficient[9]);
-                            c.setHeight(coefficient[10]);
-                            c.setColor(g.getColor());
-                            objects.add(c);
-                        } else {
-                            System.out.println("Wrong coefficient for Cylinder");
-                        }
-
-                    } else if (SITBase.CLASS.CONE.equals(g.getType())) {
-                        if (coefficient.length == 11) {
-                            Cone c = new Cone(ontoRef);
-                            c.shouldAddTime(true);
-                            c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
-                            c.setAxis(coefficient[3], coefficient[4], coefficient[5]);
-                            c.setApex(coefficient[6], coefficient[7], coefficient[8]);
-                            c.setRadius(coefficient[9]);
-                            c.setHeight(coefficient[10]);
-                            c.setColor(g.getColor());
-                            objects.add(c);
-                        } else {
-                            System.out.println("Wrong coefficient for Cone");
-                        }
-
-                    } else {
-                        System.out.println("Unknwonw label");
-                    }
-                }
-
+                Set<GeometricPrimitive> objects = fromPITtoSIT(request.getGeometricPrimitives(),ontoRef);
                 // add objects
                 for (GeometricPrimitive i : objects) {
                     for (GeometricPrimitive j : objects)
@@ -188,126 +121,32 @@ public class SemanticService
                 }
 
                 ontoRef.synchronizeReasoner();
-                //take class name
+                //filling the response
                 List<String> subClasses= recognition1.getBestRecognitionDescriptor().SubConceptToString();
                 List<String> superClasses=recognition1.getBestRecognitionDescriptor().SuperConceptToString();
-                List<String> firstSupClass = new ArrayList<>();
-                List<String> isFirstSupCLassOf= new ArrayList<>();
                 response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length()+1));
                 response.setSubClasses(subClasses);
                 response.setSuperClasses(superClasses);
                 ontoRef.synchronizeReasoner();
                 recognition1.getBestRecognitionDescriptor().readSemantic();
-                //////////////////TODO////////////////////////////
                 //check whether is actually working correctly
-                MORAxioms.Concepts sameLevelClasses= new MORAxioms.Concepts();
-                //finding the classes which are at the same hierarcy grade of the semantic item
-                for (String s:subClasses){
-                    MORFullConcept ind= new MORFullConcept(s,ontoRef);
-                    ind.readSemantic();
-                    MORAxioms.Concepts cl= ind.getSuperConcept();
-                    for (OWLClass l:cl){
-                        MORFullConcept ind2 = new MORFullConcept(l.toStringID().substring(ONTO_IRI.length() + 1),ontoRef);
-                        ind2.readSemantic();
-                        MORAxioms.Concepts cl2= ind2.getSuperConcept();
-                        if(recognition1.getBestRecognitionDescriptor().getSuperConcept().equals(cl2)){
-                            sameLevelClasses.add(l);
-                        }
-                    }
-                    System.out.println("superClasses without the removal \n"+cl);
-                    for(OWLClass l: sameLevelClasses) {
-                        cl.remove(l);
-                    }
-                    System.out.println("superClasses with the removal\n"+cl);
-                    System.out.println("super classes of the semaantic item \n"+superClasses);
-                    if(cl.equals(recognition1.getBestRecognitionDescriptor().getSuperConcept())){
-                        isFirstSupCLassOf.add(s);
-                    }
-
-                }
-                System.out.println("classes at the same level\n"+sameLevelClasses);
+                List<String> isFirstSupClassOf=computeIsFirstSuperClassOf(subClasses,ontoRef,recognition1);
                 recognition1.getBestRecognitionDescriptor().readSemantic();
-
-                for (OWLClass s : recognition1.getBestRecognitionDescriptor().getSuperConcept()){
-                    MORAxioms.Concepts SupCl= recognition1.getBestRecognitionDescriptor().getSuperConcept();
-                    System.out.println("super classes of the semantic item before the removal\n"+SupCl);
-                    SupCl.remove(s);
-                    System.out.println("super classes of the semantic item after the removal\n"+SupCl);
-                    MORFullConcept ind= new MORFullConcept(s.toStringID().substring(ONTO_IRI.length() + 1),ontoRef);
-                    ind.readSemantic();
-                    MORAxioms.Concepts supCl= ind.getSuperConcept();
-                    System.out.println("super classes of the current super class\n"+supCl);
-
-                    if(SupCl.equals(supCl)){
-                        firstSupClass.add(s.toStringID().substring(ONTO_IRI.length()+1));
-                    }
-                }
-
+                List<String > firstSupClass= computeFirstSuperClass(recognition1,ontoRef);
                 System.out.println("first sup class \n" +firstSupClass);
-                System.out.println("is first sup class\n"+isFirstSupCLassOf);
+                System.out.println("is first sup class\n"+isFirstSupClassOf);
                 response.setFirstSuperClass(firstSupClass);
-                response.setIsFirstSuperClassOf(isFirstSupCLassOf);
-
-                Atoms atoms = new Atoms();
-                for (GeometricPrimitive i : objects) {
-                    i.readSemantic();
-
-                    if(i.getTypeIndividual().toString().contains(SITBase.CLASS.SPHERE)){
-                        ArrayList<Float> coefficients=new ArrayList<>();
-                       //filling the coefficients
-                        coefficients.add(i.getLiteral(SITBase.DATA_PROPERTY.RADIUS_SPHERE).parseFloat());
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.SPHERE,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
-                                coefficients,computeSR(i));
-                        atoms.add(g);
-
-                    }
-                    else if (i.getTypeIndividual().toString().contains(SITBase.CLASS.PLANE)){
-                        ArrayList<Float> coefficients=new ArrayList<>();
-                        coefficients.add(
-                                i.getLiteral(DATA_PROPERTY.HESSIAN).parseFloat()
-                        );
-                        coefficients.add(i.getLiteral(DATA_PROPERTY.AXIS_X).parseFloat());
-                        coefficients.add(i.getLiteral(DATA_PROPERTY.AXIS_Y).parseFloat());
-                        coefficients.add(i.getLiteral(DATA_PROPERTY.AXIS_Z).parseFloat());
-                        Atom g = new Atom(i.getGround().toString().substring(ONTO_NAME.length()+1),CLASS.PLANE,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
-                                coefficients,computeSR(i));
-                        atoms.add(g);
-
-                    }
-                    else  if (i.getTypeIndividual().toString().contains(CLASS.CYLINDER)){
-                        ArrayList<Float> coefficients = new ArrayList<>();
-                        coefficients.add(
-                                i.getLiteral(DATA_PROPERTY.CYLINDER_HEIGHT).parseFloat());
-                        coefficients.add(
-                                i.getLiteral(DATA_PROPERTY.CYLINDER_RADIUS).parseFloat());
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CYLINDER,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
-                                coefficients,computeSR(i));
-                        atoms.add(g);
-
-                    }
-                    else if (i.getTypeIndividual().toString().contains(CLASS.CONE)){
-                        ArrayList<Float> coefficients = new ArrayList<>();
-                        coefficients.add(
-                                i.getLiteral(DATA_PROPERTY.CONE_HEIGHT).parseFloat());
-                        coefficients.add(
-                                i.getLiteral(DATA_PROPERTY.CONE_RADIUS).parseFloat());
-                        Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CONE,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
-                                coefficients,computeSR(i));
-                        atoms.add(g);
-
-                    }
-                    }
-                    atoms.mapInROSMsg(node,response);
-                    ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
-                    for (GeometricPrimitive i : objects)
-                       ontoRef.removeIndividual(i.getInstance());
-                     ontoRef.synchronizeReasoner();
-                    recognition1.getBestRecognitionDescriptor().saveOntology(ONTO_FILE);
-                }
-
-            };
-
-        }
+                response.setIsFirstSuperClassOf(isFirstSupClassOf);
+                Atoms atoms = fromSemanticToEpisodic(objects);
+                atoms.mapInROSMsg(node,response);
+                ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
+                for (GeometricPrimitive i : objects)
+                    ontoRef.removeIndividual(i.getInstance());
+                ontoRef.synchronizeReasoner();
+                recognition1.getBestRecognitionDescriptor().saveOntology(ONTO_FILE);
+            }
+        };
+    }
 
 
     public ArrayList<Relation> computeSR(GeometricPrimitive subject){
@@ -423,7 +262,174 @@ public class SemanticService
 
 
     }
-    public void objectProperty(MORAxioms.ObjectSemantics objProp, String property, ArrayList<String> individuals){
+    public Set<GeometricPrimitive> fromPITtoSIT(List<sit_msgs.atom> geometricPrimitives,OWLReferences ontoRef){
+        Set<GeometricPrimitive> objects = new HashSet<>();
+        for (sit_msgs.atom g : geometricPrimitives) {
+            float[] coefficient = g.getCoefficients();
+            System.out.println(g.getType());
+            if (SITBase.CLASS.SPHERE.equals(g.getType())) {
+                if (coefficient.length == 4) {
+                    Sphere s = new Sphere(ontoRef);
+                    s.shouldAddTime(true);
+                    s.setCenter(coefficient[0], coefficient[1], coefficient[2]);
+                    s.setRadius(coefficient[3]);
+                    s.setColor(g.getColor());
+                    objects.add(s);
+                } else {
+                    System.out.println("Wrong coefficients for sphere!");
+                }
+
+            } else if (SITBase.CLASS.PLANE.equals(g.getType())) {
+                if (coefficient.length == 7) {
+                    Plane p = new Plane(ontoRef);
+                    p.shouldAddTime(true);
+                    p.setAxis(coefficient[0], coefficient[1], coefficient[2]);
+                    p.setCenter(coefficient[3], coefficient[4], coefficient[5]);
+                    p.setHessian(coefficient[6]);
+                    p.setColor(g.getColor());
+                    objects.add(p);
+                } else {
+                    System.out.println("Wrong coefficient for Plane ");
+                }
+
+            } else if (SITBase.CLASS.CYLINDER.equals(g.getType())) {
+                if (coefficient.length == 11) {
+                    Cylinder c = new Cylinder(ontoRef);
+                    c.shouldAddTime(true);
+                    c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
+                    c.setAxis(coefficient[3], coefficient[4], coefficient[5]);
+                    c.setApex(coefficient[6], coefficient[7], coefficient[8]);
+                    c.setRadius(coefficient[9]);
+                    c.setHeight(coefficient[10]);
+                    c.setColor(g.getColor());
+                    objects.add(c);
+                } else {
+                    System.out.println("Wrong coefficient for Cylinder");
+                }
+
+            } else if (SITBase.CLASS.CONE.equals(g.getType())) {
+                if (coefficient.length == 11) {
+                    Cone c = new Cone(ontoRef);
+                    c.shouldAddTime(true);
+                    c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
+                    c.setAxis(coefficient[3], coefficient[4], coefficient[5]);
+                    c.setApex(coefficient[6], coefficient[7], coefficient[8]);
+                    c.setRadius(coefficient[9]);
+                    c.setHeight(coefficient[10]);
+                    c.setColor(g.getColor());
+                    objects.add(c);
+                } else {
+                    System.out.println("Wrong coefficient for Cone");
+                }
+
+            } else {
+                System.out.println("Unknwonw label");
+            }
+        }
+        return objects;
+    }
+    public List<String> computeFirstSuperClass(SceneRepresentation recognition1, OWLReferences ontoRef ){
+        List<String> firstSupClass= new ArrayList<>();
+        for (OWLClass s : recognition1.getBestRecognitionDescriptor().getSuperConcept()){
+            MORAxioms.Concepts SupCl= recognition1.getBestRecognitionDescriptor().getSuperConcept();
+            System.out.println("super classes of the semantic item before the removal\n"+SupCl);
+            //todo sometimes problems of concurrent modificiation to be checked
+            SupCl.remove(s);
+            System.out.println("super classes of the semantic item after the removal\n"+SupCl);
+            MORFullConcept ind= new MORFullConcept(s.toStringID().substring(ONTO_IRI.length() + 1),ontoRef);
+            ind.readSemantic();
+            MORAxioms.Concepts supCl= ind.getSuperConcept();
+            System.out.println("super classes of the current super class\n"+supCl);
+
+            if(SupCl.equals(supCl)){
+                firstSupClass.add(s.toStringID().substring(ONTO_IRI.length()+1));
+            }
+        }
+        return firstSupClass;
+    }
+    public List<String> computeIsFirstSuperClassOf(List<String> subClasses,OWLReferences ontoRef,SceneRepresentation recognition1){
+        List<String> isFirstSupClassOf= new ArrayList<>();
+        MORAxioms.Concepts sameLevelClasses= new MORAxioms.Concepts();
+        //finding the classes which are at the same hierarcy grade of the semantic item
+        for (String s:subClasses){
+            MORFullConcept ind= new MORFullConcept(s,ontoRef);
+            ind.readSemantic();
+            MORAxioms.Concepts cl= ind.getSuperConcept();
+            for (OWLClass l:cl){
+                MORFullConcept ind2 = new MORFullConcept(l.toStringID().substring(ONTO_IRI.length() + 1),ontoRef);
+                ind2.readSemantic();
+                MORAxioms.Concepts cl2= ind2.getSuperConcept();
+                if(recognition1.getBestRecognitionDescriptor().getSuperConcept().equals(cl2)){
+                    sameLevelClasses.add(l);
+                }
+            }
+            System.out.println("superClasses without the removal \n"+cl);
+            for(OWLClass l: sameLevelClasses) {
+                cl.remove(l);
+            }
+
+            if(cl.equals(recognition1.getBestRecognitionDescriptor().getSuperConcept())){
+                isFirstSupClassOf.add(s);
+            }
+
+        }
+        System.out.println("classes at the same level\n"+sameLevelClasses);
+        return isFirstSupClassOf;
+    }
+    public Atoms fromSemanticToEpisodic(Set<GeometricPrimitive> objects){
+        Atoms atoms = new Atoms();
+        for (GeometricPrimitive i : objects) {
+            i.readSemantic();
+
+            if(i.getTypeIndividual().toString().contains(SITBase.CLASS.SPHERE)){
+                ArrayList<Float> coefficients=new ArrayList<>();
+                //filling the coefficients
+                coefficients.add(i.getLiteral(SITBase.DATA_PROPERTY.RADIUS_SPHERE).parseFloat());
+                Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.SPHERE,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
+                        coefficients,computeSR(i));
+                atoms.add(g);
+
+            }
+            else if (i.getTypeIndividual().toString().contains(SITBase.CLASS.PLANE)){
+                ArrayList<Float> coefficients=new ArrayList<>();
+                coefficients.add(
+                        i.getLiteral(DATA_PROPERTY.HESSIAN).parseFloat()
+                );
+                coefficients.add(i.getLiteral(DATA_PROPERTY.AXIS_X).parseFloat());
+                coefficients.add(i.getLiteral(DATA_PROPERTY.AXIS_Y).parseFloat());
+                coefficients.add(i.getLiteral(DATA_PROPERTY.AXIS_Z).parseFloat());
+                Atom g = new Atom(i.getGround().toString().substring(ONTO_NAME.length()+1),CLASS.PLANE,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
+                        coefficients,computeSR(i));
+                atoms.add(g);
+
+            }
+            else  if (i.getTypeIndividual().toString().contains(CLASS.CYLINDER)){
+                ArrayList<Float> coefficients = new ArrayList<>();
+                coefficients.add(
+                        i.getLiteral(DATA_PROPERTY.CYLINDER_HEIGHT).parseFloat());
+                coefficients.add(
+                        i.getLiteral(DATA_PROPERTY.CYLINDER_RADIUS).parseFloat());
+                Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CYLINDER,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
+                        coefficients,computeSR(i));
+                atoms.add(g);
+
+            }
+            else if (i.getTypeIndividual().toString().contains(CLASS.CONE)){
+                ArrayList<Float> coefficients = new ArrayList<>();
+                coefficients.add(
+                        i.getLiteral(DATA_PROPERTY.CONE_HEIGHT).parseFloat());
+                coefficients.add(
+                        i.getLiteral(DATA_PROPERTY.CONE_RADIUS).parseFloat());
+                Atom g = new Atom (i.getGround().toString().substring(ONTO_NAME.length()+1), CLASS.CONE,i.getLiteral(SITBase.COLOR.COLOR_DATA_PROPERTY).getLiteral(),
+                        coefficients,computeSR(i));
+                atoms.add(g);
+
+            }
+        }
+        return atoms ;
+
+
+    }    public void objectProperty(MORAxioms.ObjectSemantics objProp, String property, ArrayList<String> individuals){
         for (MORAxioms.ObjectSemantic obj : objProp) {
             if (obj.toString().contains(property)) {
                 MORAxioms.Individuals ind = obj.getValues();
@@ -694,11 +700,6 @@ public class SemanticService
         //}
 
 
-    }
-    public List<String> ConceptToString(MORAxioms.Concepts classes) {
-        String names = classes.toString();
-        names = names.replaceAll("\\p{P}", "");
-        return Arrays.asList(names.split(" "));
     }
     private String computeSceneName(){
         MORFullIndividual counter = new MORFullIndividual(COUNTER.SCENE_COUNTER,

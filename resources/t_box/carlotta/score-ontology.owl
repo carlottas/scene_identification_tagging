@@ -19,10 +19,10 @@
         <DataProperty IRI="#TimesForgotten"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isFirstSuperCLassOf"/>
+        <DataProperty IRI="#DefinesForgettingThreshold"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#DefinesForgettingThreshold"/>
+        <ObjectProperty IRI="#isFirstSuperCLassOf"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#LowerBoundTime"/>
@@ -91,13 +91,13 @@
         <DataProperty IRI="#hasValue"/>
     </Declaration>
     <Declaration>
+        <Class IRI="#EpisodicScoreLow"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#Parameters"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#hasTime"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#EpisodicScoreLow"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#totalSemantic"/>
@@ -145,10 +145,10 @@
         <NamedIndividual IRI="#Scene"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#SumScoreSubClasses"/>
+        <Class IRI="#EpisodicScore"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#EpisodicScore"/>
+        <DataProperty IRI="#SumScoreSubClasses"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#firstSuperClass"/>

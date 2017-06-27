@@ -99,67 +99,7 @@ public class EpisodicService
                 String SupportName=request.getSupportName();
                 Atoms object= new Atoms();
                 object.MapFromRosMsg(request.getObject());
-                ArrayList<EpisodicPrimitive> Primitives= new ArrayList<>();
-
-                for (Atom a : object){
-                     if(a.getType().equals(CLASS.SPHERE)){
-                         EpisodicSphere s= new EpisodicSphere(ComputeName(CLASS.SPHERE),ontoRef);
-                         s.setColor(a.getColor());
-                         s.setRadius(a.getCoefficients().get(0));
-                         s.setRelations(a.getRelations());
-                         s.setName(a.getName());
-                         s.shouldAddTime(true);
-                         Primitives.add(s);
-                     }
-                     else if (a.getType().equals(CLASS.PLANE)){
-                         EpisodicPlane p = new EpisodicPlane(ComputeName(CLASS.PLANE),ontoRef);
-                         p.setColor(a.getColor());
-                         p.setHessian(a.coefficients.get(0));
-                         p.setName(a.getName());
-                         p.setRelations(a.getRelations());
-                         p.shouldAddTime(true);
-                         Primitives.add(p);
-
-                     }
-                     else if (a.getType().equals(CLASS.CYLINDER)){
-                         EpisodicCylinder c = new EpisodicCylinder(ComputeName(CLASS.CYLINDER),ontoRef);
-                         c.setColor(a.getColor());
-                         c.setHeight(a.getCoefficients().get(0));
-                         c.setRadius(a.getCoefficients().get(1));
-                         c.setName(a.getName());
-                         c.setRelations(a.getRelations());
-                         c.shouldAddTime(true);
-                         Primitives.add(c);
-                     }
-                     else if (a.getType().equals(CLASS.CONE)){
-                         EpisodicCone c = new EpisodicCone(ComputeName(CLASS.CONE),ontoRef);
-                         c.setColor(a.getColor());
-                         c.setHeight(a.getCoefficients().get(0));
-                         c.setRadius(a.getCoefficients().get(1));
-                         c.setName(a.getName());
-                         c.setRelations(a.getRelations());
-                         c.shouldAddTime(true);
-                         Primitives.add(c);
-                     }
-                }
-
-                //update the name with the new name computed
-                for (EpisodicPrimitive i : Primitives){
-                    ArrayList<Relation> newRelation = new ArrayList<>();
-                    for(Relation r : i.getRelations()){
-                        ArrayList<String> newObjects= new ArrayList<>();
-                        for (EpisodicPrimitive j:Primitives) {
-                            for (String s : r.getObject()) {
-                                if (s.equals(j.getName())) {
-                                    newObjects.add(j.getGround().toString().substring(EPISODIC_ONTO_NAME.length() + 1));
-                                }
-
-                            }
-                        }
-                        newRelation.add(new Relation( newObjects,r.getRelation()));
-                    }
-                    i.setRelations(newRelation);
-                }
+                ArrayList<EpisodicPrimitive> Primitives= fromSemanticToEpisodic(object,ontoRef);
                 // add objects
                 for (EpisodicPrimitive i : Primitives) {
                     for (EpisodicPrimitive j : Primitives)
@@ -200,6 +140,10 @@ public class EpisodicService
                     }
 
                 }
+                //filling the response
+                response.setEpisodicSceneName(episodicScene.getEpisodicSceneName());
+
+
 
             }
 
@@ -318,6 +262,70 @@ public class EpisodicService
         }
 
         return rel ;
+
+
+    }
+    public ArrayList<EpisodicPrimitive>  fromSemanticToEpisodic(Atoms object,OWLReferences ontoRef){
+        ArrayList<EpisodicPrimitive> Primitives = new ArrayList<>();
+        for (Atom a : object){
+            if(a.getType().equals(CLASS.SPHERE)){
+                EpisodicSphere s= new EpisodicSphere(ComputeName(CLASS.SPHERE),ontoRef);
+                s.setColor(a.getColor());
+                s.setRadius(a.getCoefficients().get(0));
+                s.setRelations(a.getRelations());
+                s.setName(a.getName());
+                s.shouldAddTime(true);
+                Primitives.add(s);
+            }
+            else if (a.getType().equals(CLASS.PLANE)){
+                EpisodicPlane p = new EpisodicPlane(ComputeName(CLASS.PLANE),ontoRef);
+                p.setColor(a.getColor());
+                p.setHessian(a.coefficients.get(0));
+                p.setName(a.getName());
+                p.setRelations(a.getRelations());
+                p.shouldAddTime(true);
+                Primitives.add(p);
+
+            }
+            else if (a.getType().equals(CLASS.CYLINDER)){
+                EpisodicCylinder c = new EpisodicCylinder(ComputeName(CLASS.CYLINDER),ontoRef);
+                c.setColor(a.getColor());
+                c.setHeight(a.getCoefficients().get(0));
+                c.setRadius(a.getCoefficients().get(1));
+                c.setName(a.getName());
+                c.setRelations(a.getRelations());
+                c.shouldAddTime(true);
+                Primitives.add(c);
+            }
+            else if (a.getType().equals(CLASS.CONE)){
+                EpisodicCone c = new EpisodicCone(ComputeName(CLASS.CONE),ontoRef);
+                c.setColor(a.getColor());
+                c.setHeight(a.getCoefficients().get(0));
+                c.setRadius(a.getCoefficients().get(1));
+                c.setName(a.getName());
+                c.setRelations(a.getRelations());
+                c.shouldAddTime(true);
+                Primitives.add(c);
+            }
+        }
+        //update the name with the new name computed
+        for (EpisodicPrimitive i : Primitives){
+            ArrayList<Relation> newRelation = new ArrayList<>();
+            for(Relation r : i.getRelations()){
+                ArrayList<String> newObjects= new ArrayList<>();
+                for (EpisodicPrimitive j:Primitives) {
+                    for (String s : r.getObject()) {
+                        if (s.equals(j.getName())) {
+                            newObjects.add(j.getGround().toString().substring(EPISODIC_ONTO_NAME.length() + 1));
+                        }
+
+                    }
+                }
+                newRelation.add(new Relation( newObjects,r.getRelation()));
+            }
+            i.setRelations(newRelation);
+        }
+        return  Primitives;
 
 
     }
