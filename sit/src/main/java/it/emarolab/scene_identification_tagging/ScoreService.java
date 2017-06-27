@@ -116,7 +116,7 @@ public class ScoreService extends AbstractNodeMain
 
     private class SemanticScore {
         private String Name;
-        private String firstSuperClass;
+        private List<String> firstSuperClass;
         private List<String> subClasses= new ArrayList<>();
         private List<String> superClasses= new ArrayList<>();
         private List<String> belongingIndividuals=new ArrayList<>();
@@ -139,7 +139,7 @@ public class ScoreService extends AbstractNodeMain
          * @param AddTime Boolean, if true also the time information are added
          */
         public SemanticScore(String Name, List<String> SubClasses,
-                             List<String> SuperClasses,String firstSuperClass,List<String> isFirstSuperCLassOf, OWLReferences ontoRef,boolean AddTime) {
+                             List<String> SuperClasses,List<String> firstSuperClass,List<String> isFirstSuperCLassOf, OWLReferences ontoRef,boolean AddTime) {
             //everytime this function is called it means that it needs to be initialized
             scoreSemantic = new MORFullIndividual(Name,
                     ontoRef);
@@ -202,8 +202,8 @@ public class ScoreService extends AbstractNodeMain
             scoreSemantic.addData(SCORE.SCORE_PROP_TIMES_FORGOTTEN, 0);
             scoreSemantic.addData(SCORE.SCORE_PROP_TIMES_LOW_SCORE, 0);
             scoreSemantic.addData(SCORE.SCORE_PROP_USER_NO_FORGET, false, true);
-            if(addTime){
-                scoreSemantic.addData(SCORE.SCORE_PROP_HAS_TIME,time);
+            if (addTime) {
+                scoreSemantic.addData(SCORE.SCORE_PROP_HAS_TIME, time);
             }
             scoreSemantic.writeSemantic();
             scoreSemantic.readSemantic();
@@ -226,7 +226,9 @@ public class ScoreService extends AbstractNodeMain
                 scoreSemantic.addObject(SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF, s);
             }
             //adding obj property first super Class
-            scoreSemantic.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, this.firstSuperClass);
+            for (String s : this.firstSuperClass) {
+            scoreSemantic.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, s);
+            }
             for(String s : this.isFirstSuperCLassOf) {
                 MORFullIndividual ind = new MORFullIndividual(s, ontoRef);
                 ind.readSemantic();
@@ -541,7 +543,7 @@ public class ScoreService extends AbstractNodeMain
             //Remove its score from the total semantic score
             UpdateTotalSemanticScore(scoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), 0);
             // if there is no super class
-            if (firstSuperClass.equals(CLASS.SCENE)){
+            if (firstSuperClass.size()==1 && firstSuperClass.get(0).equals(CLASS.SCENE)){
                 //delete the belonging individuals
                 for (String s : belongingIndividuals) {
                     //update the score of the first superClass
@@ -556,7 +558,7 @@ public class ScoreService extends AbstractNodeMain
                 for (String i : belongingIndividuals) {
                     //declaration of the object
                     EpisodicScore episodicScore = new EpisodicScore(i, ontoRef);
-                    episodicScore.changeSemanticItem(this.firstSuperClass);
+                    episodicScore.changeSemanticItem(firstSuperClass.get(0));
                 }
                 UpdateFirstSuperClassScore();
             }
@@ -573,7 +575,7 @@ public class ScoreService extends AbstractNodeMain
          * update the fist super classes score once the element has been deleted
          */
         private void UpdateFirstSuperClassScore(){
-            MORFullIndividual firstSup = new MORFullIndividual(this.firstSuperClass, ontoRef);
+            MORFullIndividual firstSup = new MORFullIndividual(firstSuperClass.get(0), ontoRef);
             //update the number of belonging individuals
             int numberBelongingIndividual = firstSup.getLiteral(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL).parseInteger() +
                     scoreSemantic.getLiteral(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL).parseInteger();
@@ -607,7 +609,7 @@ public class ScoreService extends AbstractNodeMain
                 subCl.readSemantic();
                 //update the first superclass object property
                 subCl.removeObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, this.Name);
-                subCl.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, this.firstSuperClass);
+                subCl.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, firstSuperClass.get(0));
                 //write the ontology
                 subCl.writeSemantic();
             }
@@ -639,12 +641,8 @@ public class ScoreService extends AbstractNodeMain
          * function which update the Object first super class name
          */
         private void FirstSuperClass(){
-            List<String> firstSup= new ArrayList<>();
-            objectPropertyValues(scoreSemantic.getObjectSemantics(),SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS,firstSup);
-            for (String i : firstSup){
-                this.firstSuperClass= i;
 
-            }
+            objectPropertyValues(scoreSemantic.getObjectSemantics(),SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS,this.firstSuperClass);
         }
 
         /**
@@ -690,7 +688,7 @@ public class ScoreService extends AbstractNodeMain
          *
          * @return the String containing the name of the fist super class
          */
-        public String getFirstSuperClass(){return this.firstSuperClass;}
+        public List<String> getFirstSuperClass(){return this.firstSuperClass;}
 
         /**
          *

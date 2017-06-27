@@ -22,10 +22,9 @@ import it.emarolab.scene_identification_tagging.sceneRepresentation.SceneReprese
 import it.emarolab.owloop.aMORDescriptor.MORAxioms;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
+import java.util.Arrays.*;
 
 
 public class SemanticService
@@ -192,54 +191,62 @@ public class SemanticService
                 //take class name
                 List<String> subClasses= recognition1.getBestRecognitionDescriptor().SubConceptToString();
                 List<String> superClasses=recognition1.getBestRecognitionDescriptor().SuperConceptToString();
-                String firstSupClass = new String();
+                List<String> firstSupClass = new ArrayList<>();
                 List<String> isFirstSupCLassOf= new ArrayList<>();
                 response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length()+1));
                 response.setSubClasses(subClasses);
                 response.setSuperClasses(superClasses);
-                System.out.println("Super classes \n"+superClasses);
-                System.out.println("finding first super class\n");
-                for (String s : superClasses){
-                    System.out.println("\n"+s);
-                    MORAxioms.Concepts SupCl= recognition1.getBestRecognitionDescriptor().getSuperConcept();
-                    MORFullConcept ind= new MORFullConcept(s,ontoRef);
-                    SupCl.remove(ind.getGroundInstance());
-                    for (OWLClass c: ontoRef.getEquivalentClasses(ind.getGroundInstance())) {
-                        SupCl.remove(c);
-                    }
-                    System.out.println("superclasses without the class"+SupCl);
-                    ind.readSemantic();
-                    MORAxioms.Concepts cl= ind.getSuperConcept();
-                    System.out.println("super classes of the current class\n"+cl);
-                    if(SupCl.equals(cl)){
-                        firstSupClass=s;
-                    }
-                }
+                ontoRef.synchronizeReasoner();
                 recognition1.getBestRecognitionDescriptor().readSemantic();
-                System.out.println("looking for is first super class");
-                MORAxioms.Concepts SuperCl= recognition1.getBestRecognitionDescriptor().getSuperConcept();
-                System.out.println("sup class without the class\n"+ SuperCl);
-                SuperCl.add(recognition1.getBestRecognitionDescriptor().getInstance());
-                for(OWLClass c : ontoRef.getEquivalentClasses(recognition1.getBestRecognitionDescriptor().getGroundInstance())) {
-                    SuperCl.add(c);
-                }
-                System.out.println("sup class with class\n"+SuperCl);
+                //////////////////TODO////////////////////////////
+                //check whether is actually working correctly
+                MORAxioms.Concepts sameLevelClasses= new MORAxioms.Concepts();
+                //finding the classes which are at the same hierarcy grade of the semantic item
                 for (String s:subClasses){
                     MORFullConcept ind= new MORFullConcept(s,ontoRef);
                     ind.readSemantic();
                     MORAxioms.Concepts cl= ind.getSuperConcept();
-                    System.out.println("super class of the current class\n"+cl);
-                    if(SuperCl.equals(cl)){
+                    for (OWLClass l:cl){
+                        MORFullConcept ind2 = new MORFullConcept(l.toStringID().substring(ONTO_IRI.length() + 1),ontoRef);
+                        ind2.readSemantic();
+                        MORAxioms.Concepts cl2= ind2.getSuperConcept();
+                        if(recognition1.getBestRecognitionDescriptor().getSuperConcept().equals(cl2)){
+                            sameLevelClasses.add(l);
+                        }
+                    }
+                    System.out.println("superClasses without the removal \n"+cl);
+                    for(OWLClass l: sameLevelClasses) {
+                        cl.remove(l);
+                    }
+                    System.out.println("superClasses with the removal\n"+cl);
+                    System.out.println("super classes of the semaantic item \n"+superClasses);
+                    if(cl.equals(recognition1.getBestRecognitionDescriptor().getSuperConcept())){
                         isFirstSupCLassOf.add(s);
                     }
 
+                }
+                System.out.println("classes at the same level\n"+sameLevelClasses);
+                recognition1.getBestRecognitionDescriptor().readSemantic();
+
+                for (OWLClass s : recognition1.getBestRecognitionDescriptor().getSuperConcept()){
+                    MORAxioms.Concepts SupCl= recognition1.getBestRecognitionDescriptor().getSuperConcept();
+                    System.out.println("super classes of the semantic item before the removal\n"+SupCl);
+                    SupCl.remove(s);
+                    System.out.println("super classes of the semantic item after the removal\n"+SupCl);
+                    MORFullConcept ind= new MORFullConcept(s.toStringID().substring(ONTO_IRI.length() + 1),ontoRef);
+                    ind.readSemantic();
+                    MORAxioms.Concepts supCl= ind.getSuperConcept();
+                    System.out.println("super classes of the current super class\n"+supCl);
+
+                    if(SupCl.equals(supCl)){
+                        firstSupClass.add(s.toStringID().substring(ONTO_IRI.length()+1));
+                    }
                 }
 
                 System.out.println("first sup class \n" +firstSupClass);
                 System.out.println("is first sup class\n"+isFirstSupCLassOf);
                 response.setFirstSuperClass(firstSupClass);
                 response.setIsFirstSuperClassOf(isFirstSupCLassOf);
-
 
                 Atoms atoms = new Atoms();
                 for (GeometricPrimitive i : objects) {
@@ -688,7 +695,11 @@ public class SemanticService
 
 
     }
-
+    public List<String> ConceptToString(MORAxioms.Concepts classes) {
+        String names = classes.toString();
+        names = names.replaceAll("\\p{P}", "");
+        return Arrays.asList(names.split(" "));
+    }
     private String computeSceneName(){
         MORFullIndividual counter = new MORFullIndividual(COUNTER.SCENE_COUNTER,
                 ONTO_NAME,
