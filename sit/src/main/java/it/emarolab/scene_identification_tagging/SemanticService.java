@@ -2,6 +2,8 @@
 package it.emarolab.scene_identification_tagging;
 
 
+import it.emarolab.owloop.aMORDescriptor.MORConcept;
+import it.emarolab.owloop.aMORDescriptor.utility.concept.MORFullConcept;
 import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;
 import it.emarolab.scene_identification_tagging.realObject.Cylinder;
 import it.emarolab.scene_identification_tagging.realObject.Sphere;
@@ -190,11 +192,55 @@ public class SemanticService
                 //take class name
                 List<String> subClasses= recognition1.getBestRecognitionDescriptor().SubConceptToString();
                 List<String> superClasses=recognition1.getBestRecognitionDescriptor().SuperConceptToString();
-                 response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length()+1));
+                String firstSupClass = new String();
+                List<String> isFirstSupCLassOf= new ArrayList<>();
+                response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length()+1));
                 response.setSubClasses(subClasses);
                 response.setSuperClasses(superClasses);
-                response.setFirstSuperClass(superClasses.get(superClasses.size()-1));
-                response.setIsFirstSuperClassOf(subClasses.get(0));
+                System.out.println("Super classes \n"+superClasses);
+                System.out.println("finding first super class\n");
+                for (String s : superClasses){
+                    System.out.println("\n"+s);
+                    MORAxioms.Concepts SupCl= recognition1.getBestRecognitionDescriptor().getSuperConcept();
+                    MORFullConcept ind= new MORFullConcept(s,ontoRef);
+                    SupCl.remove(ind.getGroundInstance());
+                    for (OWLClass c: ontoRef.getEquivalentClasses(ind.getGroundInstance())) {
+                        SupCl.remove(c);
+                    }
+                    System.out.println("superclasses without the class"+SupCl);
+                    ind.readSemantic();
+                    MORAxioms.Concepts cl= ind.getSuperConcept();
+                    System.out.println("super classes of the current class\n"+cl);
+                    if(SupCl.equals(cl)){
+                        firstSupClass=s;
+                    }
+                }
+                recognition1.getBestRecognitionDescriptor().readSemantic();
+                System.out.println("looking for is first super class");
+                MORAxioms.Concepts SuperCl= recognition1.getBestRecognitionDescriptor().getSuperConcept();
+                System.out.println("sup class without the class\n"+ SuperCl);
+                SuperCl.add(recognition1.getBestRecognitionDescriptor().getInstance());
+                for(OWLClass c : ontoRef.getEquivalentClasses(recognition1.getBestRecognitionDescriptor().getGroundInstance())) {
+                    SuperCl.add(c);
+                }
+                System.out.println("sup class with class\n"+SuperCl);
+                for (String s:subClasses){
+                    MORFullConcept ind= new MORFullConcept(s,ontoRef);
+                    ind.readSemantic();
+                    MORAxioms.Concepts cl= ind.getSuperConcept();
+                    System.out.println("super class of the current class\n"+cl);
+                    if(SuperCl.equals(cl)){
+                        isFirstSupCLassOf.add(s);
+                    }
+
+                }
+
+                System.out.println("first sup class \n" +firstSupClass);
+                System.out.println("is first sup class\n"+isFirstSupCLassOf);
+                response.setFirstSuperClass(firstSupClass);
+                response.setIsFirstSuperClassOf(isFirstSupCLassOf);
+
+
                 Atoms atoms = new Atoms();
                 for (GeometricPrimitive i : objects) {
                     i.readSemantic();

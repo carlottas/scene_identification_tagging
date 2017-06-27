@@ -120,7 +120,7 @@ public class ScoreService extends AbstractNodeMain
         private List<String> subClasses= new ArrayList<>();
         private List<String> superClasses= new ArrayList<>();
         private List<String> belongingIndividuals=new ArrayList<>();
-        private List<String> isFirstSuperCLassOf=new ArrayList<>();
+        private List<String> isFirstSuperCLassOf;
         MORFullIndividual scoreSemantic;
         MORFullIndividual totalScoreSemantic;
         MORFullIndividual totalScoreEpisodic;
@@ -227,13 +227,11 @@ public class ScoreService extends AbstractNodeMain
             }
             //adding obj property first super Class
             scoreSemantic.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, this.firstSuperClass);
-            //TODO change it has to be a single string , it can be first super class of one thing
-            //at the time ,
-            for (String s:isFirstSuperCLassOf){
-                MORFullIndividual ind= new MORFullIndividual(s, ontoRef);
+            for(String s : this.isFirstSuperCLassOf) {
+                MORFullIndividual ind = new MORFullIndividual(s, ontoRef);
                 ind.readSemantic();
                 ind.removeObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS);
-                ind.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS,this.Name);
+                ind.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, this.Name);
                 ind.writeSemantic();
             }
             scoreSemantic.writeSemantic();
@@ -601,18 +599,19 @@ public class ScoreService extends AbstractNodeMain
             firstSup.writeSemantic();
         }
         private void UpdateFirstSuperClass(){
-            for(String s : isFirstSuperCLassOf){
                 //declaration of the object
+            for (String s: this.isFirstSuperCLassOf) {
                 MORFullIndividual subCl = new MORFullIndividual(s,
                         ontoRef);
                 //read the current ontology state
                 subCl.readSemantic();
                 //update the first superclass object property
-                subCl.removeObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS,this.Name);
-                subCl.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS,this.firstSuperClass);
+                subCl.removeObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, this.Name);
+                subCl.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, this.firstSuperClass);
                 //write the ontology
                 subCl.writeSemantic();
             }
+
         }
         /**
          * function which update the object list of belonging individuals
@@ -652,8 +651,11 @@ public class ScoreService extends AbstractNodeMain
          * function which update the Object first superClass NAME
          */
         private void IsFirstSuperClassOf(){
+
             objectPropertyValues(scoreSemantic.getObjectSemantics(),SCORE.SCORE_OBJ_PROP_IS_FIRST_SUPER_CLASS_OF,
-                    this.isFirstSuperCLassOf);
+                    isFirstSuperCLassOf);
+
+
         }
         /**
          * function which update all the object paramenters

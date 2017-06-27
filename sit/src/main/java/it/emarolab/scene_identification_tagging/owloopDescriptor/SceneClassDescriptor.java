@@ -210,11 +210,11 @@ public class SceneClassDescriptor
     public List<String> SubConceptToString(){
         String names=subConcept.toString();
         names = names.replaceAll("\\p{P}","");
-        return Arrays.asList(names.split(","));
+        return Arrays.asList(names.split(" "));
     }
     public List<String> SuperConceptToString(){
         String names=superConcept.toString();
         names = names.replaceAll("\\p{P}","");
-        return Arrays.asList(names.split(","));
+        return Arrays.asList(names.split(" "));
     }
 }
