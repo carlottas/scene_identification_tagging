@@ -100,7 +100,14 @@ public class EpisodicScene implements SITBase{
             for (String i :SuperClasses){
                 currentClass.addSuperConcept(i);
             }
+            //todo find a way to set that all the the subclasses of scene are disjoint
             currentClass.writeSemantic();
+            Set<OWLClass> disj= new HashSet<OWLClass>();
+            for(OWLClass c:SuperClass.getSuperConcept()){
+                disj.add(c);
+            }
+            ontoRef.makeDisjointClasses(disj);
+            ontoRef.synchronizeReasoner();
             return true;
         }
 
