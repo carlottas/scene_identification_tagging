@@ -130,6 +130,7 @@ public class EpisodicService
                         i.ApplySceneName();
                         i.writeSemantic();
                         i.saveOntology(EPISODIC_ONTO_FILE);
+                        response.setLearnt(true);
                     }
                 }
                 else {
@@ -138,6 +139,7 @@ public class EpisodicService
                         ontoRef.removeIndividual(i.getInstance());
                         ontoRef.synchronizeReasoner();
                     }
+                    response.setLearnt(false);
 
                 }
                 //filling the response

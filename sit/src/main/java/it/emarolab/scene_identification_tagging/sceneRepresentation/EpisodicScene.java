@@ -130,10 +130,13 @@ public class EpisodicScene implements SITBase{
             int count =0 ;
             MORFullIndividual ind= new MORFullIndividual(i,ontoRef);
             ind.readSemantic();
-            count = countNumberOfEqualObjectProperty(description,ind,ontoRef);
-            count+=countNumberOfEqualObjectProperty(ColorDescription,ind,ontoRef);
-            if(count==description.size()+ColorDescription.size()){
-                return false;
+            if((description.size()+ColorDescription.size())==countNumberOfRelations(ind)) {
+                count = countNumberOfEqualObjectProperty(description, ind, ontoRef);
+                count += countNumberOfEqualObjectProperty(ColorDescription, ind, ontoRef);
+                if (count == description.size() + ColorDescription.size()) {
+                    this.EpisodicSceneName = ind.getGround().toString().substring(EPISODIC_ONTO_NAME.length() + 1);
+                    return false;
+                }
             }
         }
 
@@ -157,6 +160,14 @@ public class EpisodicScene implements SITBase{
             scene.addData( DATA_PROPERTY.TIME, time, true);
         scene.addObject(SUPPORT.HAS_SCENE_SUPPORT,SupportName);
         scene.writeSemantic();
+
+    }
+    public int countNumberOfRelations(MORFullIndividual ind){
+        //Hyp all the object properties are related to spatial relations and color
+        //plus one for the support (hence the minus 1)
+        return ind.getObjectSemantics().size()-1;
+
+
 
     }
     public int countNumberOfEqualObjectProperty(ArrayList<EpisodicLearn> relation,MORFullIndividual ind,OWLReferences ontoRef){
