@@ -89,7 +89,6 @@ public class ScoreService extends AbstractNodeMain
                 if(!episodic.getName().isEmpty()){
                     EpisodicScore episodicScore= new EpisodicScore(episodic.getName(),episodic.getNameSemanticItem(),ontoRef,true);
                     //if initialization
-                    episodicScore.episodicInitialization();
                     //if retrieval
                     //(episodicScore.episodicRetrieval();
 
@@ -151,7 +150,11 @@ public class ScoreService extends AbstractNodeMain
                     ontoRef);
             this.ontoRef = ontoRef;
             this.Name = Name;
+            SubClasses.remove("owlNothing");
+            System.out.println("Subclaasses after removal of owl nothing inside the score\n");
+            System.out.println(SubClasses.size() +" "+SubClasses);
             this.subClasses = SubClasses;
+            SuperClasses.remove(CLASS.SCENE);
             this.superClasses = SuperClasses;
             this.firstSuperClass = firstSuperClass;
             this.isFirstSuperCLassOf=isFirstSuperCLassOf;
@@ -239,6 +242,7 @@ public class ScoreService extends AbstractNodeMain
                 ind.writeSemantic();
             }
             scoreSemantic.writeSemantic();
+            ontoRef.synchronizeReasoner();
             scoreSemantic.saveOntology(SCORE.SCORE_FILE_PATH);
             //updating super class score
             System.out.println("updating super classes score...");
@@ -439,6 +443,9 @@ public class ScoreService extends AbstractNodeMain
             if (setName.isEmpty()) {
                 return;
             }
+            if(setName.size()==1 && setName.contains(CLASS.SPHERE)){
+                return;
+            }
             //for all the string
             for (String name : setName) {
                 //define the MOR individual of such superclass
@@ -630,6 +637,7 @@ public class ScoreService extends AbstractNodeMain
          */
         private void SuperClasses() {
             objectPropertyValues(scoreSemantic.getObjectSemantics(), SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF, superClasses);
+            superClasses.remove(CLASS.SCENE);
         }
 
         /**
@@ -664,8 +672,8 @@ public class ScoreService extends AbstractNodeMain
             BelongingIndividual();
             SuperClasses();
             SubClasses();
-            FirstSuperClass();
-            IsFirstSuperClassOf();
+            //FirstSuperClass();
+            //IsFirstSuperClassOf();
         }
 
         /**
@@ -796,6 +804,7 @@ public class ScoreService extends AbstractNodeMain
         updateTotalEpisodicScore(scoreComputed);
         System.out.println("updating semantic from individual...");
         updateSemanticFromIndividual(Name, scoreComputed);
+        ontoRef.synchronizeReasoner();
         scoreEpisodic.saveOntology(SCORE.SCORE_FILE_PATH);
     }
     /**
