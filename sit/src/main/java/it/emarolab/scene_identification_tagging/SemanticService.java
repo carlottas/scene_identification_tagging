@@ -283,8 +283,8 @@ public class SemanticService
                 if (coefficient.length == 7) {
                     Plane p = new Plane(ontoRef);
                     p.shouldAddTime(true);
-                    p.setAxis(coefficient[0], coefficient[1], coefficient[2]);
-                    p.setCenter(coefficient[3], coefficient[4], coefficient[5]);
+                    p.setCenter(coefficient[0], coefficient[1], coefficient[2]);
+                    p.setAxis(coefficient[3], coefficient[4], coefficient[5]);
                     p.setHessian(coefficient[6]);
                     p.setColor(g.getColor());
                     objects.add(p);
@@ -297,8 +297,8 @@ public class SemanticService
                     Cylinder c = new Cylinder(ontoRef);
                     c.shouldAddTime(true);
                     c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
-                    c.setAxis(coefficient[3], coefficient[4], coefficient[5]);
-                    c.setApex(coefficient[6], coefficient[7], coefficient[8]);
+                    c.setApex(coefficient[3], coefficient[4], coefficient[5]);
+                    c.setAxis(coefficient[6], coefficient[7], coefficient[8]);
                     c.setRadius(coefficient[9]);
                     c.setHeight(coefficient[10]);
                     c.setColor(g.getColor());
@@ -312,8 +312,8 @@ public class SemanticService
                     Cone c = new Cone(ontoRef);
                     c.shouldAddTime(true);
                     c.setCenter(coefficient[0], coefficient[1], coefficient[2]);
-                    c.setAxis(coefficient[3], coefficient[4], coefficient[5]);
-                    c.setApex(coefficient[6], coefficient[7], coefficient[8]);
+                    c.setApex(coefficient[3], coefficient[4], coefficient[5]);
+                    c.setAxis(coefficient[6], coefficient[7], coefficient[8]);
                     c.setRadius(coefficient[9]);
                     c.setHeight(coefficient[10]);
                     c.setColor(g.getColor());
