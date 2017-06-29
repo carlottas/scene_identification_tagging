@@ -135,6 +135,9 @@ public class EpisodicScene implements SITBase{
                 count += countNumberOfEqualObjectProperty(ColorDescription, ind, ontoRef);
                 if (count == description.size() + ColorDescription.size()) {
                     this.EpisodicSceneName = ind.getGround().toString().substring(EPISODIC_ONTO_NAME.length() + 1);
+                     ind.removeData(DATA_PROPERTY.TIME);
+                     ind.addData(DATA_PROPERTY.TIME,time,true);
+                     ind.writeSemantic();
                     return false;
                 }
             }

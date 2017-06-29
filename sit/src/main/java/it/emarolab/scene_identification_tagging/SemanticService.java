@@ -129,6 +129,7 @@ public class SemanticService
                 response.setSuperClasses(superClasses);
                 ontoRef.synchronizeReasoner();
                 recognition1.getBestRecognitionDescriptor().readSemantic();
+                /*
                 //check whether is actually working correctly
                 List<String> isFirstSupClassOf=computeIsFirstSuperClassOf(subClasses,ontoRef,recognition1);
                 recognition1.getBestRecognitionDescriptor().readSemantic();
@@ -137,6 +138,7 @@ public class SemanticService
                 System.out.println("is first sup class\n"+isFirstSupClassOf);
                 response.setFirstSuperClass(firstSupClass);
                 response.setIsFirstSuperClassOf(isFirstSupClassOf);
+                */
                 Atoms atoms = fromSemanticToEpisodic(objects);
                 atoms.mapInROSMsg(node,response);
                 ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
