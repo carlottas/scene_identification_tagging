@@ -94,20 +94,21 @@ public class EpisodicScene implements SITBase{
         else {
             //TODO non ha senso usare mor full concept, devi definirne uno piu piccolo
             MORFullConcept currentClass= new MORFullConcept(SemanticSceneName,ontoRef);
-            for (String i : SubClasses) {
+            /*for (String i : SubClasses) {
                 currentClass.addSubConcept(i);
             }
             for (String i :SuperClasses){
                 currentClass.addSuperConcept(i);
             }
+            */
+            currentClass.addSuperConcept(CLASS.SCENE);
             //todo find a way to set that all the the subclasses of scene are disjoint
             currentClass.writeSemantic();
             Set<OWLClass> disj= new HashSet<OWLClass>();
-            for(OWLClass c:SuperClass.getSuperConcept()){
+            for(OWLClass c:SuperClass.getSubConcept()){
                 disj.add(c);
             }
             ontoRef.makeDisjointClasses(disj);
-            ontoRef.synchronizeReasoner();
             return true;
         }
 
@@ -146,7 +147,6 @@ public class EpisodicScene implements SITBase{
         return true;
 
     }
-
     public void Learn(OWLReferences ontoRef,String Name){
         this.EpisodicSceneName=Name;
         SceneIndividualDescriptor scene= new SceneIndividualDescriptor(this.EpisodicSceneName, ontoRef);
