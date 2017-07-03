@@ -74,7 +74,7 @@ public class EpisodicCylinder
         addData( getPropertyHeight(), true);
         addData( getPropertyRadius(), true);
         addTypeIndividual( CLASS.CYLINDER);
-        System.out.println("INITIALIZE THE PROPERY");
+        System.out.println("INITIALIZE THE PROPERTY");
 
     }
 

@@ -123,6 +123,7 @@ public class EpisodicService
                 episodicScene.setAddingTime(true);
                 episodicScene.InitializeClasses(ontoRef);
                 episodicScene.InitializeSupport(ontoRef);
+                System.out.println("CHECKING WHETHER LEARNING");
                 if(episodicScene.ShouldLearn(ontoRef)){
                     episodicScene.Learn(ontoRef,ComputeName(CLASS.SCENE));
                     for (EpisodicPrimitive i:Primitives){

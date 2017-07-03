@@ -114,23 +114,34 @@ public class EpisodicScene implements SITBase{
 
     }
     public boolean ShouldLearn(OWLReferences ontoRef){
+        System.out.println("inside should learn function ");
+        System.out.println("support new "+newSupport);
         if(newSupport){return true;}
         ArrayList<EpisodicLearn> description = new ArrayList<>();
         ArrayList<EpisodicLearn> ColorDescription = new ArrayList<>();
         for (SpatialRelation r:relations){
-            description.add(new EpisodicLearn(getSpatialRelation(ontoRef,r.getRelation()),r));
+            EpisodicLearn episodicLearn= new EpisodicLearn(getSpatialRelation(ontoRef, r.getRelation()), r);
+            if(!description.contains(episodicLearn)){
+                description.add(episodicLearn);
+            }
         }
         for(colorRelation c: colorRelations){
             ColorDescription.add(new EpisodicLearn(getColorRelation(ontoRef,c.getColor()),c));
         }
         //Only for the spatial relation check
         MORFullConcept classes= new MORFullConcept(SemanticSceneName,ontoRef);
+        System.out.println("SEMANTIC SCENE NAME");
+        System.out.println(SemanticSceneName);
         classes.readSemantic();
+        System.out.println("individuals\n");
+        System.out.println(classes.getIndividualClassified());
         //for all the individuals which belongs to the related class
         for(OWLNamedIndividual i : classes.getIndividualClassified()){
+            System.out.println("inside the for loop ");
             int count =0 ;
             MORFullIndividual ind= new MORFullIndividual(i,ontoRef);
             ind.readSemantic();
+            System.out.println("number of relation of the current class: "+description.size()+" +" +ColorDescription.size());
             if((description.size()+ColorDescription.size())==countNumberOfRelations(ind)) {
                 count = countNumberOfEqualObjectProperty(description, ind, ontoRef);
                 count += countNumberOfEqualObjectProperty(ColorDescription, ind, ontoRef);
@@ -153,6 +164,12 @@ public class EpisodicScene implements SITBase{
         scene.addTypeIndividual(SemanticSceneName);
         for( SpatialRelation r : relations){
             EpisodicLearn description =new EpisodicLearn(getSpatialRelation(ontoRef,r.getRelation()),r);
+            System.out.println("description\n");
+            System.out.println(description);
+            System.out.println("relation");
+            System.out.println(description.getRelation());
+            System.out.println("individual");
+            System.out.println(description.getIndividual());
             scene.addObject(description.getRelation(),description.getIndividual());
         }
         for (colorRelation c: colorRelations){
@@ -168,28 +185,45 @@ public class EpisodicScene implements SITBase{
     public int countNumberOfRelations(MORFullIndividual ind){
         //Hyp all the object properties are related to spatial relations and color
         //plus one for the support (hence the minus 1)
-        return ind.getObjectSemantics().size()-1;
+        int count=0;
+        for(MORAxioms.ObjectSemantic i : ind.getObjectSemantics()){
+            count+=i.getValues().size();
+        }
+        System.out.println("number of relations "+count);
+
+        return count-1;
 
 
 
     }
     public int countNumberOfEqualObjectProperty(ArrayList<EpisodicLearn> relation,MORFullIndividual ind,OWLReferences ontoRef){
        int count = 0 ;
+       System.out.println("counting the number of equal object properties");
        for (EpisodicLearn j : relation) {
+           System.out.println("for all the relation");
             //For all the object property of the current scene Item
            for (MORAxioms.ObjectSemantic obj : ind.getObjectSemantics()){
+               System.out.println("for all the object property of the individual belonging to the same class"); 
                 //if they are the same object property
                if(obj.getSemantic().equals(j.getRelation())) {
                    for (OWLNamedIndividual value : obj.getValues()) {
                         //if it hold for an individual that belong to the same classes
                         //hence it has the same geometric features
+                       ontoRef.synchronizeReasoner();
                        MORFullIndividual ind1 = new MORFullIndividual(value, ontoRef);
                        ind1.readSemantic();
                        MORFullIndividual ind2 = new MORFullIndividual(j.getIndividual(), ontoRef);
                        ind2.readSemantic();
+                       System.out.println("FIRST IND TYPE\n");
+                       System.out.println(ind1.getTypeIndividual());
+                       System.out.println("SECOND IND TYPE\n");
+                       System.out.println(ind2.getTypeIndividual());
                        if (ind1.getTypeIndividual().equals(ind2.getTypeIndividual()) &&
                                ind1.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral().equals(ind2.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral())) {
                            count++;
+                           System.out.println("inside the if\n");
+                           System.out.println("!!!counter value ");
+                           System.out.print(count);
                        }
                    }
                }
