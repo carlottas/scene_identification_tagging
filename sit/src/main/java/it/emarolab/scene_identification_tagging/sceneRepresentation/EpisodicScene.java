@@ -134,19 +134,28 @@ public class EpisodicScene implements SITBase{
 
         //for all the individuals which belongs to the related class
         for(OWLNamedIndividual i : classes.getIndividualClassified()){
-
             int count =0 ;
             MORFullIndividual ind= new MORFullIndividual(i,ontoRef);
             ind.readSemantic();
             if((description.size()+ColorDescription.size())==countNumberOfRelations(ind)) {
+                System.out.println("inside the if sizes are equal ");
                 count = countNumberOfEqualObjectProperty(description, ind, ontoRef);
                 count += countNumberOfEqualObjectProperty(ColorDescription, ind, ontoRef);
+                System.out.println(count+"\n");
                 if (count == description.size() + ColorDescription.size()) {
-                    this.EpisodicSceneName = ind.getGround().toString().substring(EPISODIC_ONTO_NAME.length() + 1);
-                     ind.removeData(DATA_PROPERTY.TIME);
-                     ind.addData(DATA_PROPERTY.TIME,time,true);
-                     ind.writeSemantic();
-                    return false;
+                    for(MORAxioms.ObjectSemantic obj: ind.getObjectSemantics()){
+                        if(obj.toString().contains(SUPPORT.HAS_SCENE_SUPPORT)) {
+                            if (obj.getValues().toString().contains(SupportName)){
+                                System.out.println("same support");
+                                this.EpisodicSceneName = ind.getGround().toString().substring(EPISODIC_ONTO_NAME.length() + 1);
+                                ind.removeData(DATA_PROPERTY.TIME);
+                                ind.addData(DATA_PROPERTY.TIME,time,true);
+                                ind.writeSemantic();
+                                return false;
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -160,9 +169,7 @@ public class EpisodicScene implements SITBase{
         scene.addTypeIndividual(SemanticSceneName);
         for( SpatialRelation r : relations){
             EpisodicLearn description =new EpisodicLearn(getSpatialRelation(ontoRef,r.getRelation()),r);
-            System.out.println(description);
-            System.out.println(description.getRelation());
-            System.out.println(description.getIndividual());
+
             scene.addObject(description.getRelation(),description.getIndividual());
         }
         for (colorRelation c: colorRelations){
@@ -190,27 +197,30 @@ public class EpisodicScene implements SITBase{
     }
     public int countNumberOfEqualObjectProperty(ArrayList<EpisodicLearn> relation,MORFullIndividual ind,OWLReferences ontoRef){
        int count = 0 ;
-       for (EpisodicLearn j : relation) {
+
+        for (EpisodicLearn j : relation) {
             //For all the object property of the current scene Item
            for (MORAxioms.ObjectSemantic obj : ind.getObjectSemantics()){
-                //if they are the same object property
-               if(obj.getSemantic().equals(j.getRelation())) {
-                   for (OWLNamedIndividual value : obj.getValues()) {
-                        //if it hold for an individual that belong to the same classes
-                        //hence it has the same geometric features
-                       ontoRef.synchronizeReasoner();
-                       MORFullIndividual ind1 = new MORFullIndividual(value, ontoRef);
-                       ind1.readSemantic();
-                       MORFullIndividual ind2 = new MORFullIndividual(j.getIndividual(), ontoRef);
-                       ind2.readSemantic();
-                       if (ind1.getTypeIndividual().equals(ind2.getTypeIndividual()) &&
-                               ind1.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral().equals(ind2.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral())) {
-                           count++;
+
+                   //if they are the same object property
+                   if (obj.getSemantic().equals(j.getRelation())) {
+                       for (OWLNamedIndividual value : obj.getValues()) {
+                           //if it hold for an individual that belong to the same classes
+                           //hence it has the same geometric features
+                           ontoRef.synchronizeReasoner();
+                           MORFullIndividual ind1 = new MORFullIndividual(value, ontoRef);
+                           ind1.readSemantic();
+                           MORFullIndividual ind2 = new MORFullIndividual(j.getIndividual(), ontoRef);
+                           ind2.readSemantic();
+                           if (ind1.getTypeIndividual().equals(ind2.getTypeIndividual())) {
+
+                               count++;
+                           }
                        }
                    }
                }
+
            }
-       }
         return count ;
     }
     /**
