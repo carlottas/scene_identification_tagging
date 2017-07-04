@@ -12,6 +12,7 @@ import it.emarolab.scene_identification_tagging.SITBase;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneClassDescriptor;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneIndividualDescriptor;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SpatialIndividualDescriptor;
+import it.emarolab.scene_identification_tagging.realObject.EpisodicPrimitive;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
@@ -44,20 +45,20 @@ public class EpisodicScene implements SITBase{
         this.SemanticSceneName=SemanticSceneName;
         colorRelations= computeColorRelation(objects);
     }
-
     private Set< SpatialRelation> computeSceneRelations(Collection<? extends SpatialIndividualDescriptor> objects) {
         Set< SpatialRelation> relations = new HashSet<>();
         if ( ! objects.isEmpty())
             // hp: object properties of individual belonging to "GeometricPrimitive" are all spatial relations
             for ( SpatialIndividualDescriptor o : objects) {
-                for (MORAxioms.ObjectSemantic s : o.getObjectSemantics()) {
-                    for (OWLNamedIndividual i : s.getValues()) {
+                for ( MORAxioms.ObjectSemantic s : o.getObjectSemantics()) {
+                    for (OWLNamedIndividual  i : s.getValues()) {
                         relations.add(new SpatialRelation(o, s.getSemantic(), i));
                     }
                 }
             }
         return relations;
     }
+
     private Set< colorRelation> computeColorRelation(Collection<? extends SpatialIndividualDescriptor> objects) {
         Set< colorRelation> colorRelations = new HashSet<>();
         if ( ! objects.isEmpty())
@@ -114,8 +115,7 @@ public class EpisodicScene implements SITBase{
 
     }
     public boolean ShouldLearn(OWLReferences ontoRef){
-        System.out.println("inside should learn function ");
-        System.out.println("support new "+newSupport);
+
         if(newSupport){return true;}
         ArrayList<EpisodicLearn> description = new ArrayList<>();
         ArrayList<EpisodicLearn> ColorDescription = new ArrayList<>();
@@ -130,18 +130,14 @@ public class EpisodicScene implements SITBase{
         }
         //Only for the spatial relation check
         MORFullConcept classes= new MORFullConcept(SemanticSceneName,ontoRef);
-        System.out.println("SEMANTIC SCENE NAME");
-        System.out.println(SemanticSceneName);
         classes.readSemantic();
-        System.out.println("individuals\n");
-        System.out.println(classes.getIndividualClassified());
+
         //for all the individuals which belongs to the related class
         for(OWLNamedIndividual i : classes.getIndividualClassified()){
-            System.out.println("inside the for loop ");
+
             int count =0 ;
             MORFullIndividual ind= new MORFullIndividual(i,ontoRef);
             ind.readSemantic();
-            System.out.println("number of relation of the current class: "+description.size()+" +" +ColorDescription.size());
             if((description.size()+ColorDescription.size())==countNumberOfRelations(ind)) {
                 count = countNumberOfEqualObjectProperty(description, ind, ontoRef);
                 count += countNumberOfEqualObjectProperty(ColorDescription, ind, ontoRef);
@@ -164,11 +160,8 @@ public class EpisodicScene implements SITBase{
         scene.addTypeIndividual(SemanticSceneName);
         for( SpatialRelation r : relations){
             EpisodicLearn description =new EpisodicLearn(getSpatialRelation(ontoRef,r.getRelation()),r);
-            System.out.println("description\n");
             System.out.println(description);
-            System.out.println("relation");
             System.out.println(description.getRelation());
-            System.out.println("individual");
             System.out.println(description.getIndividual());
             scene.addObject(description.getRelation(),description.getIndividual());
         }
@@ -189,7 +182,6 @@ public class EpisodicScene implements SITBase{
         for(MORAxioms.ObjectSemantic i : ind.getObjectSemantics()){
             count+=i.getValues().size();
         }
-        System.out.println("number of relations "+count);
 
         return count-1;
 
@@ -198,12 +190,9 @@ public class EpisodicScene implements SITBase{
     }
     public int countNumberOfEqualObjectProperty(ArrayList<EpisodicLearn> relation,MORFullIndividual ind,OWLReferences ontoRef){
        int count = 0 ;
-       System.out.println("counting the number of equal object properties");
        for (EpisodicLearn j : relation) {
-           System.out.println("for all the relation");
             //For all the object property of the current scene Item
            for (MORAxioms.ObjectSemantic obj : ind.getObjectSemantics()){
-               System.out.println("for all the object property of the individual belonging to the same class"); 
                 //if they are the same object property
                if(obj.getSemantic().equals(j.getRelation())) {
                    for (OWLNamedIndividual value : obj.getValues()) {
@@ -214,16 +203,9 @@ public class EpisodicScene implements SITBase{
                        ind1.readSemantic();
                        MORFullIndividual ind2 = new MORFullIndividual(j.getIndividual(), ontoRef);
                        ind2.readSemantic();
-                       System.out.println("FIRST IND TYPE\n");
-                       System.out.println(ind1.getTypeIndividual());
-                       System.out.println("SECOND IND TYPE\n");
-                       System.out.println(ind2.getTypeIndividual());
                        if (ind1.getTypeIndividual().equals(ind2.getTypeIndividual()) &&
                                ind1.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral().equals(ind2.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral())) {
                            count++;
-                           System.out.println("inside the if\n");
-                           System.out.println("!!!counter value ");
-                           System.out.print(count);
                        }
                    }
                }
@@ -292,7 +274,7 @@ public class EpisodicScene implements SITBase{
 
         public EpisodicLearn(OWLObjectProperty relation , SpatialRelation r){
             this.relation=relation;
-            this.individual = r.getObject().getIndividual();
+            this.individual = r.getSubject().getIndividual();
         }
         public EpisodicLearn(OWLObjectProperty sceneRelation, colorRelation colorRelation) {
             this.relation = sceneRelation;

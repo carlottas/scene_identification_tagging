@@ -469,10 +469,13 @@ public class SemanticService
                 ArrayList<sit_msgs.SpatialRelationship> rel= new ArrayList<sit_msgs.SpatialRelationship>();
                 for ( Relation r :s.getRelations()){
                     //create the relation subject atom
-                    sit_msgs.SpatialRelationship rosSR = node.getTopicMessageFactory().newFromType(SpatialRelationship._TYPE);
-                    rosSR.setRelation(r.getRelation());
-                    rosSR.setObject(r.getObject());
-                    rel.add(rosSR);
+
+                    for(String o:r.getObject()) {
+                        sit_msgs.SpatialRelationship rosSR = node.getTopicMessageFactory().newFromType(SpatialRelationship._TYPE);
+                        rosSR.setRelation(r.getRelation());
+                        rosSR.setObject(r.getObject());
+                        rel.add(rosSR);
+                    }
                 }
                 rosAtom.setRelations(rel);
                 rosAtom.setName(s.getName());
