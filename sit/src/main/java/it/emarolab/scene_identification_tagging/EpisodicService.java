@@ -5,6 +5,7 @@ import it.emarolab.amor.owlInterface.OWLReferencesInterface;
 import it.emarolab.owloop.aMORDescriptor.MORAxioms;
 import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;
 import it.emarolab.owloop.core.ObjectProperty;
+import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneClassDescriptor;
 import it.emarolab.scene_identification_tagging.realObject.*;
 import it.emarolab.scene_identification_tagging.realObject.Cylinder;
 import it.emarolab.scene_identification_tagging.realObject.Sphere;
@@ -25,11 +26,7 @@ import org.ros.node.Node;
 import org.ros.node.parameter.ParameterTree;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.lang.reflect.Array;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
-
+import java.util.*;
 
 
 public class EpisodicService
@@ -150,6 +147,20 @@ public class EpisodicService
                 }
                 //retrieval
                 else if (decision==2){
+                    List<String> classes= request.getRetrievalSemantic();
+                    List<String> individuals= new ArrayList<>();
+
+                    for (String s : classes){
+                        if(!s.equals("owlNothing")) {
+                            SceneClassDescriptor currentClass = new SceneClassDescriptor(s, ontoRef);
+                            currentClass.readSemantic();
+                            MORAxioms.Individuals i = currentClass.getIndividualClassified();
+                            String names=i.toString().replaceAll("\\p{P}","");
+                            individuals.addAll(Arrays.asList(names.split(" ")));
+                        }
+                    }
+                    response.setRetrievalSemantic(individuals);
+
 
                 }
                 //forgetting

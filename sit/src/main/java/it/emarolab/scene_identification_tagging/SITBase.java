@@ -116,6 +116,7 @@ public interface SITBase {
     interface INDIVIDUAL
             extends VOCABOLARY{
 
+
         /**
          * The prefix used for all the individuals with
          * a primitive shape (i.e.: belonging to
@@ -533,6 +534,13 @@ public interface SITBase {
         String SUPPORT_CLASS_NAME="Support";
         String OBJECT_PROPERTY_IS_SUPPORT_OF="is-support-of_scene";
         String HAS_SCENE_SUPPORT="has-scene_support";
+    }
+    interface RETRIEVAL
+    extends  VOCABOLARY{
+        /**
+         * name of the class used to do the semantic retrieval
+         */
+        String SEMANTIC_RETRIEVAL_NAME="retrievalSemantic";
     }
     interface SCORE{
         String SCORE_ONTO_NAME="score-ontology";

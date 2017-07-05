@@ -19,7 +19,9 @@ import it.emarolab.amor.owlInterface.OWLReferences;
 import it.emarolab.amor.owlInterface.OWLReferencesInterface;
 import it.emarolab.scene_identification_tagging.realObject.*;
 import it.emarolab.scene_identification_tagging.sceneRepresentation.SceneRepresentation;
+import it.emarolab.scene_identification_tagging.owloopDescriptor.retrievalDescriptor;
 import it.emarolab.owloop.aMORDescriptor.MORAxioms;
+
 import it.emarolab.amor.owlInterface.SemanticRestriction;
 import it.emarolab.owloop.aMORDescriptor.MORAxioms;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneClassDescriptor;
@@ -154,30 +156,9 @@ public class SemanticService
                 }
                 //retrieval
                 else if (decision==2){
+                    retrievalDescriptor retrievalDescriptor= new retrievalDescriptor(request.getRetrieval(),ontoRef);
 
-                    SceneClassDescriptor scene= new SceneClassDescriptor(CLASS.SCENE,ontoRef);
-                    scene.readSemantic();
-                    String names= scene.toString().replaceAll("\\p{P}","");
-                    List<String> SceneClasses=Arrays.asList(names.split(" "));
-                    for (String s : SceneClasses){
-                        SceneClassDescriptor currentClass= new SceneClassDescriptor(s,ontoRef);
-                        currentClass.readSemantic();
-                        MORAxioms.Restrictions restriction=currentClass.getDefinitionConcept();
-
-                        for(SemanticRestriction j:restriction){
-                            System.out.println("IMPORTANTE RESTRICTION EXPRESSION!!!!!");
-                            System.out.println(j.toString());
-                            System.out.println("VALUE NAME");
-                            System.out.println(j.getValueName());
-                            System.out.println("getNNF");
-                           System.out.println(j.getAxiom(ontoRef).getNNF());
-                            System.out.println("getTypeIndex");
-                            System.out.println(j.getAxiom(ontoRef).typeIndex());
-                            System.out.println("getAxiomType");
-                            System.out.println(j.getAxiom(ontoRef).getAxiomType());
-                        }
-
-                    }
+                    response.setRetrievaled(retrievalDescriptor.getNameRetrieval());
 
                 }
                 //forgetting
