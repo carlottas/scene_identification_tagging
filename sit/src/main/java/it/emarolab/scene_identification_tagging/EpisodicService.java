@@ -3,9 +3,12 @@ package it.emarolab.scene_identification_tagging;
 import it.emarolab.amor.owlInterface.OWLReferences;
 import it.emarolab.amor.owlInterface.OWLReferencesInterface;
 import it.emarolab.owloop.aMORDescriptor.MORAxioms;
+import it.emarolab.owloop.aMORDescriptor.utility.concept.MORFullConcept;
 import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;
+import it.emarolab.owloop.core.Individual;
 import it.emarolab.owloop.core.ObjectProperty;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneClassDescriptor;
+import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneIndividualDescriptor;
 import it.emarolab.scene_identification_tagging.realObject.*;
 import it.emarolab.scene_identification_tagging.realObject.Cylinder;
 import it.emarolab.scene_identification_tagging.realObject.Sphere;
@@ -147,24 +150,101 @@ public class EpisodicService
                 }
                 //retrieval
                 else if (decision==2){
-                    List<String> classes= request.getRetrievalSemantic();
-                    List<String> individuals= new ArrayList<>();
+                    //retrieval Semantic
+                    if(!request.getRetrievalSemantic().isEmpty()) {
+                        List<String> classes = request.getRetrievalSemantic();
+                        List<String> individuals = new ArrayList<>();
 
-                    for (String s : classes){
-                        if(!s.equals("owlNothing")) {
-                            SceneClassDescriptor currentClass = new SceneClassDescriptor(s, ontoRef);
-                            currentClass.readSemantic();
-                            MORAxioms.Individuals i = currentClass.getIndividualClassified();
-                            String names=i.toString().replaceAll("\\p{P}","");
-                            individuals.addAll(Arrays.asList(names.split(" ")));
+                        for (String s : classes) {
+                            if (!s.equals("owlNothing")) {
+                                SceneClassDescriptor currentClass = new SceneClassDescriptor(s, ontoRef);
+                                currentClass.readSemantic();
+                                MORAxioms.Individuals i = currentClass.getIndividualClassified();
+                                String names = i.toString().replaceAll("\\p{P}", "");
+                                individuals.addAll(Arrays.asList(names.split(" ")));
+                            }
                         }
+                        response.setRetrievalSemantic(individuals);
                     }
-                    response.setRetrievalSemantic(individuals);
+                    //retrieval Episodic
+                    else{
+                        String support = request.getRetrieval().getSupport();
+                        List<sit_msgs.objectPropertyRetrieval> objectPropertyRetrievals=request.getRetrieval().getObjectProperty();
+                        //for all the required object property
+                        List<List<String>> possibleScenes= new ArrayList<>();
+                        for(sit_msgs.objectPropertyRetrieval obj:objectPropertyRetrievals){
+                            List<String> possibleScene= new ArrayList<>();
+                            sit_msgs.retrievalAtom subject= obj.getSubject();
+                            sit_msgs.retrievalAtom object=obj.getObject();
+                            String relation= obj.getRelationship();
+                            //TODO change, create a concept for this
+                            MORFullConcept classSubject = new MORFullConcept(subject.getLabel(),ontoRef);
+                            classSubject.readSemantic();
+                            MORAxioms.Individuals individuals=classSubject.getIndividualClassified();
+                            List<EpisodicPrimitive> equalsToSubject= new ArrayList<>();
+                            //checking the individuals which are equal to the request
+                            for (OWLNamedIndividual i : individuals){
+                                EpisodicPrimitive ind= new EpisodicPrimitive(i,ontoRef);
+                                ind.readSemantic();
+                                MORAxioms.Concepts cl=ind.getTypeIndividual();
+                                if(ind.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral().equals(subject.getColor())) {
+                                    if (checkClasses(cl.toString(), subject)) {
+                                        equalsToSubject.add(ind);
+                                    }
+                                }
+                            }
+                            for (EpisodicPrimitive i : equalsToSubject) {
+                                //check whether the same spatial relationship hold
+                                i.readSemantic();
+                                System.out.println("SUBJECT");
+                                System.out.println(i.getGround());
+                                if(i.getObjectSemantics().toString().contains(obj.getRelationship())) {
+                                    OWLNamedIndividual currentObj = i.getObject(obj.getRelationship());
+                                    MORFullIndividual IndivudalObject = new MORFullIndividual(currentObj, ontoRef);
+                                    IndivudalObject.readSemantic();
+                                    System.out.println("OBJECT");
+                                    System.out.println(IndivudalObject.getGround());
+                                    if (IndivudalObject.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral().equals(object.getColor())) {
+                                        if (checkClasses(IndivudalObject.getTypeIndividual().toString(), object)) {
+                                            //possible Scene
+                                            IndivudalObject.readSemantic();
+                                            //TODO it should be an object property not a data property
+                                            possibleScene.add(IndivudalObject.getLiteral(DATA_PROPERTY.BELONG_TO_SCENE).getLiteral());
+                                        }
+                                    }
+                                }
+                            }
+                            possibleScenes.add(possibleScene);
+
+                        }
+
+                        List<String> intersection = new ArrayList<>(possibleScenes.get(0));
+                        for (List<String> l:possibleScenes){
+                            if(!l.isEmpty()) {
+                                intersection.retainAll(l);
+                            }
+                        }
+                        for (String s : intersection){
+                            SceneIndividualDescriptor scene = new SceneIndividualDescriptor(s,ontoRef);
+                            scene.readSemantic();
+                            OWLNamedIndividual supportScene= scene.getObject(SUPPORT.HAS_SCENE_SUPPORT);
+                            if(!supportScene.getIRI().toString().substring(EPISODIC_ONTO_IRI.length()+1).equals(support)){
+                                intersection.remove(s);
+                            }
+
+                        }
+
+                        response.setRetrievalEpisodic(intersection);
+
+                    }
+
 
 
                 }
                 //forgetting
                 else if (decision==3){
+
+
 
                 }
             }
@@ -174,6 +254,43 @@ public class EpisodicService
 
 
 
+    }
+
+    public boolean checkClasses(String classes,sit_msgs.retrievalAtom atom){
+        List<String> classAtom = new ArrayList<>();
+        String prefix1="";
+        if (atom.getLabel().equals(CLASS.SPHERE)){
+            prefix1=CLASS.SPHERE;
+        }
+        else if (atom.getLabel().equals(CLASS.CONE)){
+            prefix1=CLASS.CONE;
+        }
+        else if (atom.getLabel().equals(CLASS.CYLINDER)){
+            prefix1=CLASS.CYLINDER;
+        }
+        else if (atom.getLabel().equals(CLASS.PLANE)){
+            prefix1=CLASS.PLANE;
+        }
+
+        for(sit_msgs.geometricCharacteristic g : atom.getGeometricFeatures()){
+            String prefix2=g.getCharacteristic();
+            if(g.getInterval()==1){
+                classAtom.add(prefix1+prefix2+GEOMETRICFEATURES.SMALLER_THAN_FIVE);
+            }
+            else if (g.getInterval()==2){
+                classAtom.add(prefix1+prefix2+GEOMETRICFEATURES.INCLUDED_IN_TEN_FIVE);
+            }
+            else if (g.getInterval()==3){
+                classAtom.add(prefix1+prefix2+GEOMETRICFEATURES.BIGGER_THAN_TEN);
+            }
+        }
+        int count = 0;
+        for (String s : classAtom){
+            if(classes.contains(s)){
+                count++;
+            }
+        }
+        return count==classAtom.size();
     }
     public ArrayList<Relation> computeSR(GeometricPrimitive subject){
 

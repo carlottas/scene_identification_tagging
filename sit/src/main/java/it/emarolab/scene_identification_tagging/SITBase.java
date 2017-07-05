@@ -232,6 +232,8 @@ public interface SITBase {
          * The name of the classes that describe the Cone with respect to its
          * Height and Radius
          */
+        String RADIUS="radius";
+        String HEIGHT="height";
         String CONE_RADIUS_SMALLER_THAN_FIVE="ConeRadiusSmallerThanFive";
         String CONE_RADIUS_INCLUDED_IN_TEN_FIVE="ConeRadiusIncludedInTenFive";
         String CONE_RADIUS_BIGGER_THAN_TEN="ConeRadiusBiggerThanTen";
@@ -528,6 +530,17 @@ public interface SITBase {
         String CONE_COUNTER="Cone-Counter";
         String VALUE_DATA_PROPERTY="has-value";
         String EPISODIC_SCENE_COUNTER="Episodic-Scene-Counter";
+    }
+    interface GEOMETRICFEATURES
+    extends  VOCABOLARY{
+        String RADIUS="Radius";
+        String HEIGHT="Height";
+
+        String SMALLER_THAN_FIVE="SmallerThanFive";
+        String INCLUDED_IN_TEN_FIVE="IncludedInTenFive";
+        String BIGGER_THAN_TEN="BiggerThanTen";
+
+
     }
     interface SUPPORT
     extends VOCABOLARY{
