@@ -90,65 +90,74 @@ public class EpisodicService
             build(EpisodicInterfaceRequest request, EpisodicInterfaceResponse response) {
                 OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
                         EPISODIC_ONTO_NAME, EPISODIC_ONTO_FILE, EPISODIC_ONTO_IRI, true);
-
                 // suppress aMOR log
                 it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
-                String SceneName=request.getSceneName();
-                List<String> SubClasses=request.getSubClasses();
-                List<String> SuperClasses=request.getSuperClasses();
-                String SupportName=request.getSupportName();
-                Atoms object= new Atoms();
-                object.MapFromRosMsg(request.getObject());
-                ArrayList<EpisodicPrimitive> Primitives= fromSemanticToEpisodic(object,ontoRef);
-                // add objects
-                for (EpisodicPrimitive i : Primitives) {
-                    for (EpisodicPrimitive j : Primitives)
-                        if (!i.equals(j))
-                            j.addDisjointIndividual(i.getInstance());
-                    i.getObjectSemantics().clear(); // clean previus spatial relation
-                    i.writeSemantic();
-                }
-                //adding the ObjectProperty
-                for (EpisodicPrimitive i : Primitives){
-                 i.ApplyRelations();
-                 i.writeSemantic();
-                 //i.saveOntology(EPISODIC_ONTO_FILE);
-                }
-                ontoRef.synchronizeReasoner();
-                //initialize the scene
-                EpisodicScene episodicScene= new EpisodicScene(Primitives,ontoRef,SceneName);
-                episodicScene.setSubClasses(SubClasses);
-                episodicScene.setSuperClasses(SuperClasses);
-                episodicScene.setSupportName(SupportName);
-                episodicScene.setAddingTime(true);
-                episodicScene.InitializeClasses(ontoRef);
-                episodicScene.InitializeSupport(ontoRef);
-                System.out.println("CHECKING WHETHER LEARNING");
-                if(episodicScene.ShouldLearn(ontoRef)){
-                    episodicScene.Learn(ontoRef,ComputeName(CLASS.SCENE));
-                    for (EpisodicPrimitive i:Primitives){
-                        i.setSceneName(episodicScene.getEpisodicSceneName());
-                        i.ApplySceneName();
+                int decision = request.getDecision();
+                if (decision == 1) {
+                    String SceneName = request.getSceneName();
+                    List<String> SubClasses = request.getSubClasses();
+                    List<String> SuperClasses = request.getSuperClasses();
+                    String SupportName = request.getSupportName();
+                    Atoms object = new Atoms();
+                    object.MapFromRosMsg(request.getObject());
+                    ArrayList<EpisodicPrimitive> Primitives = fromSemanticToEpisodic(object, ontoRef);
+                    // add objects
+                    for (EpisodicPrimitive i : Primitives) {
+                        for (EpisodicPrimitive j : Primitives)
+                            if (!i.equals(j))
+                                j.addDisjointIndividual(i.getInstance());
+                        i.getObjectSemantics().clear(); // clean previus spatial relation
                         i.writeSemantic();
-                        i.saveOntology(EPISODIC_ONTO_FILE);
-                        response.setLearnt(true);
                     }
-                }
-                else {
-                    //removing the individual of geometric primitives
-                    for (EpisodicPrimitive i : Primitives){
-                        ontoRef.removeIndividual(i.getInstance());
-                        ontoRef.synchronizeReasoner();
+                    //adding the ObjectProperty
+                    for (EpisodicPrimitive i : Primitives) {
+                        i.ApplyRelations();
+                        i.writeSemantic();
+                        //i.saveOntology(EPISODIC_ONTO_FILE);
                     }
-                    response.setLearnt(false);
+                    ontoRef.synchronizeReasoner();
+                    //initialize the scene
+                    EpisodicScene episodicScene = new EpisodicScene(Primitives, ontoRef, SceneName);
+                    episodicScene.setSubClasses(SubClasses);
+                    episodicScene.setSuperClasses(SuperClasses);
+                    episodicScene.setSupportName(SupportName);
+                    episodicScene.setAddingTime(true);
+                    episodicScene.InitializeClasses(ontoRef);
+                    episodicScene.InitializeSupport(ontoRef);
+                    System.out.println("CHECKING WHETHER LEARNING");
+                    if (episodicScene.ShouldLearn(ontoRef)) {
+                        episodicScene.Learn(ontoRef, ComputeName(CLASS.SCENE));
+                        for (EpisodicPrimitive i : Primitives) {
+                            i.setSceneName(episodicScene.getEpisodicSceneName());
+                            i.ApplySceneName();
+                            i.writeSemantic();
+                            i.saveOntology(EPISODIC_ONTO_FILE);
+                            response.setLearnt(true);
+                        }
+                    } else {
+                        //removing the individual of geometric primitives
+                        for (EpisodicPrimitive i : Primitives) {
+                            ontoRef.removeIndividual(i.getInstance());
+                            ontoRef.synchronizeReasoner();
+                        }
+                        response.setLearnt(false);
+
+                    }
+                    //filling the response
+                    response.setEpisodicSceneName(episodicScene.getEpisodicSceneName());
+
 
                 }
-                //filling the response
-                response.setEpisodicSceneName(episodicScene.getEpisodicSceneName());
+                //retrieval
+                else if (decision==2){
 
+                }
+                //forgetting
+                else if (decision==3){
 
-
+                }
             }
+
 
         };
 

@@ -20,6 +20,9 @@ import it.emarolab.amor.owlInterface.OWLReferencesInterface;
 import it.emarolab.scene_identification_tagging.realObject.*;
 import it.emarolab.scene_identification_tagging.sceneRepresentation.SceneRepresentation;
 import it.emarolab.owloop.aMORDescriptor.MORAxioms;
+import it.emarolab.amor.owlInterface.SemanticRestriction;
+import it.emarolab.owloop.aMORDescriptor.MORAxioms;
+import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneClassDescriptor;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
@@ -85,50 +88,52 @@ public class SemanticService
                         ONTO_NAME, ONTO_FILE, ONTO_IRI, true);
                 // suppress aMOR log
                 it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
-                // initialise objects
-                Set<GeometricPrimitive> objects = fromPITtoSIT(request.getGeometricPrimitives(),ontoRef);
-                // add objects
-                for (GeometricPrimitive i : objects) {
-                    for (GeometricPrimitive j : objects)
-                        if (!i.equals(j))
-                            j.addDisjointIndividual(i.getInstance());
-                    i.getObjectSemantics().clear(); // clean previus spatial relation
-                    i.writeSemantic();
-                }
-                // run SWRL
-                ontoRef.synchronizeReasoner();
-                // get SWRL results
-                //should get the semantic
-                for (GeometricPrimitive i : objects) {
-                    // it could be implemented faster
-                    i.readSemantic();
-                }
+                int decision = request.getDecision();
+                //MEMORIZATION
+                if (decision == 1) {
+                    // initialise objects
+                    Set<GeometricPrimitive> objects = fromPITtoSIT(request.getGeometricPrimitives(), ontoRef);
+                    // add objects
+                    for (GeometricPrimitive i : objects) {
+                        for (GeometricPrimitive j : objects)
+                            if (!i.equals(j))
+                                j.addDisjointIndividual(i.getInstance());
+                        i.getObjectSemantics().clear(); // clean previus spatial relation
+                        i.writeSemantic();
+                    }
+                    // run SWRL
+                    ontoRef.synchronizeReasoner();
+                    // get SWRL results
+                    //should get the semantic
+                    for (GeometricPrimitive i : objects) {
+                        // it could be implemented faster
+                        i.readSemantic();
+                    }
 
-                // create scene and reason for recognition
-                SceneRepresentation recognition1 = new SceneRepresentation(objects, ontoRef);
-                System.out.println("Recognised with best confidence: " + recognition1.getRecognitionConfidence() + " should learn? " + recognition1.shouldLearn());
-                System.out.println("Best recognised class: " + recognition1.getBestRecognitionDescriptor());
-                System.out.println("Other recognised classes: " + recognition1.getSceneDescriptor().getTypeIndividual());
+                    // create scene and reason for recognition
+                    SceneRepresentation recognition1 = new SceneRepresentation(objects, ontoRef);
+                    System.out.println("Recognised with best confidence: " + recognition1.getRecognitionConfidence() + " should learn? " + recognition1.shouldLearn());
+                    System.out.println("Best recognised class: " + recognition1.getBestRecognitionDescriptor());
+                    System.out.println("Other recognised classes: " + recognition1.getSceneDescriptor().getTypeIndividual());
 
-                // learn the new scene if is the case
-                if (recognition1.shouldLearn()) {
-                    response.setLearnt(true);
-                    System.out.println("Learning.... ");
-                    recognition1.learn(computeSceneName());
-                }
-                else {
-                    response.setLearnt(false);
-                }
+                    // learn the new scene if is the case
+                    if (recognition1.shouldLearn()) {
+                        response.setLearnt(true);
+                        System.out.println("Learning.... ");
+                        recognition1.learn(computeSceneName());
+                    } else {
+                        response.setLearnt(false);
+                    }
 
-                ontoRef.synchronizeReasoner();
-                //filling the response
-                List<String> subClasses= recognition1.getBestRecognitionDescriptor().SubConceptToString();
-                List<String> superClasses=recognition1.getBestRecognitionDescriptor().SuperConceptToString();
-                response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length()+1));
-                response.setSubClasses(subClasses);
-                response.setSuperClasses(superClasses);
-                ontoRef.synchronizeReasoner();
-                recognition1.getBestRecognitionDescriptor().readSemantic();
+                    ontoRef.synchronizeReasoner();
+                    //filling the response
+                    List<String> subClasses = recognition1.getBestRecognitionDescriptor().SubConceptToString();
+                    List<String> superClasses = recognition1.getBestRecognitionDescriptor().SuperConceptToString();
+                    response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length() + 1));
+                    response.setSubClasses(subClasses);
+                    response.setSuperClasses(superClasses);
+                    ontoRef.synchronizeReasoner();
+                    recognition1.getBestRecognitionDescriptor().readSemantic();
                 /*
                 //check whether is actually working correctly
                 List<String> isFirstSupClassOf=computeIsFirstSuperClassOf(subClasses,ontoRef,recognition1);
@@ -139,14 +144,48 @@ public class SemanticService
                 response.setFirstSuperClass(firstSupClass);
                 response.setIsFirstSuperClassOf(isFirstSupClassOf);
                 */
-                Atoms atoms = fromSemanticToEpisodic(objects);
-                atoms.mapInROSMsg(node,response);
-                ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
-                for (GeometricPrimitive i : objects)
-                    ontoRef.removeIndividual(i.getInstance());
-                ontoRef.synchronizeReasoner();
-                recognition1.getBestRecognitionDescriptor().saveOntology(ONTO_FILE);
+                    Atoms atoms = fromSemanticToEpisodic(objects);
+                    atoms.mapInROSMsg(node, response);
+                    ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
+                    for (GeometricPrimitive i : objects)
+                        ontoRef.removeIndividual(i.getInstance());
+                    ontoRef.synchronizeReasoner();
+                    recognition1.getBestRecognitionDescriptor().saveOntology(ONTO_FILE);
+                }
+                //retrieval
+                else if (decision==2){
+
+                    SceneClassDescriptor scene= new SceneClassDescriptor(CLASS.SCENE,ontoRef);
+                    scene.readSemantic();
+                    String names= scene.toString().replaceAll("\\p{P}","");
+                    List<String> SceneClasses=Arrays.asList(names.split(" "));
+                    for (String s : SceneClasses){
+                        SceneClassDescriptor currentClass= new SceneClassDescriptor(s,ontoRef);
+                        currentClass.readSemantic();
+                        MORAxioms.Restrictions restriction=currentClass.getDefinitionConcept();
+
+                        for(SemanticRestriction j:restriction){
+                            System.out.println("IMPORTANTE RESTRICTION EXPRESSION!!!!!");
+                            System.out.println(j.toString());
+                            System.out.println("VALUE NAME");
+                            System.out.println(j.getValueName());
+                            System.out.println("getNNF");
+                           System.out.println(j.getAxiom(ontoRef).getNNF());
+                            System.out.println("getTypeIndex");
+                            System.out.println(j.getAxiom(ontoRef).typeIndex());
+                            System.out.println("getAxiomType");
+                            System.out.println(j.getAxiom(ontoRef).getAxiomType());
+                        }
+
+                    }
+
+                }
+                //forgetting
+                else if (decision==3){
+
+                }
             }
+
         };
     }
 
@@ -431,7 +470,8 @@ public class SemanticService
         return atoms ;
 
 
-    }    public void objectProperty(MORAxioms.ObjectSemantics objProp, String property, ArrayList<String> individuals){
+    }
+    public void objectProperty(MORAxioms.ObjectSemantics objProp, String property, ArrayList<String> individuals){
         for (MORAxioms.ObjectSemantic obj : objProp) {
             if (obj.toString().contains(property)) {
                 MORAxioms.Individuals ind = obj.getValues();

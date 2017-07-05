@@ -76,21 +76,32 @@ public class ScoreService extends AbstractNodeMain
 
                 EpisodicScoreItem episodic=request.getEpisodic();
                 SemanticScoreItem semantic=request.getSemantic();
-
+                int decision=request.getDecision();
                 OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
                         SCORE.SCORE_ONTO_NAME, SCORE.SCORE_FILE_PATH, SCORE.SCORE_IRI_ONTO, true);
                 // suppress aMOR log
                 it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole( false);
-                if(!semantic.getName().isEmpty()) {
-                    SemanticScore semanticScore = new SemanticScore(semantic.getName(), semantic.getSubClasses(), semantic.getSuperClasses(),semantic.getFirstSuperClass(),semantic.getIsFirstSuperCLassOf(),ontoRef,true);
-                    //if retrieval
-                    //semanticScore.semanticRetrieval();
+                //MEMORIZATION
+                if(decision==1) {
+                    if (!semantic.getName().isEmpty()) {
+                        SemanticScore semanticScore = new SemanticScore(semantic.getName(), semantic.getSubClasses(), semantic.getSuperClasses(), semantic.getFirstSuperClass(), semantic.getIsFirstSuperCLassOf(), ontoRef, true);
+                        //if retrieval
+                        //semanticScore.semanticRetrieval();
+                    }
+                    if (!episodic.getName().isEmpty()) {
+                        EpisodicScore episodicScore = new EpisodicScore(episodic.getName(), episodic.getNameSemanticItem(), ontoRef, true);
+                        //if initialization
+                        //if retrieval
+                        //(episodicScore.episodicRetrieval();
+
+                    }
                 }
-                if(!episodic.getName().isEmpty()){
-                    EpisodicScore episodicScore= new EpisodicScore(episodic.getName(),episodic.getNameSemanticItem(),ontoRef,true);
-                    //if initialization
-                    //if retrieval
-                    //(episodicScore.episodicRetrieval();
+                //RETRIEVAL
+               else  if(decision==2){
+
+                }
+                //FORGETTING
+               else  if(decision==3){
 
                 }
                 /*
