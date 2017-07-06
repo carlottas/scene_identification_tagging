@@ -217,8 +217,13 @@ public class EpisodicService
                             possibleScenes.add(possibleScene);
 
                         }
-
-                        List<String> intersection = new ArrayList<>(possibleScenes.get(0));
+                        List<String> intersection = new ArrayList<>();
+                        for (List<String> i:possibleScenes) {
+                            if(!i.isEmpty()) {
+                                intersection.addAll(i);
+                                break;
+                            }
+                        }
                         for (List<String> l:possibleScenes){
                             if(!l.isEmpty()) {
                                 intersection.retainAll(l);
