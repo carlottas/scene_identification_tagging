@@ -16,6 +16,7 @@ import it.emarolab.scene_identification_tagging.sceneRepresentation.EpisodicScen
 import it.emarolab.scene_identification_tagging.sceneRepresentation.SpatialRelation;
 import it.emarolab.scene_identification_tagging.sceneRepresentation.Relation;
 import javafx.scene.shape.*;
+import org.apache.jena.base.Sys;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 //import jdk.internal.org.objectweb.asm.tree.analysis.Value;
@@ -229,16 +230,35 @@ public class EpisodicService
                                 intersection.retainAll(l);
                             }
                         }
+                        List<String> supportList = new ArrayList<>();
+                        List<String> timeList= new ArrayList<>();
+                        long time = System.currentTimeMillis();
+                        MORFullIndividual clock = new MORFullIndividual(TIME.CLOCK,ontoRef);
+                        clock.readSemantic();
+                        clock.removeData(TIME.HAS_TIME_CLOCK);
+                        clock.addData(TIME.HAS_TIME_CLOCK,time);
+                        clock.writeSemantic();
+                        clock.saveOntology(EPISODIC_ONTO_FILE);
+                        ontoRef.synchronizeReasoner();
+                        
                         for (String s : intersection){
                             SceneIndividualDescriptor scene = new SceneIndividualDescriptor(s,ontoRef);
+                            ontoRef.synchronizeReasoner();
                             scene.readSemantic();
                             OWLNamedIndividual supportScene= scene.getObject(SUPPORT.HAS_SCENE_SUPPORT);
-                            if(!supportScene.getIRI().toString().substring(EPISODIC_ONTO_IRI.length()+1).equals(support)){
-                                intersection.remove(s);
+                            if(supportScene.getIRI().toString().substring(EPISODIC_ONTO_IRI.length()+1).equals(support)){
+                                supportList.add(s);
+                            }
+                            //todo reasoner ! change clock value
+                           String timeClass= timeIntervalClass(request.getRetrieval().getTime());
+                            System.out.println(scene.getTypeIndividual().toString());
+                            if(scene.getTypeIndividual().toString().contains(timeClass)){
+                                timeList.add(s);
                             }
 
                         }
-
+                        intersection.retainAll(supportList);
+                        intersection.retainAll(timeList);
                         response.setRetrievalEpisodic(intersection);
 
                     }
@@ -261,6 +281,28 @@ public class EpisodicService
 
     }
 
+    public String timeIntervalClass(int time){
+        String timeClass="";
+        switch(time)
+        {
+            case 1 : {
+                timeClass = TIME.TEN_MINUTES_CLASS;
+                break;
+            }
+            case 2 : {
+                timeClass=TIME.THIRTHY_MINUTES_CLASS;
+                break;
+            }
+            case 3 : {
+                timeClass=TIME.ONE_HOUR_CLASS;
+                break ;
+            }
+
+        }
+        return timeClass;
+
+
+    }
     public boolean checkClasses(String classes,sit_msgs.retrievalAtom atom){
         List<String> classAtom = new ArrayList<>();
         String prefix1="";

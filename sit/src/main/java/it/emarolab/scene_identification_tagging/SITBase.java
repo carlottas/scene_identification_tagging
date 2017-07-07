@@ -555,6 +555,17 @@ public interface SITBase {
          */
         String SEMANTIC_RETRIEVAL_NAME="retrievalSemantic";
     }
+    interface TIME
+    extends VOCABOLARY{
+        String CLOCK="clock";
+        String ONE_HOUR_CLASS="OneHour";
+        String TEN_MINUTES_CLASS="TenMinutes";
+        String THIRTHY_MINUTES_CLASS="ThirtyMinutes";
+        String ONE_HOUR_INDIVIDUAL="OneHour";
+        String TEN_MINUTES_INDIVIDUAL="TenMinutes";
+        String THIRTY_MINUTES_INDIVIDUAL="ThirtyMinutes";
+        String HAS_TIME_CLOCK="has_time";
+    }
     interface SCORE{
         String SCORE_ONTO_NAME="score-ontology";
         String SCORE_FILE_PATH="../catkin_ws/src/scene_identification_tagging/resources/t_box/carlotta/score-ontology.owl";
