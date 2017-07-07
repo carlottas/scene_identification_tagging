@@ -565,6 +565,7 @@ public interface SITBase {
         String TEN_MINUTES_INDIVIDUAL="TenMinutes";
         String THIRTY_MINUTES_INDIVIDUAL="ThirtyMinutes";
         String HAS_TIME_CLOCK="has_time";
+        String NO_TIME="noTime";
     }
     interface SCORE{
         String SCORE_ONTO_NAME="score-ontology";
