@@ -98,6 +98,19 @@ public class ScoreService extends AbstractNodeMain
                 }
                 //RETRIEVAL
                else  if(decision==2){
+                    if(!request.getSemanticRetrieval().isEmpty()){
+                        for(String s : request.getSemanticRetrieval()){
+                            SemanticScore score= new SemanticScore(s,ontoRef);
+                            score.semanticRetrieval();
+
+                        }
+                    }
+                    if(!request.getEpisodicRetrieval().isEmpty()){
+                       for (String s : request.getEpisodicRetrieval()) {
+                           EpisodicScore score = new EpisodicScore(s,ontoRef);
+                           score.episodicRetrieval();
+                       }
+                    }
 
                 }
                 //FORGETTING
