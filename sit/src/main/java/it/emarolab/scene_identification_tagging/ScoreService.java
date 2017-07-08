@@ -111,24 +111,24 @@ public class ScoreService extends AbstractNodeMain
                            score.episodicRetrieval();
                        }
                     }
+                    Forgetting forgetting= new Forgetting(ontoRef);
+                    response.setToBeForgottenSemantic(forgetting.getToBeForgottenSemantic());
+                    response.setToBeForgottenEpisodic(forgetting.getToBeForgottenEpisodic());
+                    response.setLowScoreSemantic(forgetting.getLowScoreSemantic());
+                    response.setLowScoreEpisodic(forgetting.getLowScoreEpisodic());
+                    response.setForgotSemantic(forgetting.getForgotSemantic());
+                    response.setForgotEpisodic(forgetting.getForgotEpisodic());
+                    forgetting.deleteEpisodic();
+                    forgetting.deleteSemantic();
+                    forgetting.updateTimes();
 
                 }
                 //FORGETTING
                else  if(decision==3){
 
                 }
-                /*
-                Forgetting forgetting= new Forgetting(ontoRef);
-                List<String> toBeForgottenSemantic=forgetting.getToBeForgottenSemantic();
-                List<String> toBeForgottenEpisodic=forgetting.getToBeForgottenEpisodic();
-                List<String> lowScoreSemantic=forgetting.getLowScoreSemantic();
-                List<String> lowScoreEpisodic=forgetting.getLowScoreEpisodic();
-                List<String> forgotSemantic=forgetting.getForgotSemantic();
-                List<String> forgotEpisodic=forgetting.getForgotEpisodic();
-                forgetting.deleteEpisodic();
-                forgetting.deleteSemantic();
-                forgetting.updateTimes();
-                */
+
+
 
             }
 
