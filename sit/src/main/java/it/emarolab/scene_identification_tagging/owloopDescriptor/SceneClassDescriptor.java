@@ -207,11 +207,21 @@ public class SceneClassDescriptor
         String name=getGround().toString();
         return getGround().toString().substring(i);
     }
+
+    /**
+     * Function which returns the name of the subConcept of the object as a List of String
+     * @return List of Names of the subCOncept of the object
+     */
     public List<String> SubConceptToString(){
         String names=subConcept.toString();
         names = names.replaceAll("\\p{P}","");
         return Arrays.asList(names.split(" "));
     }
+
+    /**
+     * Function which returns the name of the superConcept of the object as a List of String
+     * @return List of Names of the superConcept of the object
+     */
     public List<String> SuperConceptToString(){
         String names=superConcept.toString();
         names = names.replaceAll("\\p{P}","");
