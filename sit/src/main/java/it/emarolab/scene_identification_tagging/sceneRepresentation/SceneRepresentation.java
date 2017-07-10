@@ -55,6 +55,7 @@ public class SceneRepresentation
         implements SITBase{
 
     private Set< SpatialRelation> relations;
+    private Set<colorRelation> colorRelations;
     private SceneIndividualDescriptor sceneDescriptor;
     private SceneClassDescriptor bestRecognitionDescriptor;
     private double recognitionConfidence;
@@ -72,7 +73,8 @@ public class SceneRepresentation
     public SceneRepresentation(Collection< ? extends SpatialIndividualDescriptor> objects, OWLReferences ontoRef){
         relations = computeSceneRelations(objects);
         sceneDescriptor = new SceneIndividualDescriptor( getSceneIndividualName(), ontoRef);
-        applyScene( sceneDescriptor, relations);
+        colorRelations= computeColorRelation(objects);
+        applyScene( sceneDescriptor, relations,colorRelations);
         computeRecognitionConfidence( sceneDescriptor);
     }
 
@@ -93,12 +95,29 @@ public class SceneRepresentation
             }
         return relations;
     }
+    private Set< colorRelation> computeColorRelation(Collection<? extends SpatialIndividualDescriptor> objects) {
+        Set< colorRelation> colorRelations = new HashSet<>();
+        if ( ! objects.isEmpty())
+            for ( SpatialIndividualDescriptor o : objects) {
+               String Color= o.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral();
+               colorRelations.add(new colorRelation(o,Color));
+            }
+
+        return colorRelations;
+    }
+
 
     // add the scene individual to the ontology
-    private void applyScene(SceneIndividualDescriptor sceneDescriptor, Set<SpatialRelation> relations){
+    private void applyScene(SceneIndividualDescriptor sceneDescriptor, Set<SpatialRelation> relations,Set<colorRelation> colorRelations){
         for ( SpatialRelation r : relations){
-            OWLObjectProperty spatialRelation = getSpatialRelation( sceneDescriptor.getOntology(), r.getRelation());
-            sceneDescriptor.addObject( spatialRelation, r.getObject().getIndividual());
+
+                OWLObjectProperty spatialRelation = getSpatialRelation(sceneDescriptor.getOntology(), r.getRelation());
+                sceneDescriptor.addObject(spatialRelation, r.getObject().getIndividual());
+
+        }
+        for (colorRelation c: colorRelations){
+            OWLObjectProperty cr= getColorRelation(sceneDescriptor.getOntology(),c.getColor());
+            sceneDescriptor.addObject(cr,c.getSubject().getIndividual());
         }
         sceneDescriptor.addTypeIndividual( CLASS.SCENE);
         if (addTime)
@@ -112,6 +131,13 @@ public class SceneRepresentation
         String sceneRelationName = OBJECT_PROPERTY.SCENE_SPATIAL_PRFIX + relationName;
         return ontology.getOWLObjectProperty( sceneRelationName);
     }
+    // get spatial relation between a Scene and an Object from the spatial relation between two Objects
+    private OWLObjectProperty getColorRelation(OWLReferences ontology, String color) {
+        String sceneRelationName = OBJECT_PROPERTY.SCENE_SPATIAL_PRFIX + color;
+        return ontology.getOWLObjectProperty( sceneRelationName);
+    }
+
+
 
     // compute the best scene classification (confidence and descriptor)
     private void computeRecognitionConfidence( SceneIndividualDescriptor sceneDescriptor){
@@ -176,6 +202,25 @@ public class SceneRepresentation
             if (! found)
                 shapeCardinality.add( learning);
         }
+        for ( colorRelation cr : colorRelations){
+            OWLObjectProperty sceneColorRelation = getColorRelation(sceneDescriptor.getOntology(), cr.getColor());
+            LearningData learning = new LearningData( sceneColorRelation, cr);
+            boolean found = false;
+            for ( LearningData l : shapeCardinality) {
+                if ( l.equals(learning)){
+                    found = true;
+                    break;
+                }
+                if ( l.getRelation().equals( learning.getRelation())
+                        & l.getShape().equals( learning.getShape())){
+                    l.increaseCardinality();
+                    found = true;
+                    break;
+                }
+            }
+            if (! found)
+                shapeCardinality.add( learning);
+        }
 
         for ( LearningData toLearn : shapeCardinality)
             learned.addMinObjectRestriction( toLearn.getRelation(), toLearn.getCardinality(), toLearn.getShape());
@@ -207,6 +252,11 @@ public class SceneRepresentation
             this.relation = sceneRelation;
             this.shape = spatialRelation.getObject().getType();
             this.individual = spatialRelation.getObject().getIndividual();
+        }
+        private LearningData(OWLObjectProperty sceneRelation, colorRelation colorRelation) {
+            this.relation = sceneRelation;
+            this.shape = colorRelation.getSubject().getType();
+            this.individual = colorRelation.getSubject().getIndividual();
         }
 
         private OWLObjectProperty getRelation() {
