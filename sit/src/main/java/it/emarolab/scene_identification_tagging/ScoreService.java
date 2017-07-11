@@ -359,9 +359,12 @@ public class ScoreService extends AbstractNodeMain
                 scoreIndividual = ind.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL).parseFloat() / numberBelongingIndividual;
             }
             //removing the data that have to be computed by the reasoner
-            ind.removeData(SCORE.SCORE_PROP_SCORE_SUB_CLASSES);
-            ind.removeData(SCORE.SCORE_PROP_SCORE_BELONGING_INDIVIDUAL);
-            ind.writeSemantic();
+           // ind.removeData(SCORE.SCORE_PROP_SCORE_SUB_CLASSES);
+            //ind.removeData(SCORE.SCORE_PROP_SCORE_BELONGING_INDIVIDUAL);
+           // ind.removeData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL);
+            //ind.addData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL,scoreIndividual);
+            //ind.writeSemantic();
+            //ind.saveOntology(SCORE.SCORE_FILE_PATH);
             return ((float) (SCORE.SCORE_SEMANTIC_WEIGHT_1 * numberBelongingIndividual +
                     SCORE.SCORE_SEMANTIC_WEIGHT_2 * scoreIndividual +
                     SCORE.SCORE_SEMANTIC_WEIGHT_3 * numberSubClasses +
@@ -474,6 +477,7 @@ public class ScoreService extends AbstractNodeMain
             if (setName.isEmpty()) {
                 return;
             }
+            //TODO no sense
             if(setName.size()==1 && setName.contains(CLASS.SPHERE)){
                 return;
             }
@@ -639,6 +643,7 @@ public class ScoreService extends AbstractNodeMain
             firstSup.removeData(SCORE.SCORE_PROP_HAS_SCORE);
             firstSup.addData(SCORE.SCORE_PROP_HAS_SCORE, newScore);
             firstSup.writeSemantic();
+            firstSup.saveOntology(SCORE.SCORE_FILE_PATH);
         }
         private void UpdateFirstSuperClass(){
                 //declaration of the object
@@ -880,8 +885,9 @@ public class ScoreService extends AbstractNodeMain
         int semanticRetrieval=scoreEpisodic.getLiteral(SCORE.SCORE_PROP_NUMBER_SEMANTIC_RETRIEVAL).parseInteger();
         semanticRetrieval++;
         //compute the new score
-        float newScore=computeScore(scoreEpisodic.getLiteral(SCORE.SCORE_PROP_NUMBER_EPISODIC_RETRIEVAL).parseInteger(),
-                semanticRetrieval);
+        float newScore=computeScore(
+                semanticRetrieval,scoreEpisodic.getLiteral(SCORE.SCORE_PROP_NUMBER_EPISODIC_RETRIEVAL).parseInteger());
+
         //update the total semantic score
         updateTotalEpisodicScore(scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(),newScore);
         //update the score of the classes
@@ -1000,6 +1006,7 @@ public class ScoreService extends AbstractNodeMain
         semanticIndividual.removeData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL);
         semanticIndividual.addData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL,scoreBelongingIndividual);
         semanticIndividual.writeSemantic();
+        semanticIndividual.saveOntology(SCORE.SCORE_FILE_PATH);
         float newScoreSemantic= SemanticItem.computeScore(semanticIndividual);
         SemanticItem.UpdateTotalSemanticScore(semanticIndividual.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(),newScoreSemantic);
         List<String> classes =new ArrayList<>();
@@ -1009,6 +1016,7 @@ public class ScoreService extends AbstractNodeMain
         semanticIndividual.removeData(SCORE.SCORE_PROP_HAS_SCORE);
         semanticIndividual.addData(SCORE.SCORE_PROP_HAS_SCORE,newScoreSemantic);
         semanticIndividual.writeSemantic();
+        semanticIndividual.saveOntology(SCORE.SCORE_FILE_PATH);
     }
 
     /**

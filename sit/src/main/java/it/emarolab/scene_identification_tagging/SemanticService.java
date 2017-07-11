@@ -156,9 +156,10 @@ public class SemanticService
                 }
                 //retrieval
                 else if (decision==2){
-                    retrievalDescriptor retrievalDescriptor= new retrievalDescriptor(request.getRetrieval(),ontoRef);
-
-                    response.setRetrievaled(retrievalDescriptor.getNameRetrieval());
+                    if(!request.getRetrieval().isEmpty()) {
+                        retrievalDescriptor retrievalDescriptor = new retrievalDescriptor(request.getRetrieval(), ontoRef);
+                        response.setRetrievaled(retrievalDescriptor.getNameRetrieval());
+                    }
 
                 }
                 //forgetting
