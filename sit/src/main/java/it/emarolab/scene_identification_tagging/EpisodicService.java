@@ -212,7 +212,7 @@ public class EpisodicService
                         }
                         ///////FILLING THE RESPONSE
                         //make the list contain only the element common to all the required lists
-                        if(!timeInterval.isEmpty()){
+                        if(!timeInterval.equals(TIME.NO_TIME)){
                             retrievedScenes.retainAll(possibleTimeIntervalScenes);
                         }
                         if(!objectPropertyRetrievals.isEmpty()){
@@ -252,7 +252,7 @@ public class EpisodicService
             if (i.getIRI().toString().substring(EPISODIC_ONTO_IRI.length() + 1).equals(supportName)){
                 MORFullIndividual ind = new MORFullIndividual(i,ontoRef);
                 ind.readSemantic();
-                possibleSupportScenes.add(ind.getObject(SUPPORT.OBJECT_PROPERTY_IS_SUPPORT_OF).getIRI().toString().substring(EPISODIC_ONTO_IRI.length()+1));
+                objectProperty(ind.getObjectSemantics(),SUPPORT.OBJECT_PROPERTY_IS_SUPPORT_OF,possibleSupportScenes);
             }
         }
         return possibleSupportScenes;
@@ -318,7 +318,6 @@ public class EpisodicService
     public List<String> computePossiblePrimitiveScenes(List<retrievalAtom> retrievalPrimitives,
                                                        OWLReferences ontoRef){
         List<List<String>> ListPossiblePrimitiveScenes= new ArrayList<>();
-        List<String> possiblePrimitiveScenes = new ArrayList<>();
         for (retrievalAtom atom: retrievalPrimitives){
             MORFullConcept classAtom = new MORFullConcept(atom.getLabel(), ontoRef);
             classAtom.readSemantic();
@@ -326,20 +325,20 @@ public class EpisodicService
             List<String> equalsAtom = new ArrayList<>();
             //checking the individuals which are equal to the request
             for (OWLNamedIndividual i : individuals) {
-                EpisodicPrimitive ind = new EpisodicPrimitive(i, ontoRef);
+                MORFullIndividual ind = new MORFullIndividual(i, ontoRef);
                 ind.readSemantic();
                 MORAxioms.Concepts cl = ind.getTypeIndividual();
                 if (ind.getLiteral(COLOR.COLOR_DATA_PROPERTY).getLiteral().equals(atom.getColor())) {
                     if (checkClasses(cl.toString(),atom)) {
-                        equalsAtom.add(ind.getGround().toString().substring(EPISODIC_ONTO_NAME.length()+1));
+                        equalsAtom.add(ind.getLiteral(DATA_PROPERTY.BELONG_TO_SCENE).getLiteral());
                     }
                 }
             }
             ListPossiblePrimitiveScenes.add(equalsAtom);
 
         }
-        possiblePrimitiveScenes=computeCommonElementListsString(ListPossiblePrimitiveScenes);
-        return possiblePrimitiveScenes;
+
+        return computeCommonElementListsString(ListPossiblePrimitiveScenes);
 
     }
     public List<String> computeCommonElementListsString(List<List<String>> listOfList){
@@ -608,6 +607,18 @@ public class EpisodicService
 
     }
     public void objectProperty(MORAxioms.ObjectSemantics objProp, String property, ArrayList<String> individuals){
+        for (MORAxioms.ObjectSemantic obj : objProp) {
+            if (obj.toString().contains(property)) {
+                MORAxioms.Individuals ind = obj.getValues();
+                for (OWLNamedIndividual i : ind) {
+                    //add to the string the new score
+                    individuals.add(i.toStringID().substring(ONTO_IRI.length() + 1));
+                }
+
+            }
+        }
+    }
+    public void objectProperty(MORAxioms.ObjectSemantics objProp, String property, List<String> individuals){
         for (MORAxioms.ObjectSemantic obj : objProp) {
             if (obj.toString().contains(property)) {
                 MORAxioms.Individuals ind = obj.getValues();

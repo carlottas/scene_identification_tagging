@@ -100,8 +100,10 @@ public class ScoreService extends AbstractNodeMain
                else  if(decision==2){
                     if(!request.getSemanticRetrieval().isEmpty()){
                         for(String s : request.getSemanticRetrieval()){
-                            SemanticScore score= new SemanticScore(s,ontoRef);
-                            score.semanticRetrieval();
+                            if(!s.equals("owlNothing")) {
+                                SemanticScore score = new SemanticScore(s, ontoRef);
+                                score.semanticRetrieval();
+                            }
 
                         }
                     }
@@ -111,6 +113,7 @@ public class ScoreService extends AbstractNodeMain
                            score.episodicRetrieval();
                        }
                     }
+                    /*
                     Forgetting forgetting= new Forgetting(ontoRef);
                     response.setToBeForgottenSemantic(forgetting.getToBeForgottenSemantic());
                     response.setToBeForgottenEpisodic(forgetting.getToBeForgottenEpisodic());
@@ -121,6 +124,7 @@ public class ScoreService extends AbstractNodeMain
                     forgetting.deleteEpisodic();
                     forgetting.deleteSemantic();
                     forgetting.updateTimes();
+                    */
 
                 }
                 //FORGETTING
@@ -278,13 +282,11 @@ public class ScoreService extends AbstractNodeMain
          */
         public void semanticRetrieval() {
             scoreSemantic.readSemantic();
-            //find the individual that have been retrieved with the
-            // semantic item
-            //updating the belonging individual score
             for (String s : belongingIndividuals) {
                 EpisodicScore ep = new EpisodicScore(s, ontoRef);
                 ep.episodicSemanticRetrieval();
             }
+            scoreSemantic.readSemantic();
             int retrieval = scoreSemantic.getLiteral(SCORE.SCORE_PROP_NUMBER_RETRIEVAL).parseInteger();
             retrieval++;
             scoreSemantic.removeData(SCORE.SCORE_PROP_NUMBER_RETRIEVAL);
@@ -298,6 +300,11 @@ public class ScoreService extends AbstractNodeMain
             scoreSemantic.removeData(SCORE.SCORE_PROP_HAS_SCORE);
             scoreSemantic.addData(SCORE.SCORE_PROP_HAS_SCORE, newScore);
             scoreSemantic.writeSemantic();
+            scoreSemantic.saveOntology(SCORE.SCORE_FILE_PATH);
+            //find the individual that have been retrieved with the
+            // semantic item
+            //updating the belonging individual score
+
         }
         /**
          *
@@ -850,6 +857,7 @@ public class ScoreService extends AbstractNodeMain
         scoreEpisodic.removeData(SCORE.SCORE_PROP_HAS_SCORE);
         scoreEpisodic.addData(SCORE.SCORE_PROP_HAS_SCORE,newScore);
         scoreEpisodic.writeSemantic();
+        scoreEpisodic.saveOntology(SCORE.SCORE_FILE_PATH);
     }
     /**
      * fpnction which forget the episodic item hence delete it from the ontology
@@ -883,6 +891,7 @@ public class ScoreService extends AbstractNodeMain
         scoreEpisodic.removeData(SCORE.SCORE_PROP_HAS_SCORE);
         scoreEpisodic.addData(SCORE.SCORE_PROP_HAS_SCORE,newScore);
         scoreEpisodic.writeSemantic();
+        scoreEpisodic.saveOntology(SCORE.SCORE_FILE_PATH);
     }
 
 
