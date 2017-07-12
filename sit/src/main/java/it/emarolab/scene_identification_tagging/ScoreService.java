@@ -336,6 +336,7 @@ public class ScoreService extends AbstractNodeMain
         private float computeScore(MORFullIndividual ind) {
             //read the current state of the ontology
             ind.readSemantic();
+            System.out.println("semantic item in the compute score"+ ind.toString());
             totalScoreSemantic.readSemantic();
             totalScoreEpisodic.readSemantic();
             float scoreSubClasses;
@@ -371,7 +372,31 @@ public class ScoreService extends AbstractNodeMain
                     SCORE.SCORE_SEMANTIC_WEIGHT_4 * scoreSubClasses +
                     SCORE.SCORE_SEMANTIC_WEIGHT_5 * retrieval));
         }
-
+        private float computeScore(int numberBelongingIndividual,int numberSubClasses, float sumScoreBelongingIndividua,
+        float sumScoreSubClasses, int retrieval ) {
+            float scoreSubClasses;
+            float scoreIndividual;
+            //if the total semantic is equal to 0
+            //TODO alla fine hai deciso di dividerlo per il numero di persone ecc perchè cosi e ceoerente se no in qualunque caso
+            //sarebbe stato uno score sbagliato che avresti dovuto computare ogni volta che cambiava qualunque cosa
+            // l'unica soluzione potrebbe essere computare lo score direttamente antraverso una SWRL rule
+            if (numberSubClasses == 0) {
+                scoreSubClasses = 0;
+            } else {
+                scoreSubClasses =sumScoreSubClasses / numberSubClasses;
+            }
+            // if the total episodic is equal to 0
+            if (numberBelongingIndividual == 0) {
+                scoreIndividual= 0;
+            } else {
+                scoreIndividual = sumScoreBelongingIndividua/ numberBelongingIndividual;
+            }
+            return ((float) (SCORE.SCORE_SEMANTIC_WEIGHT_1 * numberBelongingIndividual +
+                    SCORE.SCORE_SEMANTIC_WEIGHT_2 * scoreIndividual +
+                    SCORE.SCORE_SEMANTIC_WEIGHT_3 * numberSubClasses +
+                    SCORE.SCORE_SEMANTIC_WEIGHT_4 * scoreSubClasses +
+                    SCORE.SCORE_SEMANTIC_WEIGHT_5 * retrieval));
+        }
         /**
          * update the total semantic score  when a new item is added
          * @param scoreComputed :score of the semantic item added
@@ -401,18 +426,26 @@ public class ScoreService extends AbstractNodeMain
          * @param newScore of the semantic item modified
          */
         public void UpdateTotalSemanticScore(float oldScore, float newScore) {
+            System.out.println("IMPORTANTE SEI DENTRO IL TOTAL SEMANTIC SCORE");
+            System.out.println(totalScoreSemantic.toString());
+            System.out.println("oldscore ind "+oldScore);
+            System.out.println("new score ind "+newScore);
             //read the current state of total semantic item
             totalScoreSemantic.readSemantic();
             //reading the value of hasValue dataproperty
             float total = totalScoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_VALUE).parseFloat();
             //updating the value
+            System.out.println("old total "+total );
             total -= oldScore;
             total += newScore;
+            System.out.println("new total "+total);
             //updating the data property with the new value just computed
             totalScoreSemantic.removeData(SCORE.SCORE_PROP_HAS_VALUE);
-            totalScoreSemantic.writeSemantic();
+            System.out.println("adding the data");
             totalScoreSemantic.addData(SCORE.SCORE_PROP_HAS_VALUE, total);
             totalScoreSemantic.writeSemantic();
+            System.out.println("total after all changes \n"+totalScoreSemantic.toString());
+            totalScoreSemantic.saveOntology(SCORE.SCORE_FILE_PATH);
         }
 
         /**
@@ -460,6 +493,7 @@ public class ScoreService extends AbstractNodeMain
                 objectPropertyValues(objProp, SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF, classes);
                 //update total semantic score
                 UpdateTotalSemanticScore(oldScore, newScore);
+                superClass.saveOntology(SCORE.SCORE_FILE_PATH);
                 //update superclasses score
                 updateSuperClassScore(classes, oldScore, newScore);
             }
@@ -477,10 +511,12 @@ public class ScoreService extends AbstractNodeMain
             if (setName.isEmpty()) {
                 return;
             }
+            /*
             //TODO no sense
             if(setName.size()==1 && setName.contains(CLASS.SPHERE)){
                 return;
             }
+            */
             //for all the string
             for (String name : setName) {
                 //define the MOR individual of such superclass
@@ -855,7 +891,8 @@ public class ScoreService extends AbstractNodeMain
                 numberEpisodicRetrieval);
         updateTotalEpisodicScore(scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(),
                 newScore);
-
+        System.out.println("old score individual episodic "+scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat());
+        System.out.println("new score individual episodic"+ newScore);
         updateSemanticFromIndividual(scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(),newScore);
         scoreEpisodic.removeData(SCORE.SCORE_PROP_NUMBER_EPISODIC_RETRIEVAL);
         scoreEpisodic.addData(SCORE.SCORE_PROP_NUMBER_EPISODIC_RETRIEVAL,numberEpisodicRetrieval);
@@ -950,6 +987,7 @@ public class ScoreService extends AbstractNodeMain
      * @param newScore new score of the episodic item
      */
     public void updateTotalEpisodicScore(float oldScore,float newScore){
+
         totalScoreEpisodic.readSemantic();
         float total=totalScoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_VALUE).parseFloat();
         total-=oldScore;
@@ -998,16 +1036,29 @@ public class ScoreService extends AbstractNodeMain
      * @param newScore new score of the episodic item
      */
     public void updateSemanticFromIndividual(float oldScore,float newScore){
+        System.out.println("IMPORTANTE dentro update semantic from individual");
         MORFullIndividual semanticIndividual=SemanticItem.getScoreSemantic();
         semanticIndividual.readSemantic();
+        System.out.println("semantic item ");
+        System.out.println(semanticIndividual.toString());
         float scoreBelongingIndividual=semanticIndividual.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL).parseFloat();
+        System.out.println("IMPORTANTE \n\n\n\n\n");
+        System.out.println("before changing the score "+scoreBelongingIndividual);
         scoreBelongingIndividual-=oldScore;
         scoreBelongingIndividual+=newScore;
+        System.out.println("after changing the score "+scoreBelongingIndividual);
         semanticIndividual.removeData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL);
         semanticIndividual.addData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL,scoreBelongingIndividual);
         semanticIndividual.writeSemantic();
         semanticIndividual.saveOntology(SCORE.SCORE_FILE_PATH);
-        float newScoreSemantic= SemanticItem.computeScore(semanticIndividual);
+        System.out.println("Semantic Item before calling the compute score\n"+semanticIndividual.toString());
+        float newScoreSemantic= SemanticItem.computeScore(semanticIndividual.getLiteral(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL).parseInteger(),
+                semanticIndividual.getLiteral(SCORE.SCORE_PROP_NUMBER_SUB_CLASSES).parseInteger(),
+                semanticIndividual.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL).parseFloat(),
+                semanticIndividual.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES).parseFloat(),
+                semanticIndividual.getLiteral(SCORE.SCORE_PROP_NUMBER_RETRIEVAL).parseInteger());
+        System.out.println("NewScore "+newScoreSemantic);
+
         SemanticItem.UpdateTotalSemanticScore(semanticIndividual.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(),newScoreSemantic);
         List<String> classes =new ArrayList<>();
         objectPropertyValues(semanticIndividual.getObjectSemantics(),SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF,classes);
