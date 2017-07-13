@@ -158,16 +158,25 @@ public class EpisodicService
                     if(!request.getRetrievalSemantic().isEmpty()) {
                         List<String> classes = request.getRetrievalSemantic();
                         List<String> individuals = new ArrayList<>();
-
+                        Set<String> forgotten = new HashSet<>();
                         for (String s : classes) {
                             if (!s.equals("owlNothing")) {
                                 SceneClassDescriptor currentClass = new SceneClassDescriptor(s, ontoRef);
                                 currentClass.readSemantic();
                                 MORAxioms.Individuals i = currentClass.getIndividualClassified();
-                                String names = i.toString().replaceAll("\\p{P}", "");
-                                individuals.addAll(Arrays.asList(names.split(" ")));
+                                for (OWLNamedIndividual ind:i){
+                                    MORFullIndividual individual= new MORFullIndividual(ind,ontoRef);
+                                    individual.readSemantic();
+                                    if(individual.getLiteral(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT).parseBoolean()) {
+                                        //todo Change with ground
+                                        forgotten.add(ind.getIRI().toString().substring(EPISODIC_ONTO_IRI.length() + 1));
+                                    }
+                                    individuals.add(ind.getIRI().toString().substring(EPISODIC_ONTO_IRI.length()+1));
+                                }
                             }
                         }
+
+                        individuals.removeAll(forgotten);
                         response.setRetrievalSemantic(individuals);
                     }
                     //retrieval Episodic
@@ -225,6 +234,16 @@ public class EpisodicService
                         if(!retrievalAtomsList.isEmpty()){
                             retrievedScenes.retainAll(possiblePrimitiveScenes);
                         }
+                        Set<String> forgotten = new HashSet<>();
+                        for (String s : retrievedScenes){
+                            MORFullIndividual ind= new MORFullIndividual(s,ontoRef);
+                            ind.readSemantic();
+                            if(ind.getLiteral(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT).parseBoolean()){
+                                forgotten.add(s);
+                            }
+
+                        }
+                        retrievedScenes.removeAll(forgotten);
                         response.setRetrievalEpisodic(retrievedScenes);
                     }
 
