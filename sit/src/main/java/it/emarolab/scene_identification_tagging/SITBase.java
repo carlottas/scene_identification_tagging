@@ -626,4 +626,8 @@ public interface SITBase {
         double SCORE_EPISODIC_WEIGHT_2=0.6;
 
     }
+    interface FORGETTING{
+        String NAME_SEMANTIC_INDIVIDUAL="Forgot";
+        String NAME_SEMANTIC_DATA_PROPERTY_FORGOT="toBeForgotten";
+    }
 }

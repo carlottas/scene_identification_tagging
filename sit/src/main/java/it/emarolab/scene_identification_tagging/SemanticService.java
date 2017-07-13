@@ -158,7 +158,11 @@ public class SemanticService
                 else if (decision==2){
                     if(!request.getRetrieval().isEmpty()) {
                         retrievalDescriptor retrievalDescriptor = new retrievalDescriptor(request.getRetrieval(), ontoRef);
-                        response.setRetrievaled(retrievalDescriptor.getNameRetrieval());
+                        List<String> ListRetrieval = new ArrayList<>();
+                        ListRetrieval.addAll(retrievalDescriptor.getNameRetrieval());
+                        response.setRetrievaled(ListRetrieval);
+
+
                     }
 
                 }
