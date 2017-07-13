@@ -2,6 +2,7 @@ package it.emarolab.scene_identification_tagging.sceneRepresentation;
 
 import it.emarolab.amor.owlInterface.OWLReferences;
 import it.emarolab.owloop.aMORDescriptor.MORAxioms;
+import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;
 import it.emarolab.scene_identification_tagging.SITBase;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneClassDescriptor;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneIndividualDescriptor;
@@ -232,6 +233,11 @@ public class SceneRepresentation
         // update this internal class
         bestRecognitionDescriptor = learned;
         recognitionConfidence = 1;
+        MORFullIndividual forgot= new MORFullIndividual(FORGETTING.NAME_SEMANTIC_INDIVIDUAL+newSceneName.replace(CLASS.SCENE,""),sceneDescriptor.getOntology());
+        forgot.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
+        forgot.addTypeIndividual(newSceneName);
+        forgot.writeSemantic();
+
     }
 
     /*
