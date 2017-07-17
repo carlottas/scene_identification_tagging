@@ -162,9 +162,31 @@ public class ScoreService extends AbstractNodeMain
                         response.setLowScoreSemantic(lowScoreSemantic.mapInROSMsg(node));
 
                     }
+                    else if (decision ==2){
+                        for(String s : request.getEpisodicForgot()){
+                            //forgot
+                        }
+                        for(String s : request.getSemanticForgot()){
+                            //forgot
+                        }
+
+
+                    }
+                    else if (decision==3){
+                        //saving the item
+                        for(String s : request.getUserPutNoForget()){
+                            changeUserNoForget(s,ontoRef,true);
+                        }
+
+                    }
+                    else if (decision == 4){
+                        //removing the save item
+                        for (String s : request.getUserRemoveNoForget()){
+                            changeUserNoForget(s,ontoRef,false);
+
+                        }
+                    }
                 }
-
-
             }
 
 
@@ -1468,6 +1490,20 @@ public class ScoreService extends AbstractNodeMain
         score.setCounter(scoreInd.getLiteral(NameTimesProperty).parseInteger());
         score.setScoreValue(scoreInd.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat());
         return score;
+    }
+
+    public void changeUserNoForget(String Name, OWLReferences ontoRef, boolean state){
+        MORFullIndividual individual = new MORFullIndividual(Name,ontoRef);
+        individual.readSemantic();
+        individual.removeData(SCORE.SCORE_PROP_USER_NO_FORGET);
+        if(state){
+            individual.addData(SCORE.SCORE_PROP_USER_NO_FORGET,true, true);
+        }
+        else{
+            individual.addData(SCORE.SCORE_PROP_USER_NO_FORGET,false,true);
+        }
+        individual.writeSemantic();
+        individual.saveOntology(SCORE.SCORE_FILE_PATH);
     }
 }
 
