@@ -584,6 +584,7 @@ public interface SITBase {
         String SCORE_PROP_SCORE_SUM_SUB_CLASSES="SumScoreSubClasses";
         String SCORE_PROP_SCORE_SUB_CLASSES="ScoreSubClasses";
         String SCORE_PROP_TIMES_FORGOTTEN="TimesForgotten";
+        String SCORE_PROP_TIMES_TO_BE_FORGOTTEN="TimesForgotten";
         String SCORE_PROP_TIMES_LOW_SCORE="TimesLowScore";
         String SCORE_PROP_USER_NO_FORGET="UserNoForget";
         //Object Property
