@@ -450,7 +450,7 @@ public interface SITBase {
          */
         String ID = PREFIX_HAS + "id";
 
-        String BELONG_TO_SCENE="belong_to_Scene";
+        String BELONG_TO_SCENE="BelongToScene";
 
 
 

@@ -179,6 +179,7 @@ public class EpisodicScene implements SITBase{
         if (addTime)
             scene.addData( DATA_PROPERTY.TIME, time, true);
         scene.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
+        scene.addData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT,0);
         scene.addObject(SUPPORT.HAS_SCENE_SUPPORT,SupportName);
         scene.writeSemantic();
 

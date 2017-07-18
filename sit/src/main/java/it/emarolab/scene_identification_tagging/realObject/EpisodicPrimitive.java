@@ -248,7 +248,7 @@ public class EpisodicPrimitive extends SpatialIndividualDescriptor
 
     public  void ApplySceneName(){
         this.readSemantic();
-        this.addData(DATA_PROPERTY.BELONG_TO_SCENE,this.SceneName);
+        this.addObject(DATA_PROPERTY.BELONG_TO_SCENE,this.SceneName);
         this.writeSemantic();
     }
 

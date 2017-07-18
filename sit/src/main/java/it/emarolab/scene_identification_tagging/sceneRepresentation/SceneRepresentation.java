@@ -235,7 +235,9 @@ public class SceneRepresentation
         recognitionConfidence = 1;
         MORFullIndividual forgot= new MORFullIndividual(FORGETTING.NAME_SEMANTIC_INDIVIDUAL+newSceneName.replace(CLASS.SCENE,""),sceneDescriptor.getOntology());
         forgot.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
+        forgot.addData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT,0);
         forgot.addTypeIndividual(newSceneName);
+
         forgot.writeSemantic();
         forgot.saveOntology(ONTO_FILE);
 

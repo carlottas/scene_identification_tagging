@@ -287,6 +287,9 @@
         <NamedIndividual IRI="#R-7"/>
     </Declaration>
     <Declaration>
+        <ObjectProperty IRI="#BelongToScene"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#Cylinder"/>
     </Declaration>
     <Declaration>
@@ -1020,6 +1023,11 @@
         <NamedIndividual IRI="#S-0"/>
     </DifferentIndividuals>
     <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <NamedIndividual IRI="#C-0"/>
+        <NamedIndividual IRI="#SnEp-4"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
         <ObjectProperty IRI="#isBelowOf"/>
         <NamedIndividual IRI="#C-0"/>
         <NamedIndividual IRI="#R-7"/>
@@ -1035,6 +1043,11 @@
         <NamedIndividual IRI="#R-7"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <NamedIndividual IRI="#R-0"/>
+        <NamedIndividual IRI="#SnEp-0"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
         <ObjectProperty IRI="#isBelowOf"/>
         <NamedIndividual IRI="#R-0"/>
         <NamedIndividual IRI="#R-1"/>
@@ -1048,6 +1061,11 @@
         <ObjectProperty IRI="#isParallelTo"/>
         <NamedIndividual IRI="#R-0"/>
         <NamedIndividual IRI="#R-1"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <NamedIndividual IRI="#R-1"/>
+        <NamedIndividual IRI="#SnEp-0"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#isAboveOf"/>
@@ -1065,6 +1083,11 @@
         <NamedIndividual IRI="#R-0"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <NamedIndividual IRI="#R-10"/>
+        <NamedIndividual IRI="#SnEp-6"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
         <ObjectProperty IRI="#isBelowOf"/>
         <NamedIndividual IRI="#R-10"/>
         <NamedIndividual IRI="#R-9"/>
@@ -1078,6 +1101,11 @@
         <ObjectProperty IRI="#isParallelTo"/>
         <NamedIndividual IRI="#R-10"/>
         <NamedIndividual IRI="#R-9"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <NamedIndividual IRI="#R-2"/>
+        <NamedIndividual IRI="#SnEp-1"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#isAboveOf"/>
@@ -1105,6 +1133,11 @@
         <NamedIndividual IRI="#R-2"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <NamedIndividual IRI="#R-3"/>
+        <NamedIndividual IRI="#SnEp-2"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
         <ObjectProperty IRI="#isAboveOf"/>
         <NamedIndividual IRI="#R-3"/>
         <NamedIndividual IRI="#R-4"/>
@@ -1120,6 +1153,11 @@
         <NamedIndividual IRI="#R-4"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <NamedIndividual IRI="#R-4"/>
+        <NamedIndividual IRI="#SnEp-2"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
         <ObjectProperty IRI="#isBelowOf"/>
         <NamedIndividual IRI="#R-4"/>
         <NamedIndividual IRI="#R-3"/>
@@ -1133,6 +1171,11 @@
         <ObjectProperty IRI="#isParallelTo"/>
         <NamedIndividual IRI="#R-4"/>
         <NamedIndividual IRI="#R-3"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <NamedIndividual IRI="#R-5"/>
+        <NamedIndividual IRI="#SnEp-3"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#isBelowOf"/>
@@ -1155,6 +1198,11 @@
         <NamedIndividual IRI="#R-5"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <NamedIndividual IRI="#R-6"/>
+        <NamedIndividual IRI="#SnEp-4"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
         <ObjectProperty IRI="#isAboveOf"/>
         <NamedIndividual IRI="#R-6"/>
         <NamedIndividual IRI="#R-7"/>
@@ -1173,6 +1221,11 @@
         <ObjectProperty IRI="#isParallelTo"/>
         <NamedIndividual IRI="#R-6"/>
         <NamedIndividual IRI="#R-7"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <NamedIndividual IRI="#R-7"/>
+        <NamedIndividual IRI="#SnEp-4"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#isAboveOf"/>
@@ -1200,6 +1253,16 @@
         <NamedIndividual IRI="#C-0"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <NamedIndividual IRI="#R-8"/>
+        <NamedIndividual IRI="#SnEp-5"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <NamedIndividual IRI="#R-9"/>
+        <NamedIndividual IRI="#SnEp-6"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
         <ObjectProperty IRI="#isAboveOf"/>
         <NamedIndividual IRI="#R-9"/>
         <NamedIndividual IRI="#R-10"/>
@@ -1213,6 +1276,11 @@
         <ObjectProperty IRI="#isParallelTo"/>
         <NamedIndividual IRI="#R-9"/>
         <NamedIndividual IRI="#R-10"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <NamedIndividual IRI="#S-0"/>
+        <NamedIndividual IRI="#SnEp-3"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#isBelowOf"/>
@@ -1560,11 +1628,6 @@
         <NamedIndividual IRI="#a"/>
     </ObjectPropertyAssertion>
     <DataPropertyAssertion>
-        <DataProperty IRI="#belong_to_Scene"/>
-        <NamedIndividual IRI="#C-0"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SnEp-4</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
         <DataProperty IRI="#has-color"/>
         <NamedIndividual IRI="#C-0"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">red</Literal>
@@ -1640,11 +1703,6 @@
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
-        <DataProperty IRI="#belong_to_Scene"/>
-        <NamedIndividual IRI="#R-0"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SnEp-0</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
         <DataProperty IRI="#has-color"/>
         <NamedIndividual IRI="#R-0"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">pink</Literal>
@@ -1663,11 +1721,6 @@
         <DataProperty IRI="#has-time"/>
         <NamedIndividual IRI="#R-0"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499159100088</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#belong_to_Scene"/>
-        <NamedIndividual IRI="#R-1"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SnEp-0</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#has-color"/>
@@ -1690,11 +1743,6 @@
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499159100170</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
-        <DataProperty IRI="#belong_to_Scene"/>
-        <NamedIndividual IRI="#R-10"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SnEp-6</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
         <DataProperty IRI="#has-color"/>
         <NamedIndividual IRI="#R-10"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">pink</Literal>
@@ -1713,11 +1761,6 @@
         <DataProperty IRI="#has-time"/>
         <NamedIndividual IRI="#R-10"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499164515668</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#belong_to_Scene"/>
-        <NamedIndividual IRI="#R-2"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SnEp-1</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#has-color"/>
@@ -1790,11 +1833,6 @@
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499160181496</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
-        <DataProperty IRI="#belong_to_Scene"/>
-        <NamedIndividual IRI="#R-5"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SnEp-3</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
         <DataProperty IRI="#has-color"/>
         <NamedIndividual IRI="#R-5"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">green</Literal>
@@ -1813,11 +1851,6 @@
         <DataProperty IRI="#has-time"/>
         <NamedIndividual IRI="#R-5"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499161125641</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#belong_to_Scene"/>
-        <NamedIndividual IRI="#R-6"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SnEp-4</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#has-color"/>
@@ -1840,11 +1873,6 @@
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499162868853</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
-        <DataProperty IRI="#belong_to_Scene"/>
-        <NamedIndividual IRI="#R-7"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SnEp-4</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
         <DataProperty IRI="#has-color"/>
         <NamedIndividual IRI="#R-7"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">pink</Literal>
@@ -1863,11 +1891,6 @@
         <DataProperty IRI="#has-time"/>
         <NamedIndividual IRI="#R-7"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499162869084</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#belong_to_Scene"/>
-        <NamedIndividual IRI="#R-8"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SnEp-5</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#has-color"/>
@@ -1890,11 +1913,6 @@
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499163983513</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
-        <DataProperty IRI="#belong_to_Scene"/>
-        <NamedIndividual IRI="#R-9"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SnEp-6</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
         <DataProperty IRI="#has-color"/>
         <NamedIndividual IRI="#R-9"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">green</Literal>
@@ -1913,11 +1931,6 @@
         <DataProperty IRI="#has-time"/>
         <NamedIndividual IRI="#R-9"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499164515493</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#belong_to_Scene"/>
-        <NamedIndividual IRI="#S-0"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SnEp-3</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#has-color"/>
@@ -2025,6 +2038,10 @@
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499412081830</Literal>
     </DataPropertyAssertion>
     <SubObjectPropertyOf>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
         <ObjectProperty IRI="#has-scene_blue"/>
         <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
     </SubObjectPropertyOf>
@@ -2197,6 +2214,10 @@
     <IrreflexiveObjectProperty>
         <ObjectProperty IRI="#has-scene_isRightOf"/>
     </IrreflexiveObjectProperty>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <Class IRI="#GeometricPrimitive"/>
+    </ObjectPropertyDomain>
     <ObjectPropertyDomain>
         <ObjectProperty IRI="#has-scene_blue"/>
         <Class IRI="#Scene"/>
@@ -2273,6 +2294,10 @@
         <ObjectProperty IRI="#isRightOf"/>
         <Class IRI="#GeometricPrimitive"/>
     </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#BelongToScene"/>
+        <Class IRI="#Scene"/>
+    </ObjectPropertyRange>
     <ObjectPropertyRange>
         <ObjectProperty IRI="#has-scene_blue"/>
         <Class IRI="#GeometricPrimitive"/>

@@ -201,13 +201,64 @@ public class SemanticService
                         System.out.println("i have never seen something like this, i should learn it ");
                     }
                     else {
-                        System.out.println("Recognised with best confidence: " + recognition1.getRecognitionConfidence() );
-                        System.out.println("Best recognised class: " + recognition1.getBestRecognitionDescriptor());
-                        System.out.println("Other recognised classes: " + recognition1.getSceneDescriptor().getTypeIndividual());
-                        response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length() + 1));
-                        Atoms atoms = fromSemanticToEpisodic(objects);
-                        atoms.mapInROSMsg(node, response);
-                        ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
+                        String nameScene= recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length() + 1);
+                        String individualName = FORGETTING.NAME_SEMANTIC_INDIVIDUAL + nameScene.replaceAll("Scene", "");
+                        MORFullIndividual ind = new MORFullIndividual(individualName, ontoRef);
+                        ind.readSemantic();
+                        if (!ind.getLiteral(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT).parseBoolean()) {
+                            System.out.println("Recognised with best confidence: " + recognition1.getRecognitionConfidence());
+                            System.out.println("Best recognised class: " + recognition1.getBestRecognitionDescriptor());
+                            System.out.println("Other recognised classes: " + recognition1.getSceneDescriptor().getTypeIndividual());
+                            response.setSceneName(nameScene);
+                            Atoms atoms = fromSemanticToEpisodic(objects);
+                            atoms.mapInROSMsg(node, response);
+                            ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
+                        }
+                        else{
+                                ind.readSemantic();
+                                float counter = ind.getLiteral(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT).parseFloat();
+                                float newCounter = 0;
+                                if (counter<1){
+                                    newCounter=counter+FORGETTING.INCREMENT_ONE;
+                                    if (newCounter>=1){
+                                        List<String> resetCounter= new ArrayList<>();
+                                        resetCounter.add(nameScene);
+                                        ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
+                                        ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
+                                        ind.writeSemantic();
+                                        response.setResetCounter(resetCounter);
+
+                                    }
+
+                                }
+                                else if (counter<2 && counter>=1){
+                                    newCounter=counter+FORGETTING.INCREMENT_TWO;
+                                    if(newCounter>=2){
+                                        List<String> resetCounter= new ArrayList<>();
+                                        ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
+                                        ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
+                                        ind.writeSemantic();
+                                        resetCounter.add(nameScene);
+                                        response.setResetCounter(resetCounter);
+                                    }
+
+                                }
+                                else if (counter<3&&counter>=2){
+                                    newCounter=counter+FORGETTING.INCREMENT_THREE;
+                                    if(newCounter>=3){
+                                        List<String> userNoForget= new ArrayList<>();
+                                        ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
+                                        ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
+                                        ind.writeSemantic();
+                                        userNoForget.add(nameScene);
+                                        response.setUserNoForget(userNoForget);
+                                    }
+                                }
+                                ind.removeData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT);
+                                ind.addData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT,newCounter);
+                                ind.writeSemantic();
+                                ind.saveOntology(ONTO_FILE);
+                        }
                         for (GeometricPrimitive i : objects)
                             ontoRef.removeIndividual(i.getInstance());
                         ontoRef.synchronizeReasoner();
