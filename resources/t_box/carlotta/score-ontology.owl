@@ -25,10 +25,10 @@
         <DataProperty IRI="#DefinesLowerThreshold"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isSubClassOf"/>
+        <NamedIndividual IRI="#Scene1"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#Scene1"/>
+        <ObjectProperty IRI="#isSubClassOf"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#TimesLowScore"/>
@@ -106,13 +106,13 @@
         <ObjectProperty IRI="#isFirstSuperCLassOf"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#TimesToBeForgotten"/>
+        <DataProperty IRI="#LowerBoundTime"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#SnEp-5"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#LowerBoundTime"/>
+        <DataProperty IRI="#TimesToBeForgotten"/>
     </Declaration>
     <Declaration>
         <Class IRI="#SemanticScore"/>
@@ -121,10 +121,10 @@
         <ObjectProperty IRI="#isIndividualOf"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Score"/>
+        <DataProperty IRI="#NumberSubClasses"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#NumberSubClasses"/>
+        <Class IRI="#Score"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#DefinesThreshold"/>
@@ -169,16 +169,16 @@
         <Class IRI="#SemanticForgotten"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Forgotten"/>
-    </Declaration>
-    <Declaration>
         <NamedIndividual IRI="#Scene2"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#EpisodicToBeForgotten"/>
+        <Class IRI="#Forgotten"/>
     </Declaration>
     <Declaration>
         <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#EpisodicToBeForgotten"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#SnEp-0"/>
@@ -430,7 +430,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#DefinesLowerThreshold"/>
         <NamedIndividual IRI="#DefinesThreshold"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.3</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.08</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#NumberBelongingIndividual"/>

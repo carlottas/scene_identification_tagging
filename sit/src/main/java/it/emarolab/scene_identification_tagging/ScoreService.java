@@ -133,8 +133,12 @@ public class ScoreService extends AbstractNodeMain
                         ScoreCounterArray forgotSemantic= new ScoreCounterArray();
                         ScoreCounterArray lowScoreSemantic= new ScoreCounterArray();
                         ScoreCounterArray lowScoreEpisodic= new ScoreCounterArray();
+
+                        System.out.println("declaration of forgetting\n");
+                        System.out.println("onto ref"+ ontoRef);
                         Forgetting forgetting = new Forgetting(ontoRef);
-                        forgetting.updateLists();
+
+                        //forgetting.updateLists();
                         for(String s : forgetting.getToBeForgottenEpisodic()){
                             toBeForgettingEpisodic.add(createToBeForgettingItem(s,ontoRef,SCORE.SCORE_PROP_TIMES_TO_BE_FORGOTTEN));
                         }
@@ -1225,7 +1229,13 @@ public class ScoreService extends AbstractNodeMain
                     ontoRef);
             forgotClassSemantic = new MORFullConcept(SCORE.SCORE_CLASS_FORGOTTEN_SEMANTIC,
                     ontoRef);
-
+            this.ontoRef=ontoRef;
+            toBeForgottenEpisodic= new ArrayList<>();
+            toBeForgottenSemantic= new ArrayList<>();
+            lowScoreSemantic= new ArrayList<>();
+            lowScoreEpisodic= new ArrayList<>();
+            forgotSemantic= new ArrayList<>();
+            forgotEpisodic= new ArrayList<>(); 
             updateLists();
 
         }
@@ -1260,7 +1270,6 @@ public class ScoreService extends AbstractNodeMain
 
         private void updateLists() {
             ontoRef.synchronizeReasoner();
-
             forgotClassSemantic.readSemantic();
             MORAxioms.Individuals indsForgotSemantic = forgotClassSemantic.getIndividualClassified();
             for (OWLNamedIndividual i : indsForgotSemantic) {
@@ -1287,12 +1296,14 @@ public class ScoreService extends AbstractNodeMain
 
             lowScoreClassEpisodic.readSemantic();
             MORAxioms.Individuals indsLowScoreEpisodic = lowScoreClassEpisodic.getIndividualClassified();
+            System.out.println(indsLowScoreEpisodic);
             for (OWLNamedIndividual i : indsLowScoreEpisodic) {
                 lowScoreEpisodic.add(i.toStringID().substring(SCORE.SCORE_IRI_ONTO.length() + 1));
             }
 
             lowScoreClassSemantic.readSemantic();
             MORAxioms.Individuals indsLowScoreSemantic = lowScoreClassSemantic.getIndividualClassified();
+            System.out.println(indsLowScoreSemantic);
             for (OWLNamedIndividual i : indsLowScoreSemantic) {
                 lowScoreSemantic.add(i.toStringID().substring(SCORE.SCORE_IRI_ONTO.length() + 1));
             }
