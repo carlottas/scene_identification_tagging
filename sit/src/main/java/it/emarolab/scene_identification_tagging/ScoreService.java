@@ -98,7 +98,7 @@ public class ScoreService extends AbstractNodeMain
                     }
                 }
                 //RETRIEVAL
-                else if (decision == 2) {
+                else if (decision == 2 || decision==4) {
                     if (!request.getSemanticRetrieval().isEmpty()) {
                         for (String s : request.getSemanticRetrieval()) {
                             if (!s.equals("owlNothing")) {
@@ -117,10 +117,9 @@ public class ScoreService extends AbstractNodeMain
 
                     //the forgetting counter is done everytime the retrieval is finished
                     Forgetting forgetting = new Forgetting(ontoRef);
-                    forgetting.deleteEpisodic();
-                    forgetting.deleteSemantic();
+                   // forgetting.deleteEpisodic();
+                    //forgetting.deleteSemantic();
                     forgetting.updateTimes();
-
 
                 }
                 //FORGETTING
@@ -162,7 +161,7 @@ public class ScoreService extends AbstractNodeMain
                         response.setLowScoreSemantic(lowScoreSemantic.mapInROSMsg(node));
 
                     }
-                    else if (decision ==2){
+                    else if (forgettingDecision ==2){
                         for(String s : request.getEpisodicForgot()){
                             //forgot
                         }
@@ -172,14 +171,14 @@ public class ScoreService extends AbstractNodeMain
 
 
                     }
-                    else if (decision==3){
+                    else if (forgettingDecision==3){
                         //saving the item
                         for(String s : request.getUserPutNoForget()){
                             changeUserNoForget(s,ontoRef,true);
                         }
 
                     }
-                    else if (decision == 4){
+                    else if (forgettingDecision == 4){
                         //removing the save item
                         for (String s : request.getUserRemoveNoForget()){
                             changeUserNoForget(s,ontoRef,false);

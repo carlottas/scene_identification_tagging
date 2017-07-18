@@ -254,6 +254,62 @@ public class EpisodicService
                 else if (decision==3){
 
                 }
+                else if (decision==4){
+                    String SceneName = request.getSceneName();
+
+                    String SupportName = request.getSupportName();
+                    Atoms object = new Atoms();
+                    object.MapFromRosMsg(request.getObject());
+                    ArrayList<EpisodicPrimitive> Primitives = fromSemanticToEpisodic(object, ontoRef);
+                    // add objects
+                    for (EpisodicPrimitive i : Primitives) {
+                        for (EpisodicPrimitive j : Primitives)
+                            if (!i.equals(j))
+                                j.addDisjointIndividual(i.getInstance());
+                        i.getObjectSemantics().clear(); // clean previus spatial relation
+                        i.writeSemantic();
+                    }
+                    //adding the ObjectProperty
+                    for (EpisodicPrimitive i : Primitives) {
+                        i.ApplyRelations();
+                        i.writeSemantic();
+                        //i.saveOntology(EPISODIC_ONTO_FILE);
+                    }
+                    ontoRef.synchronizeReasoner();
+                    //initialize the scene
+                    EpisodicScene episodicScene = new EpisodicScene(Primitives, ontoRef, SceneName);
+                    episodicScene.setSupportName(SupportName);
+                    episodicScene.setAddingTime(true);
+                    episodicScene.InitializeClasses(ontoRef);
+                    episodicScene.InitializeSupport(ontoRef);
+                    System.out.println("CHECKING WHETHER LEARNING");
+                    if(episodicScene.ShouldLearn(ontoRef)){
+                        System.out.println("i have never actually seen this");
+
+                    }
+                   else {
+                        response.setEpisodicSceneName(episodicScene.getEpisodicSceneName());
+                    }
+                    //removing the individual of geometric primitives
+                    for (EpisodicPrimitive i : Primitives) {
+                        ontoRef.removeIndividual(i.getInstance());
+                        ontoRef.synchronizeReasoner();
+                    }
+                    response.setLearnt(false);
+
+
+                }
+                if(!request.getToBeForget().isEmpty()){
+                    for(String s : request.getToBeForget()){
+                        MORFullIndividual ind= new MORFullIndividual(s,ontoRef);
+                        ind.readSemantic();
+                        ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
+                        ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,true,true);
+                        ind.writeSemantic();
+                        ind.saveOntology(EPISODIC_ONTO_FILE);
+                    }
+                }
+
             }
 
 

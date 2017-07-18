@@ -237,6 +237,7 @@ public class SceneRepresentation
         forgot.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
         forgot.addTypeIndividual(newSceneName);
         forgot.writeSemantic();
+        forgot.saveOntology(ONTO_FILE);
 
     }
 

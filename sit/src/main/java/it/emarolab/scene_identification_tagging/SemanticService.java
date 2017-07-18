@@ -170,6 +170,58 @@ public class SemanticService
                 else if (decision==3){
 
                 }
+                //recognition
+                else if (decision==4){
+                    // initialise objects
+                    Set<GeometricPrimitive> objects = fromPITtoSIT(request.getGeometricPrimitives(), ontoRef);
+                    // add objects
+                    for (GeometricPrimitive i : objects) {
+                        for (GeometricPrimitive j : objects)
+                            if (!i.equals(j))
+                                j.addDisjointIndividual(i.getInstance());
+                        i.getObjectSemantics().clear(); // clean previus spatial relation
+                        i.writeSemantic();
+                    }
+                    // run SWRL
+                    ontoRef.synchronizeReasoner();
+                    // get SWRL results
+                    //should get the semantic
+                    for (GeometricPrimitive i : objects) {
+                        // it could be implemented faster
+                        i.readSemantic();
+                    }
+
+                    // create scene and reason for recognition
+                    SceneRepresentation recognition1 = new SceneRepresentation(objects, ontoRef);
+                    if(recognition1.shouldLearn()){
+                        System.out.println("i have never seen something like this, i should learn it ");
+                    }
+                    else {
+                        System.out.println("Recognised with best confidence: " + recognition1.getRecognitionConfidence() );
+                        System.out.println("Best recognised class: " + recognition1.getBestRecognitionDescriptor());
+                        System.out.println("Other recognised classes: " + recognition1.getSceneDescriptor().getTypeIndividual());
+                        response.setSceneName(recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length() + 1));
+                        Atoms atoms = fromSemanticToEpisodic(objects);
+                        atoms.mapInROSMsg(node, response);
+                        ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
+                        for (GeometricPrimitive i : objects)
+                            ontoRef.removeIndividual(i.getInstance());
+                        ontoRef.synchronizeReasoner();
+                    }
+                }
+                if(!request.getToBeForget().isEmpty()){
+                    for(String s : request.getToBeForget())
+                    {
+                        String individualName = FORGETTING.NAME_SEMANTIC_INDIVIDUAL + s.replaceAll("Scene", "");
+                        MORFullIndividual ind = new MORFullIndividual(individualName, ontoRef);
+                        ind.readSemantic();
+                        ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
+                        ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,true,true);
+                        ind.writeSemantic();
+                        ind.saveOntology(ONTO_FILE);
+                    }
+
+                }
             }
 
         };
