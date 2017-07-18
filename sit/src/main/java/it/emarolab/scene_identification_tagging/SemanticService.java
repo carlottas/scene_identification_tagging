@@ -160,7 +160,11 @@ public class SemanticService
                         retrievalDescriptor retrievalDescriptor = new retrievalDescriptor(request.getRetrieval(), ontoRef);
                         List<String> ListRetrieval = new ArrayList<>();
                         ListRetrieval.addAll(retrievalDescriptor.getNameRetrieval());
+                        retrievalDescriptor.updateTimeRetrievalForgotten();
+                        retrievalDescriptor.removeToBeForgot();
                         response.setRetrievaled(ListRetrieval);
+                        response.setUserNoForget(retrievalDescriptor.getUserNoForget());
+                        response.setResetCounter(retrievalDescriptor.getResetCounter());
 
 
                     }

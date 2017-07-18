@@ -245,6 +245,60 @@ public class EpisodicService
                         }
                         retrievedScenes.removeAll(forgotten);
                         response.setRetrievalEpisodic(retrievedScenes);
+                        List<String> resetCounter= new ArrayList<>();
+                        List<String> userNoForget= new ArrayList<>();
+                        for (String s : forgotten){
+                            MORFullIndividual ind = new MORFullIndividual(s,ontoRef);
+                            ind.readSemantic();
+                            float counter = ind.getLiteral(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT).parseFloat();
+                            float newCounter = 0;
+                            if (counter<1){
+                                newCounter=counter+FORGETTING.INCREMENT_ONE;
+                                if (newCounter>=1){
+                                    resetCounter.add(s);
+
+                                }
+
+                            }
+                            else if (counter<2 && counter>=1){
+                                newCounter=counter+FORGETTING.INCREMENT_TWO;
+                                if(newCounter>=2){
+                                    resetCounter.add(s);
+                                }
+
+                            }
+                            else if (counter<3&&counter>=2){
+                                newCounter=counter+FORGETTING.INCREMENT_THREE;
+                                if(newCounter>=3){
+                                    userNoForget.add(s);
+                                }
+                            }
+                            ind.removeData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT);
+                            ind.addData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT,newCounter);
+                            ind.writeSemantic();
+                            ind.saveOntology(EPISODIC_ONTO_FILE);
+                        }
+                        //removing user no forget from the ontology episodic
+                        for (String s: userNoForget){
+                            MORFullIndividual ind = new MORFullIndividual(s,ontoRef);
+                            ind.readSemantic();
+                            ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
+                            ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
+                            ind.writeSemantic();
+                            ind.saveOntology(EPISODIC_ONTO_FILE);
+                        }
+                        for (String s: resetCounter){
+                            MORFullIndividual ind = new MORFullIndividual(s,ontoRef);
+                            ind.readSemantic();
+                            ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
+                            ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
+                            ind.writeSemantic();
+                            ind.saveOntology(EPISODIC_ONTO_FILE);
+                        }
+                        response.setResetCounter(resetCounter);
+                        response.setUserNoForget(userNoForget);
+
+
                     }
 
 
@@ -256,7 +310,6 @@ public class EpisodicService
                 }
                 else if (decision==4){
                     String SceneName = request.getSceneName();
-
                     String SupportName = request.getSupportName();
                     Atoms object = new Atoms();
                     object.MapFromRosMsg(request.getObject());

@@ -86,14 +86,11 @@ public class ScoreService extends AbstractNodeMain
                 if (decision == 1) {
                     if (!semantic.getName().isEmpty()) {
                         SemanticScore semanticScore = new SemanticScore(semantic.getName(), semantic.getSubClasses(), semantic.getSuperClasses(), semantic.getFirstSuperClass(), semantic.getIsFirstSuperCLassOf(), ontoRef, true);
-                        //if retrieval
-                        //semanticScore.semanticRetrieval();
+
                     }
                     if (!episodic.getName().isEmpty()) {
                         EpisodicScore episodicScore = new EpisodicScore(episodic.getName(), episodic.getNameSemanticItem(), ontoRef, true);
-                        //if initialization
-                        //if retrieval
-                        //(episodicScore.episodicRetrieval();
+
 
                     }
                 }
@@ -120,6 +117,13 @@ public class ScoreService extends AbstractNodeMain
                    // forgetting.deleteEpisodic();
                     //forgetting.deleteSemantic();
                     forgetting.updateTimes();
+                    for(String s : request.getUserNoForget()){
+                        resetCounter(s,ontoRef);
+                        changeUserNoForget(s,ontoRef,true);
+                    }
+                    for (String s : request.getResetCounter()){
+                        resetCounter(s,ontoRef);
+                    }
 
                 }
                 //FORGETTING
@@ -1262,8 +1266,6 @@ public class ScoreService extends AbstractNodeMain
             updateTimes(toBeForgottenSemantic, SCORE.SCORE_PROP_TIMES_TO_BE_FORGOTTEN);
             updateTimes(lowScoreEpisodic, SCORE.SCORE_PROP_TIMES_LOW_SCORE);
             updateTimes(lowScoreSemantic, SCORE.SCORE_PROP_TIMES_LOW_SCORE);
-            updateTimes(forgotEpisodic,SCORE.SCORE_PROP_TIMES_FORGOTTEN);
-            updateTimes(forgotSemantic,SCORE.SCORE_PROP_TIMES_FORGOTTEN);
             ontoRef.synchronizeReasoner();
             updateLists();
         }
@@ -1497,7 +1499,9 @@ public class ScoreService extends AbstractNodeMain
         ScoreCounter score = new ScoreCounter(name);
         MORFullIndividual scoreInd= new MORFullIndividual(name, ontoRef);
         scoreInd.readSemantic();
-        score.setCounter(scoreInd.getLiteral(NameTimesProperty).parseInteger());
+        if(!NameTimesProperty.equals(SCORE.SCORE_PROP_TIMES_FORGOTTEN)) {
+            score.setCounter(scoreInd.getLiteral(NameTimesProperty).parseInteger());
+        }
         score.setScoreValue(scoreInd.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat());
         return score;
     }
@@ -1514,6 +1518,18 @@ public class ScoreService extends AbstractNodeMain
         }
         individual.writeSemantic();
         individual.saveOntology(SCORE.SCORE_FILE_PATH);
+    }
+    public void resetCounter (String name, OWLReferences ontoRef){
+        MORFullIndividual ind = new MORFullIndividual(name,ontoRef);
+        ind.readSemantic();
+        ind.removeData(SCORE.SCORE_PROP_TIMES_LOW_SCORE);
+        ind.addData(SCORE.SCORE_PROP_TIMES_LOW_SCORE,0);
+        ind.removeData(SCORE.SCORE_PROP_TIMES_TO_BE_FORGOTTEN);
+        ind.addData(SCORE.SCORE_PROP_TIMES_TO_BE_FORGOTTEN,0);
+        ind.removeData(SCORE.SCORE_PROP_TIMES_TO_BE_FORGOTTEN);
+        ind.addData(SCORE.SCORE_PROP_TIMES_TO_BE_FORGOTTEN,0);
+        ind.writeSemantic();
+        ind.saveOntology(SCORE.SCORE_FILE_PATH);
     }
 }
 

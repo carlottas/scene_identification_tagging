@@ -800,6 +800,22 @@
     
 
 
+    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#timesRetrievalForgot -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#timesRetrievalForgot">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:domain>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#timesRetrievalForgot"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+            </owl:Restriction>
+        </rdfs:domain>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#toBeForgotten -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#toBeForgotten">
@@ -1319,6 +1335,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Forgot0">
         <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene0"/>
+        <timesRetrievalForgot rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</timesRetrievalForgot>
         <toBeForgotten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</toBeForgotten>
     </owl:NamedIndividual>
     
@@ -1328,6 +1345,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Forgot1">
         <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene1"/>
+        <timesRetrievalForgot rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</timesRetrievalForgot>
         <toBeForgotten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</toBeForgotten>
     </owl:NamedIndividual>
     
@@ -1337,6 +1355,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Forgot2">
         <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene2"/>
+        <timesRetrievalForgot rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</timesRetrievalForgot>
         <toBeForgotten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</toBeForgotten>
     </owl:NamedIndividual>
     
@@ -1346,6 +1365,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Forgot3">
         <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene3"/>
+        <timesRetrievalForgot rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</timesRetrievalForgot>
         <toBeForgotten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</toBeForgotten>
     </owl:NamedIndividual>
     
@@ -1355,6 +1375,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Forgot4">
         <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene4"/>
+        <timesRetrievalForgot rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</timesRetrievalForgot>
         <toBeForgotten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</toBeForgotten>
     </owl:NamedIndividual>
     

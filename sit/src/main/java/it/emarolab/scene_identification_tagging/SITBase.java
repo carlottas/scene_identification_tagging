@@ -630,5 +630,11 @@ public interface SITBase {
     interface FORGETTING{
         String NAME_SEMANTIC_INDIVIDUAL="Forgot";
         String NAME_SEMANTIC_DATA_PROPERTY_FORGOT="toBeForgotten";
+        String NAME_DATA_PROPERTY_RETRIEVAL_FORGOT="TimesRetrievalForgot";
+        float INCREMENT_ONE=(float) 0.1;
+        float INCREMENT_TWO=(float) 0.2;
+        float INCREMENT_THREE=(float) 0.4;
+
+
     }
 }

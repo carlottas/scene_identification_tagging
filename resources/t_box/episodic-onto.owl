@@ -308,6 +308,9 @@
         <Class IRI="#Scene3"/>
     </Declaration>
     <Declaration>
+        <DataProperty IRI="#timesRetrievalForgot"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#CylinderRadiusIncludedInTenFive"/>
     </Declaration>
     <Declaration>
@@ -2523,6 +2526,10 @@
         <DataProperty abbreviatedIRI="owl:topDataProperty"/>
     </SubDataPropertyOf>
     <SubDataPropertyOf>
+        <DataProperty IRI="#timesRetrievalForgot"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
         <DataProperty IRI="#toBeForgotten"/>
         <DataProperty abbreviatedIRI="owl:topDataProperty"/>
     </SubDataPropertyOf>
@@ -2688,6 +2695,13 @@
         </DataExactCardinality>
     </DataPropertyDomain>
     <DataPropertyDomain>
+        <DataProperty IRI="#timesRetrievalForgot"/>
+        <DataExactCardinality cardinality="1">
+            <DataProperty IRI="#timesRetrievalForgot"/>
+            <Datatype abbreviatedIRI="xsd:float"/>
+        </DataExactCardinality>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
         <DataProperty IRI="#toBeForgotten"/>
         <Class IRI="#Scene"/>
     </DataPropertyDomain>
@@ -2782,6 +2796,10 @@
     <DataPropertyRange>
         <DataProperty IRI="#has_time"/>
         <Datatype abbreviatedIRI="xsd:long"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#timesRetrievalForgot"/>
+        <Datatype abbreviatedIRI="xsd:float"/>
     </DataPropertyRange>
     <DataPropertyRange>
         <DataProperty IRI="#toBeForgotten"/>
