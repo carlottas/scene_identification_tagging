@@ -249,6 +249,7 @@ public class EpisodicService
                         for (String s : forgotten){
                             MORFullIndividual ind = new MORFullIndividual(s,ontoRef);
                             ind.readSemantic();
+                            System.out.println(ind);
                             float counter = ind.getLiteral(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT).parseFloat();
                             float newCounter = 0;
                             if (counter<1){

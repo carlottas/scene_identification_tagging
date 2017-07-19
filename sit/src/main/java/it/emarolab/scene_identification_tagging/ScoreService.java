@@ -182,6 +182,7 @@ public class ScoreService extends AbstractNodeMain
                     else if (forgettingDecision==3){
                         //saving the item
                         for(String s : request.getUserPutNoForget()){
+                            resetCounter(s,ontoRef);
                             changeUserNoForget(s,ontoRef,true);
                         }
 
