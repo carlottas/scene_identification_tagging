@@ -6,191 +6,191 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      ontologyIRI="http://www.semanticweb.org/carlotta-sartore/scoreOntology">
-    <Prefix name="" IRI="http://www.semanticweb.org/carlotta-sartore/scoreOntology#"/>
+    <Prefix name="" IRI="http://www.semanticweb.org/carlotta-sartore/scoreOntology"/>
     <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
     <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
     <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
     <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
     <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
     <Declaration>
-        <ObjectProperty IRI="#hasIndividual"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#SnEp-3"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#NumberEpisodicRetrieval"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#DefinesLowerThreshold"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isSubClassOf"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#Scene1"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#TimesLowScore"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#ToBeForgotten"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#ScoreSubClasses"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isSuperClassOf"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#SemanticScoreLow"/>
-    </Declaration>
-    <Declaration>
         <Class IRI="#EpisodicForgotten"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#totalEpisodic"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#ScoreBelongingIndividual"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#ScoreLow"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#SnEp-6"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#DefinesFalse"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#Parameters"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#hasTime"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#SnEp-2"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#SemanticToBeForgotten"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#DefinesHigherThreshold"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#Scene0"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#Scene4"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#TimeWindow"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#UserNoForget"/>
     </Declaration>
     <Declaration>
         <Class IRI="#EpisodicScore"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#firstSuperClass"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#TimesForgotten"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#DefinesForgettingThreshold"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isFirstSuperCLassOf"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#SnEp-5"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#LowerBoundTime"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#TimesToBeForgotten"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#SemanticScore"/>
-    </Declaration>
-    <Declaration>
-        <ObjectProperty IRI="#isIndividualOf"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#Score"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#NumberSubClasses"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#DefinesThreshold"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#Scene3"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#SnEp-1"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#NumberRetrieval"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#hasValue"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#hasScore"/>
-    </Declaration>
-    <Declaration>
         <Class IRI="#EpisodicScoreLow"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#SnEp-4"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#clock"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#totalSemantic"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#DefineFinalForgettingThreshold"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#SumScoreBelongingIndividual"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#NumberSemanticRetrieval"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#SemanticForgotten"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#Scene2"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#Forgotten"/>
     </Declaration>
     <Declaration>
         <Class IRI="#EpisodicToBeForgotten"/>
     </Declaration>
     <Declaration>
-        <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+        <Class IRI="#Forgotten"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#SnEp-0"/>
+        <Class IRI="#Parameters"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Score"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ScoreLow"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SemanticForgotten"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SemanticScore"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SemanticScoreLow"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SemanticToBeForgotten"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#TimeWindow"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ToBeForgotten"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#firstSuperClass"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasIndividual"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isFirstSuperCLassOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isIndividualOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isSubClassOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isSuperClassOf"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#DefineFinalForgettingThreshold"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#DefinesFalse"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#DefinesForgettingThreshold"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#DefinesHigherThreshold"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#DefinesLowerThreshold"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#LowerBoundTime"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#NumberBelongingIndividual"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#Scene"/>
+        <DataProperty IRI="#NumberEpisodicRetrieval"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#NumberRetrieval"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#NumberSemanticRetrieval"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#NumberSubClasses"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#ScoreBelongingIndividual"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#ScoreSubClasses"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#SumScoreBelongingIndividual"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#SumScoreSubClasses"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#TimesForgotten"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#TimesLowScore"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#TimesToBeForgotten"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#UserNoForget"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasScore"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasTime"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasValue"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#DefinesThreshold"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Scene"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Scene0"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Scene1"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Scene2"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Scene3"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Scene4"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SnEp-0"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SnEp-1"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SnEp-2"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SnEp-3"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SnEp-4"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SnEp-5"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SnEp-6"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#clock"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#totalEpisodic"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#totalSemantic"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
     </Declaration>
     <SubClassOf>
         <Class IRI="#EpisodicForgotten"/>
@@ -455,7 +455,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#SumScoreSubClasses"/>
         <NamedIndividual IRI="#Scene0"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">7.510004</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">7.5700045</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#TimesForgotten"/>
@@ -475,7 +475,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasScore"/>
         <NamedIndividual IRI="#Scene0"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">3.09325</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">3.0977502</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
@@ -490,7 +490,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#NumberRetrieval"/>
         <NamedIndividual IRI="#Scene1"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#NumberSubClasses"/>
@@ -500,7 +500,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#SumScoreBelongingIndividual"/>
         <NamedIndividual IRI="#Scene1"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">14.4</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">15.2</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#SumScoreSubClasses"/>
@@ -525,7 +525,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasScore"/>
         <NamedIndividual IRI="#Scene1"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">2.71</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">3.23</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
@@ -590,7 +590,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#NumberRetrieval"/>
         <NamedIndividual IRI="#Scene3"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#NumberSubClasses"/>
@@ -600,7 +600,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#SumScoreBelongingIndividual"/>
         <NamedIndividual IRI="#Scene3"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">14.2</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">16.199999</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#SumScoreSubClasses"/>
@@ -625,7 +625,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasScore"/>
         <NamedIndividual IRI="#Scene3"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">3.08</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">2.0</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
@@ -655,7 +655,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#SumScoreSubClasses"/>
         <NamedIndividual IRI="#Scene4"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">8.863252</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">8.927752</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#TimesForgotten"/>
@@ -675,7 +675,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasScore"/>
         <NamedIndividual IRI="#Scene4"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">2.4331627</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">2.4363875</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
@@ -760,7 +760,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#NumberSemanticRetrieval"/>
         <NamedIndividual IRI="#SnEp-2"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#TimesForgotten"/>
@@ -780,7 +780,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasScore"/>
         <NamedIndividual IRI="#SnEp-2"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">14.4</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">15.2</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
@@ -830,7 +830,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#NumberSemanticRetrieval"/>
         <NamedIndividual IRI="#SnEp-4"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#TimesForgotten"/>
@@ -850,7 +850,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasScore"/>
         <NamedIndividual IRI="#SnEp-4"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">14.2</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">14.6</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
@@ -940,12 +940,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasValue"/>
         <NamedIndividual IRI="#totalEpisodic"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">76.799965</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#hasValue"/>
-        <NamedIndividual IRI="#totalSemantic"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">14.510974</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">79.599976</Literal>
     </DataPropertyAssertion>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#firstSuperClass"/>
@@ -1322,56 +1317,72 @@
         </Annotation>
         <Annotation>
             <AnnotationProperty abbreviatedIRI="rdfs:label"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">EPISODIC_LOW_SCORE</Literal>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">EPISODIC_FORGOT</Literal>
         </Annotation>
         <Body>
             <DataPropertyAtom>
-                <DataProperty IRI="#DefinesLowerThreshold"/>
+                <DataProperty IRI="#DefineFinalForgettingThreshold"/>
                 <NamedIndividual IRI="#DefinesThreshold"/>
-                <Variable IRI="#l"/>
+                <Variable IRI="#f"/>
             </DataPropertyAtom>
             <ClassAtom>
-                <Class IRI="#EpisodicScore"/>
+                <Class IRI="#EpisodicToBeForgotten"/>
                 <Variable IRI="#e"/>
             </ClassAtom>
             <DataPropertyAtom>
-                <DataProperty IRI="#hasValue"/>
-                <NamedIndividual IRI="#totalEpisodic"/>
+                <DataProperty IRI="#TimesForgotten"/>
+                <Variable IRI="#e"/>
                 <Variable IRI="#t"/>
             </DataPropertyAtom>
-            <DataPropertyAtom>
-                <DataProperty IRI="#hasScore"/>
-                <Variable IRI="#e"/>
-                <Variable IRI="#v"/>
-            </DataPropertyAtom>
-            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#divide">
-                <Variable IRI="#r"/>
-                <Variable IRI="#v"/>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#greaterThanOrEqual">
                 <Variable IRI="#t"/>
-            </BuiltInAtom>
-            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#lessThanOrEqual">
-                <Variable IRI="#r"/>
-                <Variable IRI="#l"/>
-            </BuiltInAtom>
-            <DataPropertyAtom>
-                <DataProperty IRI="#DefinesFalse"/>
-                <NamedIndividual IRI="#DefinesThreshold"/>
                 <Variable IRI="#f"/>
-            </DataPropertyAtom>
-            <DataPropertyAtom>
-                <DataProperty IRI="#UserNoForget"/>
-                <Variable IRI="#e"/>
-                <Variable IRI="#u"/>
-            </DataPropertyAtom>
-            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#equal">
-                <Variable IRI="#f"/>
-                <Variable IRI="#u"/>
             </BuiltInAtom>
         </Body>
         <Head>
             <ClassAtom>
-                <Class IRI="#EpisodicScoreLow"/>
+                <Class IRI="#EpisodicForgotten"/>
                 <Variable IRI="#e"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SEMANTIC_FORGOT</Literal>
+        </Annotation>
+        <Body>
+            <DataPropertyAtom>
+                <DataProperty IRI="#DefineFinalForgettingThreshold"/>
+                <NamedIndividual IRI="#DefinesThreshold"/>
+                <Variable IRI="#f"/>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#SemanticToBeForgotten"/>
+                <Variable IRI="#s"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#TimesForgotten"/>
+                <Variable IRI="#s"/>
+                <Variable IRI="#t"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#greaterThanOrEqual">
+                <Variable IRI="#t"/>
+                <Variable IRI="#f"/>
+            </BuiltInAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#SemanticForgotten"/>
+                <Variable IRI="#s"/>
             </ClassAtom>
         </Head>
     </DLSafeRule>
@@ -1440,21 +1451,21 @@
         </Annotation>
         <Annotation>
             <AnnotationProperty abbreviatedIRI="rdfs:label"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">EPISODIC_FORGOT</Literal>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SEMANTIC_TO_BE_FORGOT</Literal>
         </Annotation>
         <Body>
             <DataPropertyAtom>
-                <DataProperty IRI="#DefineFinalForgettingThreshold"/>
+                <DataProperty IRI="#DefinesForgettingThreshold"/>
                 <NamedIndividual IRI="#DefinesThreshold"/>
                 <Variable IRI="#f"/>
             </DataPropertyAtom>
             <ClassAtom>
-                <Class IRI="#EpisodicToBeForgotten"/>
-                <Variable IRI="#e"/>
+                <Class IRI="#SemanticScoreLow"/>
+                <Variable IRI="#s"/>
             </ClassAtom>
             <DataPropertyAtom>
-                <DataProperty IRI="#TimesForgotten"/>
-                <Variable IRI="#e"/>
+                <DataProperty IRI="#TimesLowScore"/>
+                <Variable IRI="#s"/>
                 <Variable IRI="#t"/>
             </DataPropertyAtom>
             <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#greaterThanOrEqual">
@@ -1464,7 +1475,71 @@
         </Body>
         <Head>
             <ClassAtom>
-                <Class IRI="#EpisodicForgotten"/>
+                <Class IRI="#SemanticToBeForgotten"/>
+                <Variable IRI="#s"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">EPISODIC_LOW_SCORE</Literal>
+        </Annotation>
+        <Body>
+            <DataPropertyAtom>
+                <DataProperty IRI="#DefinesLowerThreshold"/>
+                <NamedIndividual IRI="#DefinesThreshold"/>
+                <Variable IRI="#l"/>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#EpisodicScore"/>
+                <Variable IRI="#e"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasValue"/>
+                <NamedIndividual IRI="#totalEpisodic"/>
+                <Variable IRI="#t"/>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasScore"/>
+                <Variable IRI="#e"/>
+                <Variable IRI="#v"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#divide">
+                <Variable IRI="#r"/>
+                <Variable IRI="#v"/>
+                <Variable IRI="#t"/>
+            </BuiltInAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#lessThanOrEqual">
+                <Variable IRI="#r"/>
+                <Variable IRI="#l"/>
+            </BuiltInAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#DefinesFalse"/>
+                <NamedIndividual IRI="#DefinesThreshold"/>
+                <Variable IRI="#f"/>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#UserNoForget"/>
+                <Variable IRI="#e"/>
+                <Variable IRI="#u"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#equal">
+                <Variable IRI="#f"/>
+                <Variable IRI="#u"/>
+            </BuiltInAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#EpisodicScoreLow"/>
                 <Variable IRI="#e"/>
             </ClassAtom>
         </Head>
@@ -1533,89 +1608,10 @@
             </ClassAtom>
         </Head>
     </DLSafeRule>
-    <DLSafeRule>
-        <Annotation>
-            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
-        </Annotation>
-        <Annotation>
-            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
-        </Annotation>
-        <Annotation>
-            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SEMANTIC_TO_BE_FORGOT</Literal>
-        </Annotation>
-        <Body>
-            <DataPropertyAtom>
-                <DataProperty IRI="#DefinesForgettingThreshold"/>
-                <NamedIndividual IRI="#DefinesThreshold"/>
-                <Variable IRI="#f"/>
-            </DataPropertyAtom>
-            <ClassAtom>
-                <Class IRI="#SemanticScoreLow"/>
-                <Variable IRI="#s"/>
-            </ClassAtom>
-            <DataPropertyAtom>
-                <DataProperty IRI="#TimesLowScore"/>
-                <Variable IRI="#s"/>
-                <Variable IRI="#t"/>
-            </DataPropertyAtom>
-            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#greaterThanOrEqual">
-                <Variable IRI="#t"/>
-                <Variable IRI="#f"/>
-            </BuiltInAtom>
-        </Body>
-        <Head>
-            <ClassAtom>
-                <Class IRI="#SemanticToBeForgotten"/>
-                <Variable IRI="#s"/>
-            </ClassAtom>
-        </Head>
-    </DLSafeRule>
-    <DLSafeRule>
-        <Annotation>
-            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
-        </Annotation>
-        <Annotation>
-            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
-        </Annotation>
-        <Annotation>
-            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
-            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">SEMANTIC_FORGOT</Literal>
-        </Annotation>
-        <Body>
-            <DataPropertyAtom>
-                <DataProperty IRI="#DefineFinalForgettingThreshold"/>
-                <NamedIndividual IRI="#DefinesThreshold"/>
-                <Variable IRI="#f"/>
-            </DataPropertyAtom>
-            <ClassAtom>
-                <Class IRI="#SemanticToBeForgotten"/>
-                <Variable IRI="#s"/>
-            </ClassAtom>
-            <DataPropertyAtom>
-                <DataProperty IRI="#TimesForgotten"/>
-                <Variable IRI="#s"/>
-                <Variable IRI="#t"/>
-            </DataPropertyAtom>
-            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#greaterThanOrEqual">
-                <Variable IRI="#t"/>
-                <Variable IRI="#f"/>
-            </BuiltInAtom>
-        </Body>
-        <Head>
-            <ClassAtom>
-                <Class IRI="#SemanticForgotten"/>
-                <Variable IRI="#s"/>
-            </ClassAtom>
-        </Head>
-    </DLSafeRule>
 </Ontology>
 
 
 
-<!-- Generated by the OWL API (version 4.2.6.20160910-2108) https://github.com/owlcs/owlapi -->
+<!-- Generated by the OWL API (version 5.0.2.20160507-1747) https://github.com/owlcs/owlapi/ -->
+
 

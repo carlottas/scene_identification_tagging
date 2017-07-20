@@ -111,12 +111,6 @@ public class ScoreService extends AbstractNodeMain
                             score.episodicRetrieval();
                         }
                     }
-
-                    //the forgetting counter is done everytime the retrieval is finished
-                    Forgetting forgetting = new Forgetting(ontoRef);
-                   // forgetting.deleteEpisodic();
-                    //forgetting.deleteSemantic();
-                    forgetting.updateTimes();
                     for(String s : request.getUserNoForget()){
                         resetCounter(s,ontoRef);
                         changeUserNoForget(s,ontoRef,true);
@@ -124,7 +118,16 @@ public class ScoreService extends AbstractNodeMain
                     for (String s : request.getResetCounter()){
                         resetCounter(s,ontoRef);
                     }
-
+                    //the forgetting counter is done everytime the retrieval is finished
+                    Forgetting forgetting = new Forgetting(ontoRef);
+                    forgetting.deleteEpisodic();
+                    forgetting.deleteSemantic();
+                    //filling the response
+                    response.setDeleteEpisodic(forgetting.getForgotEpisodic());
+                    response.setDeleteSemantic(forgetting.getForgotSemantic());
+                    response.setPutForgotEpisodic(forgetting.getToBeForgottenEpisodic());
+                    response.setPutForgotSemantic(forgetting.getToBeForgottenSemantic());
+                    forgetting.updateTimes();
                 }
                 //FORGETTING
                 else if (decision == 3) {
@@ -686,21 +689,24 @@ public class ScoreService extends AbstractNodeMain
         /**
          * function which forgets the semantic score item
          */
-        public void forgetItem() {
+        public List<String> forgetItem() {
             ontoRef.synchronizeReasoner();
             //read the current ontology state
             scoreSemantic.readSemantic();
             //Remove its score from the total semantic score
             UpdateTotalSemanticScore(scoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), 0);
             // if there is no super class
-            if (firstSuperClass.size() == 1 && firstSuperClass.get(0).equals(CLASS.SCENE)) {
+            //if (firstSuperClass.size() == 1 && firstSuperClass.get(0).equals(CLASS.SCENE)) {
                 //delete the belonging individuals
                 for (String s : belongingIndividuals) {
                     //update the score of the first superClass
                     EpisodicScore ep = new EpisodicScore(s, ontoRef);
                     ep.forgetItem();
                 }
-            }
+                ontoRef.removeIndividual(this.Name);
+                return  belongingIndividuals;
+            //}
+            /*
             //if there exist the first class --> Hyp it is unique
             else {
                 //All its individual will belong to the first superclass
@@ -720,6 +726,8 @@ public class ScoreService extends AbstractNodeMain
             //now that all the individual have been associated to the super class one can delete the individual
             ontoRef.synchronizeReasoner();
             ontoRef.removeIndividual(this.Name);
+        }
+        */
         }
 
         /**
@@ -1258,7 +1266,7 @@ public class ScoreService extends AbstractNodeMain
             //for all the semantic item that must be deleted
             for (String s : forgotSemantic) {
                 SemanticScore score = new SemanticScore(s, ontoRef);
-                score.forgetItem();
+                forgotEpisodic.addAll(score.forgetItem());
             }
         }
 

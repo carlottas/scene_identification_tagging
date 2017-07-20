@@ -1,12 +1,16 @@
 package it.emarolab.scene_identification_tagging.owloopDescriptor;
+import it.emarolab.amor.owlInterface.OWLManipulator;
 import it.emarolab.amor.owlInterface.OWLReferences;
+import it.emarolab.amor.owlInterface.SemanticRestriction;
 import it.emarolab.owloop.aMORDescriptor.MORAxioms;
 import it.emarolab.owloop.aMORDescriptor.utility.concept.MORFullConcept;
 import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;
+import it.emarolab.owloop.core.Concept;
 import it.emarolab.scene_identification_tagging.SITBase;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneClassDescriptor;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneIndividualDescriptor;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SpatialIndividualDescriptor;
+import org.apache.jena.ontology.Restriction;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
@@ -38,9 +42,10 @@ public class retrievalDescriptor
         }
         // update the ontology
         learned.addSuperConcept( CLASS.SCENE);
-        learned.writeSemanticInconsistencySafe( true); // cal raesoning
+        learned.writeSemantic(); // cal raesoning
         ontoRef.synchronizeReasoner();
         learned.readSemantic();
+        System.out.println(learned);
         String sub=learned.getSubConcept().toString().replaceAll("\\p{P}","");
         Set<OWLClass> equivalentClass= ontoRef.getEquivalentClasses(name);
         Set<String> names= new HashSet<>();
@@ -51,10 +56,21 @@ public class retrievalDescriptor
         for (OWLClass c:equivalentClass){
             equivalentClasses.add(c.getIRI().toString().toString().substring(ONTO_IRI.length()+1));
         }
+        
         names.addAll(equivalentClasses);
+        learned.readSemantic();
+        System.out.println("before deleting");
+        learned.delete();
+        System.out.println("after deleting");
+        learned.writeSemantic();
+        learned.saveOntology(ONTO_FILE);
+        ontoRef.synchronizeReasoner();
+        SceneClassDescriptor thing = new SceneClassDescriptor("owl:Thing",ontoRef);
+        thing.readSemantic();
+        thing.removeEquivalentConcept(learned.getGroundInstance());
+        thing.writeSemantic();
+        thing.saveOntology(ONTO_FILE);
         Set<String> forgotten= new HashSet<>();
-
-        ontoRef.removeClass(name);
         //check whether they have already been forgotten
         for (String s : names){
             if(s.contains(CLASS.SCENE)) {
@@ -72,13 +88,15 @@ public class retrievalDescriptor
         this.nameRetrieval=names;
     }
     public void removeToBeForgot(){
+        System.out.println("inside the remove forgot ");
+        System.out.println(resetCounter);
         for (String s :resetCounter ){
             MORFullIndividual ind = new MORFullIndividual(FORGETTING.NAME_SEMANTIC_INDIVIDUAL + s.replaceAll("Scene", ""),ontoRef);
             ind.readSemantic();
             ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
             ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
             ind.writeSemantic();
-            ind.saveOntology(EPISODIC_ONTO_FILE);
+            ind.saveOntology(ONTO_FILE);
         }
         for (String s : userNoForget){
             MORFullIndividual ind = new MORFullIndividual(FORGETTING.NAME_SEMANTIC_INDIVIDUAL+s.replaceAll("Scene",""),ontoRef);
@@ -86,7 +104,7 @@ public class retrievalDescriptor
             ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
             ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
             ind.writeSemantic();
-            ind.saveOntology(EPISODIC_ONTO_FILE);
+            ind.saveOntology(ONTO_FILE);
 
         }
     }

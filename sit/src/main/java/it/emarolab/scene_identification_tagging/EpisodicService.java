@@ -298,7 +298,6 @@ public class EpisodicService
                         response.setResetCounter(resetCounter);
                         response.setUserNoForget(userNoForget);
 
-
                     }
 
 
@@ -414,14 +413,32 @@ public class EpisodicService
 
 
                 }
-                if(!request.getToBeForget().isEmpty()){
+
+                else if (decision==0){
+                    //forget and put  the forget Attribute.
+                    ontoRef.synchronizeReasoner();
+                    for(String s : request.getDeleteEpisodic()){
+                        MORFullIndividual delete= new MORFullIndividual(s,ontoRef);
+                        delete.readSemantic();
+                        List<String> primitivesDelete= new ArrayList<>();
+                        objectProperty(delete.getObjectSemantics(),OBJECT_PROPERTY.HAS_SCENE_PRIMITIVE,primitivesDelete);
+                        ontoRef.removeIndividual(s);
+                        for(String i:primitivesDelete){
+                            ontoRef.removeIndividual(i);
+                        }
+                        ontoRef.saveOntology(EPISODIC_ONTO_FILE);
+                    }
                     for(String s : request.getToBeForget()){
-                        MORFullIndividual ind= new MORFullIndividual(s,ontoRef);
-                        ind.readSemantic();
-                        ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
-                        ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,true,true);
-                        ind.writeSemantic();
-                        ind.saveOntology(EPISODIC_ONTO_FILE);
+                        MORFullIndividual putForget= new MORFullIndividual(s,ontoRef);
+                        putForget.readSemantic();
+                        putForget.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
+                        putForget.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,true,true);
+                        putForget.writeSemantic();
+                        putForget.saveOntology(EPISODIC_ONTO_FILE);
+
+                    }
+                    for (String s : request.getDeleteSemantic()){
+                        //delete
                     }
                 }
 
@@ -805,7 +822,7 @@ public class EpisodicService
                 MORAxioms.Individuals ind = obj.getValues();
                 for (OWLNamedIndividual i : ind) {
                     //add to the string the new score
-                    individuals.add(i.toStringID().substring(ONTO_IRI.length() + 1));
+                    individuals.add(i.toStringID().substring(EPISODIC_ONTO_IRI.length() + 1));
                 }
 
             }
@@ -817,7 +834,7 @@ public class EpisodicService
                 MORAxioms.Individuals ind = obj.getValues();
                 for (OWLNamedIndividual i : ind) {
                     //add to the string the new score
-                    individuals.add(i.toStringID().substring(ONTO_IRI.length() + 1));
+                    individuals.add(i.toStringID().substring(EPISODIC_ONTO_IRI.length() + 1));
                 }
 
             }

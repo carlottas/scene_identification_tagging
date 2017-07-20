@@ -8,6 +8,7 @@ import it.emarolab.owloop.aMORDescriptor.utility.MORConceptBase;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,12 +35,16 @@ public class SceneClassDescriptor
         implements MORConcept.Define,
         MORConcept.Sub<SceneClassDescriptor>,
         MORConcept.Super<SceneClassDescriptor>,
-        MORConcept.Classify<SceneIndividualDescriptor> {
+        MORConcept.Classify<SceneIndividualDescriptor>,
+        MORConcept.Equivalent<SceneClassDescriptor>,
+        MORConcept.Disjoint<SceneClassDescriptor>{
 
     private MORAxioms.Restrictions restrictions = new MORAxioms.Restrictions();
     private MORAxioms.Concepts subConcept = new MORAxioms.Concepts();
     private MORAxioms.Concepts superConcept = new MORAxioms.Concepts();
     private MORAxioms.Individuals classifiedIndividual = new MORAxioms.Individuals();
+    private MORAxioms.Concepts disjointConcept = new MORAxioms.Concepts();
+    private MORAxioms.Concepts equivalentConcept = new MORAxioms.Concepts();
 
     private int cardinality = 0;
 
@@ -90,6 +95,8 @@ public class SceneClassDescriptor
         r.addAll( Define.super.readSemantic());
         r.addAll( Super.super.readSemantic());
         r.addAll( Classify.super.readSemantic());
+        r.addAll(Equivalent.super.readSemantic());
+        r.addAll(Disjoint.super.readSemantic());
         updateCardinality();
         return r;
     }
@@ -106,6 +113,8 @@ public class SceneClassDescriptor
         r.addAll( Super.super.writeSemantic());
         r.addAll( Classify.super.writeSemantic());
         r.addAll( Sub.super.writeSemantic());
+        r.addAll(Equivalent.super.writeSemantic());
+        r.addAll(Disjoint.super.writeSemantic());
         updateCardinality();
         return r;
     }
@@ -183,6 +192,19 @@ public class SceneClassDescriptor
         return classifiedIndividual;
     }
 
+    @Override
+    public MORAxioms.Concepts getEquivalentConcept(){return this.equivalentConcept;}
+    @Override
+    public SceneClassDescriptor getNewEquivalentConcept(OWLClass instance, OWLReferences ontology){
+        return new SceneClassDescriptor(instance, ontology);
+    }
+
+    @Override
+    public MORAxioms.Concepts getDisjointConcept(){return this.disjointConcept;}
+    @Override
+    public SceneClassDescriptor getNewDisjointConcept(OWLClass instance, OWLReferences ontology){
+        return new SceneClassDescriptor(instance, ontology);
+    }
     /**
      * The sum of all the cardinality restriction available in the
      * definition of {@code this} abstract scene class.
@@ -216,5 +238,13 @@ public class SceneClassDescriptor
         String names=superConcept.toString();
         names = names.replaceAll("\\p{P}","");
         return Arrays.asList(names.split(" "));
+    }
+    public void delete (){
+        this.subConcept.clear();
+        this.superConcept.clear();
+        this.restrictions.clear();
+        this.classifiedIndividual.clear();
+        this.equivalentConcept.clear();
+        this.disjointConcept.clear();
     }
 }

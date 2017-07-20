@@ -487,6 +487,8 @@ public interface SITBase {
          * individual identifying real objects, obtained a run time.
          */
         String SCENE_SPATIAL_PRFIX = "has-scene_";
+        String HAS_SCENE_PRIMITIVE="hasScenePrimitive";
+        String BELONG_TO_SCENE="BelongToScene";
 
     }
     interface COLOR

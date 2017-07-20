@@ -163,8 +163,12 @@ public class SemanticService
                         retrievalDescriptor.updateTimeRetrievalForgotten();
                         retrievalDescriptor.removeToBeForgot();
                         response.setRetrievaled(ListRetrieval);
+                        //System.out.println("removing class");
+                        //ontoRef.removeClass(RETRIEVAL.SEMANTIC_RETRIEVAL_NAME);
+                        //ontoRef.saveOntology(ONTO_FILE);
                         response.setUserNoForget(retrievalDescriptor.getUserNoForget());
                         response.setResetCounter(retrievalDescriptor.getResetCounter());
+
 
 
                     }
@@ -172,6 +176,27 @@ public class SemanticService
                 }
                 //forgetting
                 else if (decision==3){
+                    //TODO check whether re classification occurs
+
+                    /*
+                    ontoRef.synchronizeReasoner();
+                    MORFullConcept scene0= new MORFullConcept("Scene0",ontoRef);
+                    scene0.readSemantic();
+                    response.setSceneName(scene0.getIndividualClassified().toString());MORFullConcept scene1= new MORFullConcept("Scene1",ontoRef);
+                    scene1.readSemantic();
+                    response.setResetCounter(Arrays.asList(scene1.getIndividualClassified().toString().split(" ")));
+
+                    MORFullConcept scene2= new MORFullConcept("Scene2",ontoRef);
+                    scene2.readSemantic();
+                    response.setUserNoForget(Arrays.asList(scene2.getIndividualClassified().toString().split(" ")));
+                    MORFullConcept scene3= new MORFullConcept("Scene3",ontoRef);
+                    scene3.readSemantic();
+                    response.setFirstSuperClass(Arrays.asList(scene3.getIndividualClassified().toString().split(" ")));
+                    MORFullConcept scene4= new MORFullConcept("Scene4",ontoRef);
+                    scene4.readSemantic();
+                    response.setIsFirstSuperClassOf(Arrays.asList(scene4.getIndividualClassified().toString().split(" ")));
+*/
+
 
                 }
                 //recognition
@@ -264,18 +289,19 @@ public class SemanticService
                         ontoRef.synchronizeReasoner();
                     }
                 }
-                if(!request.getToBeForget().isEmpty()){
-                    for(String s : request.getToBeForget())
-                    {
-                        String individualName = FORGETTING.NAME_SEMANTIC_INDIVIDUAL + s.replaceAll("Scene", "");
-                        MORFullIndividual ind = new MORFullIndividual(individualName, ontoRef);
-                        ind.readSemantic();
-                        ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
-                        ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,true,true);
-                        ind.writeSemantic();
-                        ind.saveOntology(ONTO_FILE);
+               else if (decision==0){
+                    //forget and put user No Forget
+                    for(String s :request.getDeleteSemantic()){
+                        //todo delete
                     }
-
+                    for (String s : request.getToBeForget()){
+                        MORFullIndividual toBeForget= new MORFullIndividual(FORGETTING.NAME_SEMANTIC_INDIVIDUAL + s.replaceAll("Scene", ""),ontoRef);
+                        toBeForget.readSemantic();
+                        toBeForget.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
+                        toBeForget.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,true,true);
+                        toBeForget.writeSemantic();
+                        toBeForget.saveOntology(ONTO_FILE);
+                    }
                 }
             }
 
