@@ -120,14 +120,15 @@ public class ScoreService extends AbstractNodeMain
                     }
                     //the forgetting counter is done everytime the retrieval is finished
                     Forgetting forgetting = new Forgetting(ontoRef);
+                    forgetting.updateTimes();
+                    forgetting.updateLists();
+                    //filling the response
                     forgetting.deleteEpisodic();
                     forgetting.deleteSemantic();
-                    //filling the response
                     response.setDeleteEpisodic(forgetting.getForgotEpisodic());
                     response.setDeleteSemantic(forgetting.getForgotSemantic());
                     response.setPutForgotEpisodic(forgetting.getToBeForgottenEpisodic());
                     response.setPutForgotSemantic(forgetting.getToBeForgottenSemantic());
-                    forgetting.updateTimes();
                     ontoRef.saveOntology(SCORE.SCORE_FILE_PATH);
                 }
                 //FORGETTING
@@ -533,40 +534,42 @@ public class ScoreService extends AbstractNodeMain
             }
             //for all the string
             for (String name : classesNames) {
-                //define the MOR individual of such superclass
-                MORFullIndividual superClass = new MORFullIndividual(
-                        name,
-                        ontoRef
-                );
-                //read the ontology
-                superClass.readSemantic();
-                //update the subclasses score with the new one
-                float scoreSubClasses = superClass.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES).parseFloat();
-                scoreSubClasses -= scoreOld;
-                scoreSubClasses += scoreNew;
-                superClass.removeData(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES);
-                superClass.addData(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES, scoreSubClasses);
-                superClass.writeSemantic();
-                //compute the new score
-                float newScore = computeScore(superClass);
-                //store the old score
-                float oldScore = superClass.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
-                //change the value of the data prop score
-                superClass.removeData(SCORE.SCORE_PROP_HAS_SCORE);
-                superClass.addData(SCORE.SCORE_PROP_HAS_SCORE, newScore);
-                //write the semantic
-                superClass.writeSemantic();
-                superClass.readSemantic();
-                //find the super classes of such element
-                MORAxioms.ObjectSemantics objProp = superClass.getObjectSemantics();
-                //check if there is any superclasses
-                List<String> classes = new ArrayList<>();
-                objectPropertyValues(objProp, SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF, classes);
-                //update total semantic score
-                UpdateTotalSemanticScore(oldScore, newScore);
-                superClass.saveOntology(SCORE.SCORE_FILE_PATH);
-                //update superclasses score
-                updateSuperClassScore(classes, oldScore, newScore);
+                if (!name.equals(CLASS.SCENE)) {
+                    //define the MOR individual of such superclass
+                    MORFullIndividual superClass = new MORFullIndividual(
+                            name,
+                            ontoRef
+                    );
+                    //read the ontology
+                    superClass.readSemantic();
+                    //update the subclasses score with the new one
+                    float scoreSubClasses = superClass.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES).parseFloat();
+                    scoreSubClasses -= scoreOld;
+                    scoreSubClasses += scoreNew;
+                    superClass.removeData(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES);
+                    superClass.addData(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES, scoreSubClasses);
+                    superClass.writeSemantic();
+                    //compute the new score
+                    float newScore = computeScore(superClass);
+                    //store the old score
+                    float oldScore = superClass.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
+                    //change the value of the data prop score
+                    superClass.removeData(SCORE.SCORE_PROP_HAS_SCORE);
+                    superClass.addData(SCORE.SCORE_PROP_HAS_SCORE, newScore);
+                    //write the semantic
+                    superClass.writeSemantic();
+                    superClass.readSemantic();
+                    //find the super classes of such element
+                    MORAxioms.ObjectSemantics objProp = superClass.getObjectSemantics();
+                    //check if there is any superclasses
+                    List<String> classes = new ArrayList<>();
+                    objectPropertyValues(objProp, SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF, classes);
+                    //update total semantic score
+                    UpdateTotalSemanticScore(oldScore, newScore);
+                    superClass.saveOntology(SCORE.SCORE_FILE_PATH);
+                    //update superclasses score
+                    updateSuperClassScore(classes, oldScore, newScore);
+                }
             }
         }
 
@@ -1230,20 +1233,20 @@ public class ScoreService extends AbstractNodeMain
         OWLReferences ontoRef;
 
         public Forgetting(OWLReferences ontoRef) {
+            this.ontoRef=ontoRef;
             //initializing the class
             toBeForgottenClassEpisodic = new MORFullConcept(SCORE.SCORE_CLASS_EPISODIC_TO_BE_FORGOTTEN,
-                    ontoRef);
+                    this.ontoRef);
             toBeForgottenClassSemantic = new MORFullConcept(SCORE.SCORE_CLASS_SEMANTIC_TO_BE_FORGOTTEN,
-                    ontoRef);
+                    this.ontoRef);
             lowScoreClassSemantic = new MORFullConcept(SCORE.SCORE_CLASS_SEMANTIC_LOW_SCORE,
-                    ontoRef);
+                    this.ontoRef);
             lowScoreClassEpisodic = new MORFullConcept(SCORE.SCORE_CLASS_EPISODIC_LOW_SCORE,
-                    ontoRef);
+                   this.ontoRef);
             forgotClassEpisodic = new MORFullConcept(SCORE.SCORE_CLASS_FORGOTTEN_EPISODIC,
-                    ontoRef);
+                    this.ontoRef);
             forgotClassSemantic = new MORFullConcept(SCORE.SCORE_CLASS_FORGOTTEN_SEMANTIC,
-                    ontoRef);
-            this.ontoRef=ontoRef;
+                    this.ontoRef);
             toBeForgottenEpisodic= new ArrayList<>();
             toBeForgottenSemantic= new ArrayList<>();
             lowScoreSemantic= new ArrayList<>();
@@ -1277,36 +1280,47 @@ public class ScoreService extends AbstractNodeMain
             updateTimes(lowScoreEpisodic, SCORE.SCORE_PROP_TIMES_LOW_SCORE);
             updateTimes(lowScoreSemantic, SCORE.SCORE_PROP_TIMES_LOW_SCORE);
             ontoRef.synchronizeReasoner();
-            updateLists();
+
         }
 
         private void updateLists() {
             ontoRef.synchronizeReasoner();
+            lowScoreEpisodic.clear();
+            lowScoreSemantic.clear();
+            forgotEpisodic.clear();
+            forgotSemantic.clear();
+            toBeForgottenEpisodic.clear();
+            toBeForgottenSemantic.clear();
             forgotClassSemantic.readSemantic();
             MORAxioms.Individuals indsForgotSemantic = forgotClassSemantic.getIndividualClassified();
+            System.out.println(forgotClassSemantic);
             for (OWLNamedIndividual i : indsForgotSemantic) {
                 forgotSemantic.add(i.toStringID().substring(SCORE.SCORE_IRI_ONTO.length() + 1));
             }
 
             forgotClassEpisodic.readSemantic();
+            System.out.println(forgotClassEpisodic);
             MORAxioms.Individuals indsForgotEpisodic = forgotClassEpisodic.getIndividualClassified();
             for (OWLNamedIndividual i : indsForgotEpisodic) {
                 forgotEpisodic.add(i.toStringID().substring(SCORE.SCORE_IRI_ONTO.length() + 1));
             }
 
             toBeForgottenClassEpisodic.readSemantic();
+            System.out.println(toBeForgottenClassEpisodic);
             MORAxioms.Individuals indsForgottenEpisodic = toBeForgottenClassEpisodic.getIndividualClassified();
             for (OWLNamedIndividual i : indsForgottenEpisodic) {
                 toBeForgottenEpisodic.add(i.toStringID().substring(SCORE.SCORE_IRI_ONTO.length() + 1));
             }
 
             toBeForgottenClassSemantic.readSemantic();
+            System.out.println(toBeForgottenClassSemantic);
             MORAxioms.Individuals indsForgottenSemantic = toBeForgottenClassSemantic.getIndividualClassified();
             for (OWLNamedIndividual i : indsForgottenSemantic) {
                 toBeForgottenSemantic.add(i.toStringID().substring(SCORE.SCORE_IRI_ONTO.length() + 1));
             }
 
             lowScoreClassEpisodic.readSemantic();
+            System.out.println(lowScoreClassEpisodic);
             MORAxioms.Individuals indsLowScoreEpisodic = lowScoreClassEpisodic.getIndividualClassified();
             System.out.println(indsLowScoreEpisodic);
             for (OWLNamedIndividual i : indsLowScoreEpisodic) {
@@ -1314,6 +1328,7 @@ public class ScoreService extends AbstractNodeMain
             }
 
             lowScoreClassSemantic.readSemantic();
+            System.out.println(lowScoreClassSemantic);
             MORAxioms.Individuals indsLowScoreSemantic = lowScoreClassSemantic.getIndividualClassified();
             System.out.println(indsLowScoreSemantic);
             for (OWLNamedIndividual i : indsLowScoreSemantic) {
@@ -1329,32 +1344,38 @@ public class ScoreService extends AbstractNodeMain
             System.out.println("\n \n " +forgotSemantic);
 
             List<String> commonElementsSemanticLowScore= new ArrayList<>();
-            commonElementsSemanticLowScore=toBeForgottenSemantic;
+            commonElementsSemanticLowScore.addAll(toBeForgottenSemantic);
             commonElementsSemanticLowScore.retainAll(lowScoreSemantic);
+            System.out.println("common elements tobeforgotten low score semantic \n"+commonElementsSemanticLowScore);
             lowScoreSemantic.removeAll(commonElementsSemanticLowScore);
+
             List<String> commonElementsEpisodicLowScore= new ArrayList<>();
-            commonElementsEpisodicLowScore=toBeForgottenEpisodic;
+            commonElementsEpisodicLowScore.addAll(toBeForgottenEpisodic);
             commonElementsEpisodicLowScore.retainAll(lowScoreEpisodic);
+            System.out.println("common elements tobeforgotten low score episodic \n"+commonElementsEpisodicLowScore);
             lowScoreEpisodic.removeAll(commonElementsEpisodicLowScore);
 
-          /*
+
             List<String> commonElementsSemantic= new ArrayList<>();
-            commonElementsSemantic=toBeForgottenSemantic;
+            commonElementsSemantic.addAll(toBeForgottenSemantic);
             commonElementsSemantic.retainAll(forgotSemantic);
+            System.out.println("common elements forgot tobeforgot semantic \n"+commonElementsSemantic);
             toBeForgottenSemantic.removeAll(commonElementsSemantic);
+
             List<String> commonElementsEpisodic= new ArrayList<>();
-            commonElementsEpisodic=toBeForgottenEpisodic;
+            commonElementsEpisodic.addAll(toBeForgottenEpisodic);
             commonElementsEpisodic.retainAll(forgotEpisodic);
+            System.out.println("common elements forgot tobeforgot episodic \n"+commonElementsEpisodic);
             toBeForgottenEpisodic.removeAll(commonElementsEpisodic);
-            */
+
             //removing the common elements to the lists
             System.out.println("important, !!!!!!!!!!!After removing common elements");
-            System.out.println("\n \n " +lowScoreSemantic);
-            System.out.println("\n \n " +lowScoreEpisodic);
-            System.out.println("\n \n " +toBeForgottenSemantic);
-            System.out.println("\n \n " +toBeForgottenEpisodic);
-            System.out.println("\n \n " +forgotEpisodic);
-            System.out.println("\n \n " +forgotSemantic);
+            System.out.println("\n \n low Score Semantic " +lowScoreSemantic);
+            System.out.println("\n \n low Score Episoid " +lowScoreEpisodic);
+            System.out.println("\n \n to Be forgotten Semantic" +toBeForgottenSemantic);
+            System.out.println("\n \n to Be forgotten Episodic" +toBeForgottenEpisodic);
+            System.out.println("\n \n forgot Episodic " +forgotEpisodic);
+            System.out.println("\n \n forgot Semantic" +forgotSemantic);
 
         }
 

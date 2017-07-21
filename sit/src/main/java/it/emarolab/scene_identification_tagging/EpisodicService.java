@@ -432,6 +432,7 @@ public class EpisodicService
                         ontoRef.saveOntology(EPISODIC_ONTO_FILE);
                     }
                     for(String s : request.getToBeForget()){
+                        System.out.println("putting to be forgotten to element"+s);
                         MORFullIndividual putForget= new MORFullIndividual(s,ontoRef);
                         putForget.readSemantic();
                         putForget.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
