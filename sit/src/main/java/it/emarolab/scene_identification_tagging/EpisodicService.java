@@ -417,7 +417,10 @@ public class EpisodicService
                 else if (decision==0){
                     //forget and put  the forget Attribute.
                     ontoRef.synchronizeReasoner();
-                    for(String s : request.getDeleteEpisodic()){
+                    //put it as set in order to avoid repeated elements
+                    Set<String> deleteElements= new HashSet<>();
+                    deleteElements.addAll(request.getDeleteEpisodic());
+                    for(String s : deleteElements){
                         MORFullIndividual delete= new MORFullIndividual(s,ontoRef);
                         delete.readSemantic();
                         List<String> primitivesDelete= new ArrayList<>();

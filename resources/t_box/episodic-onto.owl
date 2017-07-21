@@ -359,12 +359,6 @@
         <NamedIndividual IRI="#Plane-Counter"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#R-0"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#R-1"/>
-    </Declaration>
-    <Declaration>
         <NamedIndividual IRI="#R-10"/>
     </Declaration>
     <Declaration>
@@ -393,9 +387,6 @@
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#S-0"/>
-    </Declaration>
-    <Declaration>
-        <NamedIndividual IRI="#SnEp-0"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#SnEp-1"/>
@@ -768,38 +759,6 @@
     </ClassAssertion>
     <ClassAssertion>
         <Class IRI="#Cylinder"/>
-        <NamedIndividual IRI="#R-0"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="#CylinderHeightIncludedInTenFive"/>
-        <NamedIndividual IRI="#R-0"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="#CylinderRadiusSmallerThanFive"/>
-        <NamedIndividual IRI="#R-0"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="#GeometricPrimitive"/>
-        <NamedIndividual IRI="#R-0"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="#Cylinder"/>
-        <NamedIndividual IRI="#R-1"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="#CylinderHeightBiggerThanTen"/>
-        <NamedIndividual IRI="#R-1"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="#CylinderRadiusSmallerThanFive"/>
-        <NamedIndividual IRI="#R-1"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="#GeometricPrimitive"/>
-        <NamedIndividual IRI="#R-1"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="#Cylinder"/>
         <NamedIndividual IRI="#R-10"/>
     </ClassAssertion>
     <ClassAssertion>
@@ -956,10 +915,6 @@
     </ClassAssertion>
     <ClassAssertion>
         <Class IRI="#Scene0"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-    </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="#Scene0"/>
         <NamedIndividual IRI="#SnEp-1"/>
     </ClassAssertion>
     <ClassAssertion>
@@ -1011,10 +966,6 @@
         <NamedIndividual IRI="#R-7"/>
     </DifferentIndividuals>
     <DifferentIndividuals>
-        <NamedIndividual IRI="#R-0"/>
-        <NamedIndividual IRI="#R-1"/>
-    </DifferentIndividuals>
-    <DifferentIndividuals>
         <NamedIndividual IRI="#R-10"/>
         <NamedIndividual IRI="#R-9"/>
     </DifferentIndividuals>
@@ -1044,46 +995,6 @@
         <ObjectProperty IRI="#isParallelTo"/>
         <NamedIndividual IRI="#C-0"/>
         <NamedIndividual IRI="#R-7"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#BelongToScene"/>
-        <NamedIndividual IRI="#R-0"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#isBelowOf"/>
-        <NamedIndividual IRI="#R-0"/>
-        <NamedIndividual IRI="#R-1"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#isInFrontOf"/>
-        <NamedIndividual IRI="#R-0"/>
-        <NamedIndividual IRI="#R-1"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#isParallelTo"/>
-        <NamedIndividual IRI="#R-0"/>
-        <NamedIndividual IRI="#R-1"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#BelongToScene"/>
-        <NamedIndividual IRI="#R-1"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#isAboveOf"/>
-        <NamedIndividual IRI="#R-1"/>
-        <NamedIndividual IRI="#R-0"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#isBehindOf"/>
-        <NamedIndividual IRI="#R-1"/>
-        <NamedIndividual IRI="#R-0"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#isParallelTo"/>
-        <NamedIndividual IRI="#R-1"/>
-        <NamedIndividual IRI="#R-0"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#BelongToScene"/>
@@ -1299,51 +1210,6 @@
         <ObjectProperty IRI="#isRightOf"/>
         <NamedIndividual IRI="#S-0"/>
         <NamedIndividual IRI="#R-5"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#has-scene_green"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-        <NamedIndividual IRI="#R-1"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#has-scene_isAboveOf"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-        <NamedIndividual IRI="#R-1"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#has-scene_isBehindOf"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-        <NamedIndividual IRI="#R-1"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#has-scene_isBelowOf"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-        <NamedIndividual IRI="#R-0"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#has-scene_isInFrontOf"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-        <NamedIndividual IRI="#R-0"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#has-scene_isParallelTo"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-        <NamedIndividual IRI="#R-0"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#has-scene_isParallelTo"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-        <NamedIndividual IRI="#R-1"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#has-scene_pink"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-        <NamedIndividual IRI="#R-0"/>
-    </ObjectPropertyAssertion>
-    <ObjectPropertyAssertion>
-        <ObjectProperty IRI="#has-scene_support"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-        <NamedIndividual IRI="#a"/>
     </ObjectPropertyAssertion>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#has-scene_green"/>
@@ -1707,46 +1573,6 @@
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#has-color"/>
-        <NamedIndividual IRI="#R-0"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">pink</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-cylinder_height"/>
-        <NamedIndividual IRI="#R-0"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.08</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-cylinder_radius"/>
-        <NamedIndividual IRI="#R-0"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.02</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-time"/>
-        <NamedIndividual IRI="#R-0"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499159100088</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-color"/>
-        <NamedIndividual IRI="#R-1"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">green</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-cylinder_height"/>
-        <NamedIndividual IRI="#R-1"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.1</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-cylinder_radius"/>
-        <NamedIndividual IRI="#R-1"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.02</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-time"/>
-        <NamedIndividual IRI="#R-1"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499159100170</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-color"/>
         <NamedIndividual IRI="#R-10"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">pink</Literal>
     </DataPropertyAssertion>
@@ -1949,21 +1775,6 @@
         <DataProperty IRI="#has-time"/>
         <NamedIndividual IRI="#S-0"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499161125485</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has-time"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1499159100375</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#timesRetrievalForgot"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">3.2000005</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#toBeForgotten"/>
-        <NamedIndividual IRI="#SnEp-0"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">false</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#has-time"/>
@@ -3035,5 +2846,9 @@
         </Head>
     </DLSafeRule>
 </Ontology>
+
+
+
+<!-- Generated by the OWL API (version 5.0.2.20160507-1747) https://github.com/owlcs/owlapi/ -->
 
 

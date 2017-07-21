@@ -128,6 +128,7 @@ public class ScoreService extends AbstractNodeMain
                     response.setPutForgotEpisodic(forgetting.getToBeForgottenEpisodic());
                     response.setPutForgotSemantic(forgetting.getToBeForgottenSemantic());
                     forgetting.updateTimes();
+                    ontoRef.saveOntology(SCORE.SCORE_FILE_PATH);
                 }
                 //FORGETTING
                 else if (decision == 3) {
@@ -1002,7 +1003,7 @@ public class ScoreService extends AbstractNodeMain
          */
         public void forgetItem() {
             updateTotalEpisodicScore(scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), 0);
-            SemanticItem.deleteEpisodicItem(this.Name, scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_VALUE).parseFloat());
+            SemanticItem.deleteEpisodicItem(this.Name, scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat());
             ontoRef.removeIndividual(this.Name);
             ontoRef.synchronizeReasoner();
 
@@ -1318,6 +1319,42 @@ public class ScoreService extends AbstractNodeMain
             for (OWLNamedIndividual i : indsLowScoreSemantic) {
                 lowScoreSemantic.add(i.toStringID().substring(SCORE.SCORE_IRI_ONTO.length() + 1));
             }
+            //removing the common elements to the lists
+            System.out.println("important, !!!!!!!!!!!Before removing common elements");
+            System.out.println("\n \n " +lowScoreSemantic);
+            System.out.println("\n \n " +lowScoreEpisodic);
+            System.out.println("\n \n " +toBeForgottenSemantic);
+            System.out.println("\n \n " +toBeForgottenEpisodic);
+            System.out.println("\n \n " +forgotEpisodic);
+            System.out.println("\n \n " +forgotSemantic);
+
+            List<String> commonElementsSemanticLowScore= new ArrayList<>();
+            commonElementsSemanticLowScore=toBeForgottenSemantic;
+            commonElementsSemanticLowScore.retainAll(lowScoreSemantic);
+            lowScoreSemantic.removeAll(commonElementsSemanticLowScore);
+            List<String> commonElementsEpisodicLowScore= new ArrayList<>();
+            commonElementsEpisodicLowScore=toBeForgottenEpisodic;
+            commonElementsEpisodicLowScore.retainAll(lowScoreEpisodic);
+            lowScoreEpisodic.removeAll(commonElementsEpisodicLowScore);
+
+          /*
+            List<String> commonElementsSemantic= new ArrayList<>();
+            commonElementsSemantic=toBeForgottenSemantic;
+            commonElementsSemantic.retainAll(forgotSemantic);
+            toBeForgottenSemantic.removeAll(commonElementsSemantic);
+            List<String> commonElementsEpisodic= new ArrayList<>();
+            commonElementsEpisodic=toBeForgottenEpisodic;
+            commonElementsEpisodic.retainAll(forgotEpisodic);
+            toBeForgottenEpisodic.removeAll(commonElementsEpisodic);
+            */
+            //removing the common elements to the lists
+            System.out.println("important, !!!!!!!!!!!After removing common elements");
+            System.out.println("\n \n " +lowScoreSemantic);
+            System.out.println("\n \n " +lowScoreEpisodic);
+            System.out.println("\n \n " +toBeForgottenSemantic);
+            System.out.println("\n \n " +toBeForgottenEpisodic);
+            System.out.println("\n \n " +forgotEpisodic);
+            System.out.println("\n \n " +forgotSemantic);
 
         }
 
