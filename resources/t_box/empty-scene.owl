@@ -1402,11 +1402,6 @@
             </owl:Class>
         </owl:equivalentClass>
         <rdfs:subClassOf>
-            <owl:Class>
-                <owl:intersectionOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-            </owl:Class>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-scene_red"/>
                 <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
@@ -1461,7 +1456,7 @@
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Forgot1">
         <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene1"/>
         <timesRetrievalForgot rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</timesRetrievalForgot>
-        <toBeForgotten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</toBeForgotten>
+        <toBeForgotten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</toBeForgotten>
     </owl:NamedIndividual>
     
 

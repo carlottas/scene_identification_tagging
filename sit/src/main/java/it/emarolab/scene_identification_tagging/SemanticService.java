@@ -7,6 +7,7 @@ import it.emarolab.owloop.aMORDescriptor.utility.concept.MORFullConcept;
 import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;
 import it.emarolab.scene_identification_tagging.realObject.Cylinder;
 import it.emarolab.scene_identification_tagging.realObject.Sphere;
+import org.apache.jena.base.Sys;
 import sit_msgs.*;
 import org.ros.node.ConnectedNode;
 import org.ros.node.service.ServiceResponseBuilder;
@@ -86,8 +87,9 @@ public class SemanticService
             build(SemanticInterfaceRequest request, SemanticInterfaceResponse response) {
                 // load ontology
                 System.out.println("loading the ontology ");
-                OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
+                 OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
                         ONTO_NAME, ONTO_FILE, ONTO_IRI, true);
+                System.out.println(ontoRef); 
                 // suppress aMOR log
                 it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
                 int decision = request.getDecision();

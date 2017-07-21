@@ -91,7 +91,7 @@ public class EpisodicService
             @Override
             public void
             build(EpisodicInterfaceRequest request, EpisodicInterfaceResponse response) {
-                OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
+                OWLReferences ontoRef =  OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
                         EPISODIC_ONTO_NAME, EPISODIC_ONTO_FILE, EPISODIC_ONTO_IRI, true);
                 // suppress aMOR log
                 it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
