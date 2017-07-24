@@ -58,18 +58,14 @@ public class retrievalDescriptor
         }
         
         names.addAll(equivalentClasses);
+        ontoRef.synchronizeReasoner();
         learned.readSemantic();
-        System.out.println("before deleting");
         learned.delete();
-        System.out.println("after deleting");
         learned.writeSemantic();
         learned.saveOntology(ONTO_FILE);
         ontoRef.synchronizeReasoner();
-        SceneClassDescriptor thing = new SceneClassDescriptor("owl:Thing",ontoRef);
-        thing.readSemantic();
-        thing.removeEquivalentConcept(learned.getGroundInstance());
-        thing.writeSemantic();
-        thing.saveOntology(ONTO_FILE);
+        ontoRef.removeClass(name);
+        ontoRef.saveOntology(ONTO_FILE);
         Set<String> forgotten= new HashSet<>();
         //check whether they have already been forgotten
         for (String s : names){

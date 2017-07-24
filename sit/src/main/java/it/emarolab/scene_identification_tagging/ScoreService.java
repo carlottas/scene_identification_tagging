@@ -18,12 +18,13 @@ import it.emarolab.owloop.aMORDescriptor.MORAxioms;
 import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import  it.emarolab.scene_identification_tagging.ROSSemanticInterface;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 
-public class ScoreService extends AbstractNodeMain
+public class ScoreService extends  ROSSemanticInterface.ROSSemanticServer<ScoreInterfaceRequest, ScoreInterfaceResponse>
         implements SITBase {
     private static final String SERVICE_NAME = "ScoreService";
 
@@ -35,6 +36,7 @@ public class ScoreService extends AbstractNodeMain
                 ScoreInterface._TYPE, // set ROS service message
                 getService(node) // set ROS service response
         );
+        loadSemantics(SCORE.SCORE_ONTO_NAME,SCORE.SCORE_FILE_PATH,SCORE.SCORE_IRI_ONTO);
         return true;
     }
 
@@ -47,13 +49,6 @@ public class ScoreService extends AbstractNodeMain
         return GraphName.of(getServerName());
     }
 
-    @Override
-    public void onStart(ConnectedNode node) {
-        super.onStart(node);
-        // get ROS parameter
-        if (!initParam(node))
-            System.exit(1);
-    }
 
 
     /**
@@ -78,8 +73,7 @@ public class ScoreService extends AbstractNodeMain
                 EpisodicScoreItem episodic = request.getEpisodic();
                 SemanticScoreItem semantic = request.getSemantic();
                 int decision = request.getDecision();
-                OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
-                        SCORE.SCORE_ONTO_NAME, SCORE.SCORE_FILE_PATH, SCORE.SCORE_IRI_ONTO, true);
+                OWLReferences ontoRef = getOntology();
                 // suppress aMOR log
                 it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
                 //MEMORIZATION

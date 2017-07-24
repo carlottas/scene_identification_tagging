@@ -29,6 +29,7 @@ import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
 import org.ros.node.Node;
 import org.ros.node.parameter.ParameterTree;
+import  it.emarolab.scene_identification_tagging.ROSSemanticInterface;
 
 import javax.management.timer.*;
 import java.awt.image.AreaAveragingScaleFilter;
@@ -37,7 +38,7 @@ import java.util.*;
 
 
 public class EpisodicService
-        extends AbstractNodeMain
+        extends  ROSSemanticInterface.ROSSemanticServer<EpisodicInterfaceRequest, EpisodicInterfaceResponse>
         implements SITBase {
 
     private static final String SERVICE_NAME = "EpisodicService";
@@ -51,6 +52,7 @@ public class EpisodicService
                 EpisodicInterface._TYPE, // set ROS service message
                 getService(node) // set ROS service response
         );
+        loadSemantics(EPISODIC_ONTO_NAME,EPISODIC_ONTO_FILE,EPISODIC_ONTO_IRI);
         return true;
     }
 
@@ -64,13 +66,7 @@ public class EpisodicService
         return GraphName.of(getServerName());
     }
 
-    @Override
-    public void onStart(ConnectedNode node) {
-        super.onStart(node);
-        // get ROS parameter
-        if (!initParam(node))
-            System.exit(1);
-    }
+
 
 
     /**
@@ -78,7 +74,8 @@ public class EpisodicService
      * @return the object that defines the computation to be performed during service call.
      */
 
-    public ServiceResponseBuilder<EpisodicInterfaceRequest, EpisodicInterfaceResponse> getService(ConnectedNode node) {
+    public ServiceResponseBuilder<EpisodicInterfaceRequest, EpisodicInterfaceResponse>
+    getService(ConnectedNode node) {
         return new ServiceResponseBuilder<EpisodicInterfaceRequest, EpisodicInterfaceResponse>() {
 
             /**
@@ -91,8 +88,7 @@ public class EpisodicService
             @Override
             public void
             build(EpisodicInterfaceRequest request, EpisodicInterfaceResponse response) {
-                OWLReferences ontoRef =  OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
-                        EPISODIC_ONTO_NAME, EPISODIC_ONTO_FILE, EPISODIC_ONTO_IRI, true);
+                OWLReferences ontoRef = getOntology();
                 // suppress aMOR log
                 it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
                 int decision = request.getDecision();

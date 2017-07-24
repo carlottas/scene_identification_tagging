@@ -22,6 +22,7 @@ import it.emarolab.scene_identification_tagging.realObject.*;
 import it.emarolab.scene_identification_tagging.sceneRepresentation.SceneRepresentation;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.retrievalDescriptor;
 import it.emarolab.owloop.aMORDescriptor.MORAxioms;
+import  it.emarolab.scene_identification_tagging.ROSSemanticInterface;
 
 import it.emarolab.amor.owlInterface.SemanticRestriction;
 import it.emarolab.owloop.aMORDescriptor.MORAxioms;
@@ -33,7 +34,7 @@ import java.util.*;
 
 
 public class SemanticService
-        extends AbstractNodeMain
+        extends  ROSSemanticInterface.ROSSemanticServer<SemanticInterfaceRequest, SemanticInterfaceResponse>
     implements SITBase {
     private static final String SERVICE_NAME = "SemanticService";
     private static final String ONTO_NAME = "ONTO_NAME"; // an arbritary name to refer the ontology
@@ -46,6 +47,7 @@ public class SemanticService
                 SemanticInterface._TYPE, // set ROS service message
                 getService(node) // set ROS service response
         );
+       loadSemantics(ONTO_NAME,ONTO_FILE,ONTO_IRI);
         return true;
     }
 
@@ -59,13 +61,6 @@ public class SemanticService
         return GraphName.of(getServerName());
     }
 
-    @Override
-    public void onStart(ConnectedNode node) {
-        super.onStart(node);
-        // get ROS parameter
-        if (!initParam(node))
-            System.exit(1);
-    }
 
     /**
      * @param node the bridge to the standard ROS service
@@ -87,9 +82,8 @@ public class SemanticService
             build(SemanticInterfaceRequest request, SemanticInterfaceResponse response) {
                 // load ontology
                 System.out.println("loading the ontology ");
-                 OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
-                        ONTO_NAME, ONTO_FILE, ONTO_IRI, true);
-                System.out.println(ontoRef); 
+                 OWLReferences ontoRef = getOntology();
+                System.out.println(ontoRef);
                 // suppress aMOR log
                 it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
                 int decision = request.getDecision();
