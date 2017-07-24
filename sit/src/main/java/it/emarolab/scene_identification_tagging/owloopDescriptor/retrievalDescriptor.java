@@ -6,7 +6,7 @@ import it.emarolab.owloop.aMORDescriptor.MORAxioms;
 import it.emarolab.owloop.aMORDescriptor.utility.concept.MORFullConcept;
 import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;
 import it.emarolab.owloop.core.Concept;
-import it.emarolab.scene_identification_tagging.SITBase;
+import it.emarolab.scene_identification_tagging.Interfaces.SITBase;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneClassDescriptor;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneIndividualDescriptor;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SpatialIndividualDescriptor;
@@ -15,6 +15,7 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import sit_msgs.*;
+
 
 import java.util.*;
 

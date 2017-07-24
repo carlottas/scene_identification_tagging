@@ -8,7 +8,7 @@ import it.emarolab.owloop.aMORDescriptor.utility.MORConceptBase;
 import it.emarolab.owloop.aMORDescriptor.utility.concept.MORFullConcept;
 import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;
 import it.emarolab.owloop.core.Concept;
-import it.emarolab.scene_identification_tagging.SITBase;
+import it.emarolab.scene_identification_tagging.Interfaces.SITBase;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneClassDescriptor;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneIndividualDescriptor;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SpatialIndividualDescriptor;

@@ -1,9 +1,9 @@
 package it.emarolab.scene_identification_tagging.realObject;
 
-import it.emarolab.scene_identification_tagging.SITBase;
+
 
 import it.emarolab.amor.owlInterface.OWLReferences;
-import it.emarolab.scene_identification_tagging.SITBase;
+import it.emarolab.scene_identification_tagging.Interfaces.SITBase;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SpatialIndividualDescriptor;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;

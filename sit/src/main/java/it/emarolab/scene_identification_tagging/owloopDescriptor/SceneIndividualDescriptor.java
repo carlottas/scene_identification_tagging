@@ -6,7 +6,7 @@ import it.emarolab.owloop.aMORDescriptor.MORIndividual;
 import it.emarolab.owloop.aMORDescriptor.utility.MORIndividualBase;
 import it.emarolab.owloop.aMORDescriptor.utility.dataProperty.MORHierarchicalDataProperty;
 import it.emarolab.owloop.aMORDescriptor.utility.objectProperty.MORHierarchicalObjectProperty;
-import it.emarolab.scene_identification_tagging.SITBase;
+import it.emarolab.scene_identification_tagging.Interfaces.SITBase;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 

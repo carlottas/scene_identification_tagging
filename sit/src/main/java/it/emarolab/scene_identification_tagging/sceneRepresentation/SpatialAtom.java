@@ -1,7 +1,7 @@
 package it.emarolab.scene_identification_tagging.sceneRepresentation;
 
 import it.emarolab.owloop.aMORDescriptor.MORAxioms;
-import it.emarolab.scene_identification_tagging.SITBase;
+import it.emarolab.scene_identification_tagging.Interfaces.SITBase;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SpatialClassDescriptor;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.SpatialIndividualDescriptor;
 import org.semanticweb.owlapi.model.OWLClass;

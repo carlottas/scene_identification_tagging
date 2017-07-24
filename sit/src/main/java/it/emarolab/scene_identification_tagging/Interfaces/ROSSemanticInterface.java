@@ -1,5 +1,5 @@
 
-package it.emarolab.scene_identification_tagging;
+package it.emarolab.scene_identification_tagging.Interfaces;
 
 import it.emarolab.amor.owlDebugger.Logger;
 import it.emarolab.amor.owlInterface.OWLReferences;

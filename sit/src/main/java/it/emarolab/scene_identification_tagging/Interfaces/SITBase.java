@@ -1,4 +1,4 @@
-package it.emarolab.scene_identification_tagging;
+package it.emarolab.scene_identification_tagging.Interfaces;
 
 /**
  * The base interface for the SIT architecture.
