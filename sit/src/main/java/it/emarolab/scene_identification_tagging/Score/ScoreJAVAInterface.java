@@ -3,6 +3,7 @@ package it.emarolab.scene_identification_tagging.Score;
 import it.emarolab.owloop.aMORDescriptor.utility.concept.MORFullConcept;
 //import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 
+import org.apache.jena.base.Sys;
 import sit_msgs.*;
 import org.ros.node.ConnectedNode;
 import org.ros.node.service.ServiceResponseBuilder;
@@ -1065,6 +1066,13 @@ public interface ScoreJAVAInterface
          * LowScore semantic and Episodic and Forgot Semantic and Episodic
          */
         public void updateLists() {
+            //update the clock 
+            long time = System.currentTimeMillis();
+            MORFullIndividual clock = new MORFullIndividual(TIME.CLOCK,ontoRef);
+            clock.readSemantic();
+            clock.removeData(SCORE.SCORE_PROP_HAS_TIME);
+            clock.addData(SCORE.SCORE_PROP_HAS_TIME,time );
+            clock.writeSemantic();
             //syncronize the reasoner
             ontoRef.synchronizeReasoner();
             //clear the Lists

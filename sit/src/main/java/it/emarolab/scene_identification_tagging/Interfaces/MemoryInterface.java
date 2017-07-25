@@ -4,6 +4,7 @@ import it.emarolab.amor.owlInterface.OWLReferences;
 import it.emarolab.owloop.aMORDescriptor.MORAxioms;
 import it.emarolab.owloop.aMORDescriptor.utility.concept.MORFullConcept;
 import it.emarolab.owloop.aMORDescriptor.utility.individual.MORFullIndividual;
+import it.emarolab.scene_identification_tagging.owloopDescriptor.SceneClassDescriptor;
 import it.emarolab.scene_identification_tagging.realObject.*;
 import it.emarolab.scene_identification_tagging.sceneRepresentation.SceneRepresentation;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -668,6 +669,99 @@ public interface MemoryInterface
 
 
         }
+        public static List<String> RetrievalSemanticEpisodic(List<String> classes, OWLReferences ontoRef,Set<String> forgotten ){
+            List<String > individuals = new ArrayList<>();
+            for (String s : classes) {
+                if (!s.equals("owlNothing")) {
+                    //defining the ontological class
+                    SceneClassDescriptor currentClass = new SceneClassDescriptor(s, ontoRef);
+                    //read the ontology
+                    currentClass.readSemantic();
+                    //getting the individuals classified
+                    MORAxioms.Individuals i = currentClass.getIndividualClassified();
+                    for (OWLNamedIndividual ind:i){
+                        MORFullIndividual individual= new MORFullIndividual(ind,ontoRef);
+                        individual.readSemantic();
+                        //if the episodic item has not been already forgot add to the list
+                        if(individual.getLiteral(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT).parseBoolean()) {
+                            //todo Change with ground
+                            forgotten.add(ind.getIRI().toString().substring(EPISODIC_ONTO_IRI.length() + 1));
+                        }
+                        individuals.add(ind.getIRI().toString().substring(EPISODIC_ONTO_IRI.length()+1));
+                    }
+                }
+            }
+            return  individuals;
+        }
+
+        public static float updateCounterRetrievalForgetting(List<String> resetCounter,List<String> userNoForget,String Name,OWLReferences ontoRef){
+            MORFullIndividual ind = new MORFullIndividual(Name,ontoRef);
+            ind.readSemantic();
+            float counter = ind.getLiteral(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT).parseFloat();
+            float newCounter = 0;
+            if (counter<1){
+                newCounter=counter+FORGETTING.INCREMENT_ONE;
+                if (newCounter>=1){
+                    resetCounter.add(Name);
+
+                }
+
+            }
+            else if (counter<2 && counter>=1){
+                newCounter=counter+FORGETTING.INCREMENT_TWO;
+                if(newCounter>=2){
+                    resetCounter.add(Name);
+                }
+
+            }
+            else if (counter<3&&counter>=2){
+                newCounter=counter+FORGETTING.INCREMENT_THREE;
+                if(newCounter>=3){
+                    userNoForget.add(Name);
+                }
+            }
+            ind.removeData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT);
+            ind.addData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT,newCounter);
+            ind.writeSemantic();
+            ind.saveOntology(EPISODIC_ONTO_FILE);
+            return newCounter;
+
+        }
+        public static void removeUserNoForgetEpisodic(String Name, OWLReferences ontoRef){
+            MORFullIndividual ind = new MORFullIndividual(Name,ontoRef);
+            ind.readSemantic();
+            ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
+            ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
+            ind.writeSemantic();
+            ind.saveOntology(EPISODIC_ONTO_FILE);
+        }
+        public static void addPrimitivesEpisodic( ArrayList<EpisodicPrimitive> Primitives){
+            for (EpisodicPrimitive i : Primitives) {
+                for (EpisodicPrimitive j : Primitives)
+                    if (!i.equals(j))
+                        j.addDisjointIndividual(i.getInstance());
+                i.getObjectSemantics().clear(); // clean previus spatial relation
+                i.writeSemantic();
+            }
+
+        }
+        public static void deleteEpisodicItem(String s , OWLReferences ontoRef){
+            //declare the ontoogical individual
+            MORFullIndividual delete= new MORFullIndividual(s,ontoRef);
+            //read the ontology
+            delete.readSemantic();
+            //check the primitives that must be deleted
+            List<String> primitivesDelete= new ArrayList<>();
+            memory.objectPropertyValues(delete.getObjectSemantics(),OBJECT_PROPERTY.HAS_SCENE_PRIMITIVE,primitivesDelete,EPISODIC_ONTO_IRI);
+            //remove the Episodic Item
+            ontoRef.removeIndividual(s);
+            //remove the primitives
+            for(String i:primitivesDelete){
+                ontoRef.removeIndividual(i);
+            }
+            //save the ontology
+            ontoRef.saveOntology(EPISODIC_ONTO_FILE);
+            }
     }
 
 }

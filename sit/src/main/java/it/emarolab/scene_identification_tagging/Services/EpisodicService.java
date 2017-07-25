@@ -16,6 +16,17 @@ import java.util.*;
 import it.emarolab.scene_identification_tagging.sceneRepresentation.Atom;
 import it.emarolab.scene_identification_tagging.Interfaces.*;
 
+/**
+ * ROS service which manipulates the episodic onotlogy
+ * Depending on the user decision it is able to
+ * -Memorize a new Episodic Item
+ * -Retrieve old Episodic Item
+ * -Recognize Episodic Item
+ * -Either Force the forgetting or save an item
+ * Furthermore the service is able to force the retrieval of an element forgot if the user
+ * insist in the retrieval
+ * In addition it automatically forgets episodic items depending on the score Ontology situation
+ */
 public class EpisodicService
         extends  ROSSemanticInterface.ROSSemanticServer<EpisodicInterfaceRequest, EpisodicInterfaceResponse>
         implements SITBase,MemoryInterface {
@@ -67,34 +78,38 @@ public class EpisodicService
             @Override
             public void
             build(EpisodicInterfaceRequest request, EpisodicInterfaceResponse response) {
+                //Ontology declaration
                 OWLReferences ontoRef = getOntology();
                 // suppress aMOR log
                 it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
                 int decision = request.getDecision();
+                //Memorization
                 if (decision == 1) {
+                    //get the semantic item name
                     String SceneName = request.getSceneName();
+                    //getting the subclasses of the semantic item
                     List<String> SubClasses = request.getSubClasses();
+                    //getting the superclasses of the semantic item
                     List<String> SuperClasses = request.getSuperClasses();
+                    //get the support name
                     String SupportName = request.getSupportName();
+                    //taking information about the primitives
+                    //and convert it from a ros message in the Atoms class
                     Atoms object = new Atoms();
                     object.MapFromRosMsg(request.getObject());
+                    //converting from semantic to episodic
                     ArrayList<EpisodicPrimitive> Primitives = memory.fromSemanticToEpisodic(object, ontoRef);
                     // add objects
-                    for (EpisodicPrimitive i : Primitives) {
-                        for (EpisodicPrimitive j : Primitives)
-                            if (!i.equals(j))
-                                j.addDisjointIndividual(i.getInstance());
-                        i.getObjectSemantics().clear(); // clean previus spatial relation
-                        i.writeSemantic();
-                    }
+                    memory.addPrimitivesEpisodic(Primitives);
                     //adding the ObjectProperty
                     for (EpisodicPrimitive i : Primitives) {
                         i.ApplyRelations();
                         i.writeSemantic();
                         //i.saveOntology(EPISODIC_ONTO_FILE);
                     }
+                    //syncronize the reasoner
                     ontoRef.synchronizeReasoner();
-                    //initialize the scene
+                    //initialize the Episodic Item
                     EpisodicScene episodicScene = new EpisodicScene(Primitives, ontoRef, SceneName);
                     episodicScene.setSubClasses(SubClasses);
                     episodicScene.setSuperClasses(SuperClasses);
@@ -102,22 +117,31 @@ public class EpisodicService
                     episodicScene.setAddingTime(true);
                     episodicScene.InitializeClasses(ontoRef);
                     episodicScene.InitializeSupport(ontoRef);
-                    System.out.println("CHECKING WHETHER LEARNING");
+                    //checking whether learning the episodic item
+                    System.out.println("checkin whether learning ...");
+                    //if it should be learned
                     if (episodicScene.ShouldLearn(ontoRef)) {
+                        //learn the episodic item
+                        System.out.println("learning ... ");
                         episodicScene.Learn(ontoRef, memory.ComputeName(CLASS.SCENE,ontoRef));
+                        //connect the primitive t the episodic items
                         for (EpisodicPrimitive i : Primitives) {
                             i.setSceneName(episodicScene.getEpisodicSceneName());
                             i.ApplySceneName();
                             i.writeSemantic();
                             i.saveOntology(EPISODIC_ONTO_FILE);
+                            //filling the response
                             response.setLearnt(true);
                         }
                     } else {
+                        //if the episodic item must not be learned
                         //removing the individual of geometric primitives
+                        //removing the primitives from the ontology
                         for (EpisodicPrimitive i : Primitives) {
                             ontoRef.removeIndividual(i.getInstance());
                             ontoRef.synchronizeReasoner();
                         }
+                        //filling the response
                         response.setLearnt(false);
 
                     }
@@ -128,38 +152,30 @@ public class EpisodicService
                 }
                 //retrieval
                 else if (decision==2){
+                    Set<String> forgotten = new HashSet<>();
                     //retrieval Semantic
+                    //retrieved the episodic item linked to the semantic element retrieved
                     if(!request.getRetrievalSemantic().isEmpty()) {
-                        List<String> classes = request.getRetrievalSemantic();
-                        List<String> individuals = new ArrayList<>();
-                        Set<String> forgotten = new HashSet<>();
-                        for (String s : classes) {
-                            if (!s.equals("owlNothing")) {
-                                SceneClassDescriptor currentClass = new SceneClassDescriptor(s, ontoRef);
-                                currentClass.readSemantic();
-                                MORAxioms.Individuals i = currentClass.getIndividualClassified();
-                                for (OWLNamedIndividual ind:i){
-                                    MORFullIndividual individual= new MORFullIndividual(ind,ontoRef);
-                                    individual.readSemantic();
-                                    if(individual.getLiteral(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT).parseBoolean()) {
-                                        //todo Change with ground
-                                        forgotten.add(ind.getIRI().toString().substring(EPISODIC_ONTO_IRI.length() + 1));
-                                    }
-                                    individuals.add(ind.getIRI().toString().substring(EPISODIC_ONTO_IRI.length()+1));
-                                }
-                            }
-                        }
-
+                        //getting the semantic elements retrievel
+                        List<String> individuals= memory.RetrievalSemanticEpisodic(request.getRetrievalSemantic(),ontoRef,forgotten);
                         individuals.removeAll(forgotten);
                         response.setRetrievalSemantic(individuals);
                     }
                     //retrieval Episodic
                     else {
+                        //update the clock time
+                        long time = System.currentTimeMillis();
+                        MORFullIndividual clock = new MORFullIndividual(TIME.CLOCK,ontoRef);
+                        clock.readSemantic();
+                        clock.removeData(TIME.HAS_TIME_CLOCK);
+                        clock.addData(TIME.HAS_TIME_CLOCK,time);
+                        clock.writeSemantic();
+                        ontoRef.synchronizeReasoner();
                         //taking information about the support
                         String support = request.getRetrieval().getSupport();
                         //taking the object property
                         List<sit_msgs.objectPropertyRetrieval> objectPropertyRetrievals = request.getRetrieval().getObjectProperty();
-                        List<retrievalAtom> retrievalAtomsList= request.getRetrieval().getPrimitives();
+                        List<retrievalAtom> retrievalAtomsList = request.getRetrieval().getPrimitives();
                         // taking the time interval
                         String timeInterval = memory.timeIntervalClass(request.getRetrieval().getTime());
                         //Spatial Relationship
@@ -167,121 +183,85 @@ public class EpisodicService
                         //Primitives
                         List<String> possiblePrimitiveScenes = new ArrayList<>();
                         //Support
-                        List<String> possibleSupportScenes= new ArrayList<>();
+                        List<String> possibleSupportScenes = new ArrayList<>();
                         //Time
-                        List<String> possibleTimeIntervalScenes= new ArrayList<>();
+                        List<String> possibleTimeIntervalScenes = new ArrayList<>();
                         //Final List
-                        List<String> retrievedScenes= new ArrayList<>();
+                        List<String> retrievedScenes = new ArrayList<>();
                         //if object property is not empty
                         if (!objectPropertyRetrievals.isEmpty()) {
                             posssibleSceneSpatialRelationship.addAll(
-                                    memory.computePossibleSpatialRelationshipScene(objectPropertyRetrievals,ontoRef));
-                            retrievedScenes=posssibleSceneSpatialRelationship;
+                                    memory.computePossibleSpatialRelationshipScene(objectPropertyRetrievals, ontoRef));
+                            retrievedScenes = posssibleSceneSpatialRelationship;
 
                         }
-                        if(! retrievalAtomsList.isEmpty()){
+                        //if the atoms informaton is not empty
+                        if (!retrievalAtomsList.isEmpty()) {
                             possiblePrimitiveScenes.addAll(memory.computePossiblePrimitiveScenes(retrievalAtomsList, ontoRef));
-                            retrievedScenes=possiblePrimitiveScenes;
+                            retrievedScenes = possiblePrimitiveScenes;
+                        }
+                        //if the support is not empty
+                        if (!support.isEmpty()) {
+                            possibleSupportScenes.addAll(memory.computePossibleSupportScene(support, ontoRef));
+                            retrievedScenes = possibleSupportScenes;
+                        }
+                        //if the time interval is not empty
+                        if (!timeInterval.equals(TIME.NO_TIME)) {
+                            possibleTimeIntervalScenes.addAll(memory.computePossibleTimeIntervalScenes(timeInterval, ontoRef));
+                            retrievedScenes = possibleTimeIntervalScenes;
                         }
 
-                        if(!support.isEmpty()){
-                            possibleSupportScenes.addAll(memory.computePossibleSupportScene(support,ontoRef));
-                            retrievedScenes=possibleSupportScenes;
-                        }
-
-                        if(!timeInterval.equals(TIME.NO_TIME)){
-                            possibleTimeIntervalScenes.addAll(memory.computePossibleTimeIntervalScenes(timeInterval,ontoRef));
-                            retrievedScenes=possibleTimeIntervalScenes;
-                        }
-                        ///////FILLING THE RESPONSE
+                        //FILLING THE RESPONSE
                         //make the list contain only the element common to all the required lists
-                        if(!timeInterval.equals(TIME.NO_TIME)){
+                        if (!timeInterval.equals(TIME.NO_TIME)) {
                             retrievedScenes.retainAll(possibleTimeIntervalScenes);
                         }
-                        if(!objectPropertyRetrievals.isEmpty()){
+                        if (!objectPropertyRetrievals.isEmpty()) {
                             retrievedScenes.retainAll(posssibleSceneSpatialRelationship);
 
                         }
-                        if(!support.isEmpty()){
+                        if (!support.isEmpty()) {
                             retrievedScenes.retainAll(possibleSupportScenes);
                         }
-                        if(!retrievalAtomsList.isEmpty()){
+                        if (!retrievalAtomsList.isEmpty()) {
                             retrievedScenes.retainAll(possiblePrimitiveScenes);
                         }
-                        Set<String> forgotten = new HashSet<>();
-                        for (String s : retrievedScenes){
-                            MORFullIndividual ind= new MORFullIndividual(s,ontoRef);
+                        for (String s : retrievedScenes) {
+                            MORFullIndividual ind = new MORFullIndividual(s, ontoRef);
                             ind.readSemantic();
-                            if(ind.getLiteral(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT).parseBoolean()){
+                            if (ind.getLiteral(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT).parseBoolean()) {
                                 forgotten.add(s);
                             }
 
                         }
                         retrievedScenes.removeAll(forgotten);
                         response.setRetrievalEpisodic(retrievedScenes);
+                    }
+                        //updating the counter for retrieved forgot items
                         List<String> resetCounter= new ArrayList<>();
                         List<String> userNoForget= new ArrayList<>();
                         for (String s : forgotten){
-                            MORFullIndividual ind = new MORFullIndividual(s,ontoRef);
-                            ind.readSemantic();
-                            System.out.println(ind);
-                            float counter = ind.getLiteral(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT).parseFloat();
-                            float newCounter = 0;
-                            if (counter<1){
-                                newCounter=counter+FORGETTING.INCREMENT_ONE;
-                                if (newCounter>=1){
-                                    resetCounter.add(s);
-
-                                }
-
-                            }
-                            else if (counter<2 && counter>=1){
-                                newCounter=counter+FORGETTING.INCREMENT_TWO;
-                                if(newCounter>=2){
-                                    resetCounter.add(s);
-                                }
-
-                            }
-                            else if (counter<3&&counter>=2){
-                                newCounter=counter+FORGETTING.INCREMENT_THREE;
-                                if(newCounter>=3){
-                                    userNoForget.add(s);
-                                }
-                            }
-                            ind.removeData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT);
-                            ind.addData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT,newCounter);
-                            ind.writeSemantic();
-                            ind.saveOntology(EPISODIC_ONTO_FILE);
+                            memory.updateCounterRetrievalForgetting(resetCounter,userNoForget,s,ontoRef);
                         }
                         //removing user no forget from the ontology episodic
                         for (String s: userNoForget){
-                            MORFullIndividual ind = new MORFullIndividual(s,ontoRef);
-                            ind.readSemantic();
-                            ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
-                            ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
-                            ind.writeSemantic();
-                            ind.saveOntology(EPISODIC_ONTO_FILE);
+                            memory.removeUserNoForgetEpisodic(s,ontoRef);
                         }
                         for (String s: resetCounter){
-                            MORFullIndividual ind = new MORFullIndividual(s,ontoRef);
-                            ind.readSemantic();
-                            ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
-                            ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
-                            ind.writeSemantic();
-                            ind.saveOntology(EPISODIC_ONTO_FILE);
+                            memory.removeUserNoForgetEpisodic(s,ontoRef);
                         }
                         response.setResetCounter(resetCounter);
                         response.setUserNoForget(userNoForget);
 
-                    }
-
-
-
                 }
                 //forgetting
                 else if (decision==3){
+                    for (String s : request.getDeleteEpisodic()){
+                        memory.deleteEpisodicItem(s,ontoRef);
 
+                    }
                 }
+                //recognition
                 else if (decision==4){
                     String SceneName = request.getSceneName();
                     String SupportName = request.getSupportName();
@@ -289,13 +269,7 @@ public class EpisodicService
                     object.MapFromRosMsg(request.getObject());
                     ArrayList<EpisodicPrimitive> Primitives = memory.fromSemanticToEpisodic(object, ontoRef);
                     // add objects
-                    for (EpisodicPrimitive i : Primitives) {
-                        for (EpisodicPrimitive j : Primitives)
-                            if (!i.equals(j))
-                                j.addDisjointIndividual(i.getInstance());
-                        i.getObjectSemantics().clear(); // clean previus spatial relation
-                        i.writeSemantic();
-                    }
+                    memory.addPrimitivesEpisodic(Primitives);
                     //adding the ObjectProperty
                     for (EpisodicPrimitive i : Primitives) {
                         i.ApplyRelations();
@@ -323,60 +297,17 @@ public class EpisodicService
                             response.setEpisodicSceneName(episodicScene.getEpisodicSceneName());
                         }
                         else {
-                            float counter = ind.getLiteral(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT).parseFloat();
-                            float newCounter = 0;
-                            if (counter<1){
-                                newCounter=counter+FORGETTING.INCREMENT_ONE;
-                                if (newCounter>=1){
-                                    List<String> resetCounter= new ArrayList<>();
-                                    resetCounter.add(episodicScene.getEpisodicSceneName());
-                                    MORFullIndividual episodicSceneIndividual = new MORFullIndividual(episodicScene.getEpisodicSceneName(),ontoRef);
-                                    episodicSceneIndividual.readSemantic();
-                                    episodicSceneIndividual.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
-                                    episodicSceneIndividual.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
-                                    episodicSceneIndividual.writeSemantic();
-                                    episodicSceneIndividual.saveOntology(EPISODIC_ONTO_FILE);
-                                    response.setResetCounter(resetCounter);
-
-                                }
-
-                            }
-                            else if (counter<2 && counter>=1){
-                                newCounter=counter+FORGETTING.INCREMENT_TWO;
-                                if(newCounter>=2){
-                                    List<String> resetCounter= new ArrayList<>();
-                                    resetCounter.add(episodicScene.getEpisodicSceneName());
-                                    MORFullIndividual episodicSceneIndividual = new MORFullIndividual(episodicScene.getEpisodicSceneName(),ontoRef);
-                                    episodicSceneIndividual.readSemantic();
-                                    episodicSceneIndividual.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
-                                    episodicSceneIndividual.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
-                                    episodicSceneIndividual.writeSemantic();
-                                    episodicSceneIndividual.saveOntology(EPISODIC_ONTO_FILE);
-                                    response.setResetCounter(resetCounter);
-                                }
-
-                            }
-                            else if (counter<3&&counter>=2){
-                                newCounter=counter+FORGETTING.INCREMENT_THREE;
-                                if(newCounter>=3){
-                                    List<String> userNoForget= new ArrayList<>();
-                                    userNoForget.add(episodicScene.getEpisodicSceneName());
-                                    MORFullIndividual episodicSceneIndividual = new MORFullIndividual(episodicScene.getEpisodicSceneName(),ontoRef);
-                                    episodicSceneIndividual.readSemantic();
-                                    episodicSceneIndividual.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
-                                    episodicSceneIndividual.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
-                                    episodicSceneIndividual.writeSemantic();
-                                    episodicSceneIndividual.saveOntology(EPISODIC_ONTO_FILE);
-                                    response.setUserNoForget(userNoForget);
-
-
-                                }
-                            }
-                            ind.removeData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT);
-                            ind.addData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT,newCounter);
-                            ind.writeSemantic();
-                            ind.saveOntology(EPISODIC_ONTO_FILE);
-
+                            List<String> resetCounter= new ArrayList<>();
+                            List<String> userNoForget= new ArrayList<>();
+                            memory.updateCounterRetrievalForgetting(resetCounter,userNoForget,episodicScene.getEpisodicSceneName(),ontoRef);
+                           for (String s : resetCounter) {
+                               memory.removeUserNoForgetEpisodic(s,ontoRef);
+                           }
+                           for (String s : userNoForget){
+                               memory.removeUserNoForgetEpisodic(s,ontoRef);
+                           }
+                           response.setResetCounter(resetCounter);
+                           response.setUserNoForget(userNoForget);
                         }
                     }
                     //removing the individual of geometric primitives
@@ -384,34 +315,28 @@ public class EpisodicService
                         ontoRef.removeIndividual(i.getInstance());
                         ontoRef.synchronizeReasoner();
                     }
-
-
-
                 }
-
+               // automatic forgetting
                 else if (decision==0){
                     //forget and put  the forget Attribute.
                     ontoRef.synchronizeReasoner();
                     //put it as set in order to avoid repeated elements
                     Set<String> deleteElements= new HashSet<>();
                     deleteElements.addAll(request.getDeleteEpisodic());
+                    //for all the elemnts that must be deleted
                     for(String s : deleteElements){
-                        MORFullIndividual delete= new MORFullIndividual(s,ontoRef);
-                        delete.readSemantic();
-                        List<String> primitivesDelete= new ArrayList<>();
-                        memory.objectPropertyValues(delete.getObjectSemantics(),OBJECT_PROPERTY.HAS_SCENE_PRIMITIVE,primitivesDelete,EPISODIC_ONTO_IRI);
-                        ontoRef.removeIndividual(s);
-                        for(String i:primitivesDelete){
-                            ontoRef.removeIndividual(i);
-                        }
-                        ontoRef.saveOntology(EPISODIC_ONTO_FILE);
+                        memory.deleteEpisodicItem(s,ontoRef);
                     }
+                    //putting the flag to the forgot items
                     for(String s : request.getToBeForget()){
-                        System.out.println("putting to be forgotten to element"+s);
+                        //declare the ontological individual
                         MORFullIndividual putForget= new MORFullIndividual(s,ontoRef);
+                        //read the ontology
                         putForget.readSemantic();
+                        //update the FORGOT data property
                         putForget.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
                         putForget.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,true,true);
+                        //update the ontology
                         putForget.writeSemantic();
                         putForget.saveOntology(EPISODIC_ONTO_FILE);
 
