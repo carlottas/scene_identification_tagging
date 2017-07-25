@@ -582,9 +582,7 @@ public interface SITBase {
         String SCORE_PROP_NUMBER_SEMANTIC_RETRIEVAL="NumberSemanticRetrieval";
         String SCORE_PROP_NUMBER_SUB_CLASSES="NumberSubClasses";
         String SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL="SumScoreBelongingIndividual";
-        String SCORE_PROP_SCORE_BELONGING_INDIVIDUAL="ScoreBelongingIndividual";
         String SCORE_PROP_SCORE_SUM_SUB_CLASSES="SumScoreSubClasses";
-        String SCORE_PROP_SCORE_SUB_CLASSES="ScoreSubClasses";
         String SCORE_PROP_TIMES_FORGOTTEN="TimesForgotten";
         String SCORE_PROP_TIMES_TO_BE_FORGOTTEN="TimesForgotten";
         String SCORE_PROP_TIMES_LOW_SCORE="TimesLowScore";

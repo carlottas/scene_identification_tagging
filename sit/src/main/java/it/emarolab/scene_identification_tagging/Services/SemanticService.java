@@ -12,6 +12,18 @@ import it.emarolab.scene_identification_tagging.realObject.*;
 import it.emarolab.scene_identification_tagging.owloopDescriptor.retrievalDescriptor;
 import java.util.*;
 import it.emarolab.scene_identification_tagging.Interfaces.*;
+
+/**
+ * Ros service which manage the Semantic Ontology .
+ * Depending on the user decisin it
+ * Memorize new semantic items
+ * Retrieve old semantic items
+ * Recognize semantic item
+ * Either force the forgetting or save items
+ * Furthermore, after each retrieval, delete the elements which has been adressed by the score ontology.
+ * In addition, during the retrieval, is able to force a forgotten element to be retrieved if the user insisit in
+ * wanting such information
+ */
 public class SemanticService
         extends  ROSSemanticInterface.ROSSemanticServer<SemanticInterfaceRequest, SemanticInterfaceResponse>
     implements SITBase, MemoryInterface {
@@ -62,7 +74,7 @@ public class SemanticService
                 // load ontology
                 System.out.println("loading the ontology ");
                  OWLReferences ontoRef = getOntology();
-                System.out.println(ontoRef);
+
                 // suppress aMOR log
                 it.emarolab.amor.owlDebugger.Logger.setPrintOnConsole(false);
                 int decision = request.getDecision();
@@ -111,19 +123,13 @@ public class SemanticService
                     response.setSuperClasses(superClasses);
                     ontoRef.synchronizeReasoner();
                     recognition1.getBestRecognitionDescriptor().readSemantic();
-                /*
-                //check whether is actually working correctly
-                List<String> isFirstSupClassOf=computeIsFirstSuperClassOf(subClasses,ontoRef,recognition1);
-                recognition1.getBestRecognitionDescriptor().readSemantic();
-                List<String > firstSupClass= computeFirstSuperClass(recognition1,ontoRef);
-                System.out.println("first sup class \n" +firstSupClass);
-                System.out.println("is first sup class\n"+isFirstSupClassOf);
-                response.setFirstSuperClass(firstSupClass);
-                response.setIsFirstSuperClassOf(isFirstSupClassOf);
-                */
+                    //preparing the output for the episodic service
                     Atoms atoms = memory.fromSemanticToEpisodic(objects,ONTO_NAME);
+                    //map the output in a ros message
                     atoms.mapInROSMsg(node, response);
+                    //remove the ndividual used to recognize
                     ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
+                    //remove the individuals of geometri primitives
                     for (GeometricPrimitive i : objects)
                         ontoRef.removeIndividual(i.getInstance());
                     ontoRef.synchronizeReasoner();
@@ -132,15 +138,18 @@ public class SemanticService
                 //retrieval
                 else if (decision==2){
                     if(!request.getRetrieval().isEmpty()) {
+                        //definition of the retrieval descriptor
                         retrievalDescriptor retrievalDescriptor = new retrievalDescriptor(request.getRetrieval(), ontoRef);
                         List<String> ListRetrieval = new ArrayList<>();
+                        //getting the element that has been retrieved
                         ListRetrieval.addAll(retrievalDescriptor.getNameRetrieval());
+                        //update the times that forgot elements has been retrieved
                         retrievalDescriptor.updateTimeRetrievalForgotten();
+                        //remove the toBeForgot attribute to the elements that have been
+                        //forced to be retrieved
                         retrievalDescriptor.removeToBeForgot();
+                        //filling the response
                         response.setRetrievaled(ListRetrieval);
-                        //System.out.println("removing class");
-                        //ontoRef.removeClass(RETRIEVAL.SEMANTIC_RETRIEVAL_NAME);
-                        //ontoRef.saveOntology(ONTO_FILE);
                         response.setUserNoForget(retrievalDescriptor.getUserNoForget());
                         response.setResetCounter(retrievalDescriptor.getResetCounter());
 
@@ -151,31 +160,9 @@ public class SemanticService
                 }
                 //forgetting
                 else if (decision==3){
-                    //TODO check whether re classification occurs
-
-                    /*
-                    ontoRef.synchronizeReasoner();
-                    MORFullConcept scene0= new MORFullConcept("Scene0",ontoRef);
-                    scene0.readSemantic();
-                    response.setSceneName(scene0.getIndividualClassified().toString());MORFullConcept scene1= new MORFullConcept("Scene1",ontoRef);
-                    scene1.readSemantic();
-                    response.setResetCounter(Arrays.asList(scene1.getIndividualClassified().toString().split(" ")));
-
-                    MORFullConcept scene2= new MORFullConcept("Scene2",ontoRef);
-                    scene2.readSemantic();
-                    response.setUserNoForget(Arrays.asList(scene2.getIndividualClassified().toString().split(" ")));
-                    MORFullConcept scene3= new MORFullConcept("Scene3",ontoRef);
-                    scene3.readSemantic();
-                    response.setFirstSuperClass(Arrays.asList(scene3.getIndividualClassified().toString().split(" ")));
-                    MORFullConcept scene4= new MORFullConcept("Scene4",ontoRef);
-                    scene4.readSemantic();
-                    response.setIsFirstSuperClassOf(Arrays.asList(scene4.getIndividualClassified().toString().split(" ")));
-*/
-
-
                 }
                 //recognition
-                else if (decision==4){
+                else if (decision==4) {
                     // initialise objects
                     Set<GeometricPrimitive> objects = memory.fromPITtoSIT(request.getGeometricPrimitives(), ontoRef);
                     // add objects
@@ -197,78 +184,105 @@ public class SemanticService
 
                     // create scene and reason for recognition
                     SceneRepresentation recognition1 = new SceneRepresentation(objects, ontoRef);
-                    if(recognition1.shouldLearn()){
+                    if (recognition1.shouldLearn()) {
                         System.out.println("i have never seen something like this, i should learn it ");
-                    }
-                    else {
-                        String nameScene= recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length() + 1);
+                    } else {
+                        //if the element exists in the ontology
+                        String nameScene = recognition1.getBestRecognitionDescriptor().NameToString(ONTO_NAME.length() + 1);
+                        //check whether the element has been forgot
                         String individualName = FORGETTING.NAME_SEMANTIC_INDIVIDUAL + nameScene.replaceAll("Scene", "");
                         MORFullIndividual ind = new MORFullIndividual(individualName, ontoRef);
                         ind.readSemantic();
+                        //if the element has not been forgot
                         if (!ind.getLiteral(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT).parseBoolean()) {
                             System.out.println("Recognised with best confidence: " + recognition1.getRecognitionConfidence());
                             System.out.println("Best recognised class: " + recognition1.getBestRecognitionDescriptor());
                             System.out.println("Other recognised classes: " + recognition1.getSceneDescriptor().getTypeIndividual());
+                            //filling the response
                             response.setSceneName(nameScene);
-                            Atoms atoms = memory.fromSemanticToEpisodic(objects,ONTO_NAME);
+                            //preparing the output for the episodic service
+                            Atoms atoms = memory.fromSemanticToEpisodic(objects, ONTO_NAME);
+                            //map into Ros Msg
                             atoms.mapInROSMsg(node, response);
+                            //remove the individual used for recognition
                             ontoRef.removeIndividual(recognition1.getSceneDescriptor().getInstance());
+                            //remove the geometric primitives
+                            for (GeometricPrimitive i : objects)
+                                ontoRef.removeIndividual(i.getInstance());
+                            ontoRef.synchronizeReasoner();
+
                         }
-                        else{
-                                ind.readSemantic();
-                                float counter = ind.getLiteral(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT).parseFloat();
-                                float newCounter = 0;
-                                if (counter<1){
-                                    newCounter=counter+FORGETTING.INCREMENT_ONE;
-                                    if (newCounter>=1){
-                                        List<String> resetCounter= new ArrayList<>();
-                                        resetCounter.add(nameScene);
-                                        ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
-                                        ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
-                                        ind.writeSemantic();
-                                        response.setResetCounter(resetCounter);
-
-                                    }
-
+                        //if the elements has been forgot
+                        else {   //read the ontology
+                            ind.readSemantic();
+                            //read the counter value
+                            float counter = ind.getLiteral(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT).parseFloat();
+                            float newCounter = 0;
+                            //update the counter
+                            if (counter < 1) {
+                                newCounter = counter + FORGETTING.INCREMENT_ONE;
+                                //if the new counter value is bigger equal than one
+                                if (newCounter >= 1) {
+                                    //reset the counter in the score Ontology
+                                    List<String> resetCounter = new ArrayList<>();
+                                    resetCounter.add(nameScene);
+                                    //retrieved the element
+                                    ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
+                                    ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT, false, true);
+                                    ind.writeSemantic();
+                                    //filling the response
+                                    response.setResetCounter(resetCounter);
                                 }
-                                else if (counter<2 && counter>=1){
-                                    newCounter=counter+FORGETTING.INCREMENT_TWO;
-                                    if(newCounter>=2){
-                                        List<String> resetCounter= new ArrayList<>();
-                                        ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
-                                        ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
-                                        ind.writeSemantic();
-                                        resetCounter.add(nameScene);
-                                        response.setResetCounter(resetCounter);
-                                    }
 
+                            }
+                            //increment the counter
+                            else if (counter < 2 && counter >= 1) {
+                                newCounter = counter + FORGETTING.INCREMENT_TWO;
+                                //if the counter is bigger equal than 2
+                                if (newCounter >= 2) {
+                                    //Update the ontology to allow retrieval
+                                    List<String> resetCounter = new ArrayList<>();
+                                    ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
+                                    ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT, false, true);
+                                    ind.writeSemantic();
+                                    //reset the counters
+                                    resetCounter.add(nameScene);
+                                    //filling the response
+                                    response.setResetCounter(resetCounter);
                                 }
-                                else if (counter<3&&counter>=2){
-                                    newCounter=counter+FORGETTING.INCREMENT_THREE;
-                                    if(newCounter>=3){
-                                        List<String> userNoForget= new ArrayList<>();
-                                        ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
-                                        ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
-                                        ind.writeSemantic();
-                                        userNoForget.add(nameScene);
-                                        response.setUserNoForget(userNoForget);
-                                    }
+
+                            }
+                            //increment the counter
+                            else if (counter < 3 && counter >= 2) {
+                                newCounter = counter + FORGETTING.INCREMENT_THREE;
+                                //if the new counter is equal bigger than 3
+                                if (newCounter >= 3) {
+                                    //Update the ontology to allow retrieval and
+                                    //prevent the item to be again gorgot
+                                    List<String> userNoForget = new ArrayList<>();
+                                    ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
+                                    ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT, false, true);
+                                    ind.writeSemantic();
+                                    userNoForget.add(nameScene);
+                                    response.setUserNoForget(userNoForget);
                                 }
-                                ind.removeData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT);
-                                ind.addData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT,newCounter);
-                                ind.writeSemantic();
-                                ind.saveOntology(ONTO_FILE);
+                            }
+                            //update the ontology
+                            ind.removeData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT);
+                            ind.addData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT, newCounter);
+                            ind.writeSemantic();
+                            ind.saveOntology(ONTO_FILE);
                         }
-                        for (GeometricPrimitive i : objects)
-                            ontoRef.removeIndividual(i.getInstance());
-                        ontoRef.synchronizeReasoner();
+
                     }
                 }
+                //automatic forgetting
                else if (decision==0){
                     //forget and put user No Forget
                     for(String s :request.getDeleteSemantic()){
                         //todo delete
                     }
+                    //Update the ontology to prevent the elemnt forgot to be retrieved
                     for (String s : request.getToBeForget()){
                         MORFullIndividual toBeForget= new MORFullIndividual(FORGETTING.NAME_SEMANTIC_INDIVIDUAL + s.replaceAll("Scene", ""),ontoRef);
                         toBeForget.readSemantic();

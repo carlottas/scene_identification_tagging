@@ -27,9 +27,9 @@ import java.util.ArrayList;
 public interface ScoreJAVAInterface
 {
     /**
-     * Class which menage the semantic score initialization, update and removal;
+     * Class which manage the semantic score initialization, update and removal;
      */
-    public class SemanticScore implements SITBase,MemoryInterface {
+    class SemanticScore implements SITBase,MemoryInterface {
         private String Name;
         private List<String> firstSuperClass;
         private List<String> subClasses = new ArrayList<>();
@@ -100,11 +100,11 @@ public interface ScoreJAVAInterface
 
         /**
          * function which creates the semantic score item in the ontology, compute its score and link it to the subClasses,
-         * SuperClasses and Belonging Individuals, Also the superclasses' score are updated
+         * SuperClasses and Belonging Individuals, Also the superclasses' scores are updated
          */
         public void semanticInitialization() {
             // add the individual to the class
-            System.out.println("creating the semantic score individuals+"Name);
+            System.out.println("creating the semantic score individuals "+Name);
             ontoRef.synchronizeReasoner();
             scoreSemantic.readSemantic();
             scoreSemantic.addTypeIndividual(SCORE.SCORE_CLASS_SEMANTIC_SCORE);
@@ -143,17 +143,19 @@ public interface ScoreJAVAInterface
             for (String s : superClasses) {
                 scoreSemantic.addObject(SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF, s);
             }
+
             //adding obj property first super Class
-            for (String s : this.firstSuperClass) {
-                scoreSemantic.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, s);
-            }
-            for (String s : this.isFirstSuperCLassOf) {
-                MORFullIndividual ind = new MORFullIndividual(s, ontoRef);
-                ind.readSemantic();
-                ind.removeObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS);
-                ind.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, this.Name);
-                ind.writeSemantic();
-            }
+            // for (String s : this.firstSuperClass) {
+            //    scoreSemantic.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, s);
+            //}
+            //for (String s : this.isFirstSuperCLassOf) {
+            //   MORFullIndividual ind = new MORFullIndividual(s, ontoRef);
+            //   ind.readSemantic();
+            //   ind.removeObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS);
+            //   ind.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, this.Name);
+            //   ind.writeSemantic();
+
+            // }
             scoreSemantic.writeSemantic();
             ontoRef.synchronizeReasoner();
             scoreSemantic.saveOntology(SCORE.SCORE_FILE_PATH);
@@ -185,16 +187,16 @@ public interface ScoreJAVAInterface
             scoreSemantic.writeSemantic();
             //updating the score
             System.out.println("updating the score of "+Name);
+            float oldScore= scoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
             float newScore = computeScore(scoreSemantic);
             //updating the total score Semantic
             System.out.println("updating the total semantic score... ");
-            UpdateTotalSemanticScore(scoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), newScore);
+            UpdateTotalSemanticScore(oldScore, newScore);
             //update the superClasses List
             SuperClasses();
             //update superClasses Score
             System.out.println("update superclasses score...");
-            updateSuperClassScore(superClasses, scoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(),
-                    newScore);
+            updateSuperClassScore(superClasses,oldScore,newScore);
             //updating the score value;
             scoreSemantic.removeData(SCORE.SCORE_PROP_HAS_SCORE);
             scoreSemantic.addData(SCORE.SCORE_PROP_HAS_SCORE, newScore);
@@ -203,7 +205,6 @@ public interface ScoreJAVAInterface
             scoreSemantic.saveOntology(SCORE.SCORE_FILE_PATH);
 
         }
-
         /**
          * @return sum of the score of the subclasses
          */
@@ -233,19 +234,19 @@ public interface ScoreJAVAInterface
             //read the current state of the ontology
             ind.readSemantic();
             totalScoreSemantic.readSemantic();
-            totalScoreEpisodic.readSemantic();
             float scoreSubClasses;
             float scoreIndividual;
             int retrieval = ind.getLiteral(SCORE.SCORE_PROP_NUMBER_RETRIEVAL).parseInteger();
             int numberBelongingIndividual = ind.getLiteral(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL).parseInteger();
             int numberSubClasses = ind.getLiteral(SCORE.SCORE_PROP_NUMBER_SUB_CLASSES).parseInteger();
-
+            //if the number of SubClasses is equal to 0 then also the score of subclasses is equal to 0
             if (numberSubClasses == 0) {
                 scoreSubClasses = 0;
             } else {
                 scoreSubClasses = ind.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES).parseFloat() / numberSubClasses;
             }
-            // if the total episodic is equal to 0
+            // if there the number of individuals is equal to 0 then also the score of belonging individuals is equal
+            //to 0
             if (numberBelongingIndividual == 0) {
                 scoreIndividual = 0;
             } else {
@@ -299,18 +300,18 @@ public interface ScoreJAVAInterface
         public void UpdateTotalSemanticScore(float scoreComputed) {
             //read the current state of the total semnatic score
             totalScoreSemantic.readSemantic();
-            //reading the data property has value
-            float oldTotal = totalScoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_VALUE).parseFloat();
-            if (oldTotal == 0.0) {
-                oldTotal = scoreComputed;
+            //reading the data property "has value"
+            float Total = totalScoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_VALUE).parseFloat();
+            if (Total == 0.0) {
+                Total = scoreComputed;
             } else {
                 //change the value by adding the new score
-                oldTotal += scoreComputed;
+                Total += scoreComputed;
             }
             //change the dataproperty value
             totalScoreSemantic.removeData(SCORE.SCORE_PROP_HAS_VALUE);
             totalScoreSemantic.writeSemantic();
-            totalScoreSemantic.addData(SCORE.SCORE_PROP_HAS_VALUE, oldTotal);
+            totalScoreSemantic.addData(SCORE.SCORE_PROP_HAS_VALUE, Total);
             totalScoreSemantic.writeSemantic();
 
         }
@@ -322,8 +323,6 @@ public interface ScoreJAVAInterface
          * @param newScore of the semantic item modified
          */
         public void UpdateTotalSemanticScore(float oldScore, float newScore) {
-
-            System.out.println(totalScoreSemantic.toString());
             //read the current state of total semantic item
             totalScoreSemantic.readSemantic();
             //reading the value of hasValue dataproperty
@@ -350,8 +349,9 @@ public interface ScoreJAVAInterface
             if (classesNames.isEmpty()) {
                 return;
             }
-            //for all the string
+            //for all the superClasses
             for (String name : classesNames) {
+                //additional check in order not to analyze the wrong classes
                 if (!name.equals(CLASS.SCENE)) {
                     //define the MOR individual of such superclass
                     MORFullIndividual superClass = new MORFullIndividual(
@@ -360,6 +360,8 @@ public interface ScoreJAVAInterface
                     );
                     //read the ontology
                     superClass.readSemantic();
+                    //store the old score
+                    float oldScore = superClass.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
                     //update the subclasses score with the new one
                     float scoreSubClasses = superClass.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES).parseFloat();
                     scoreSubClasses -= scoreOld;
@@ -369,21 +371,19 @@ public interface ScoreJAVAInterface
                     superClass.writeSemantic();
                     //compute the new score
                     float newScore = computeScore(superClass);
-                    //store the old score
-                    float oldScore = superClass.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
                     //change the value of the data prop score
                     superClass.removeData(SCORE.SCORE_PROP_HAS_SCORE);
                     superClass.addData(SCORE.SCORE_PROP_HAS_SCORE, newScore);
                     //write the semantic
                     superClass.writeSemantic();
                     superClass.readSemantic();
+                    //update total semantic score
+                    UpdateTotalSemanticScore(oldScore, newScore);
                     //find the super classes of such element
                     MORAxioms.ObjectSemantics objProp = superClass.getObjectSemantics();
                     //check if there is any superclasses
                     List<String> classes = new ArrayList<>();
                     memory.objectPropertyValues(objProp, SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF, classes,SCORE.SCORE_IRI_ONTO);
-                    //update total semantic score
-                    UpdateTotalSemanticScore(oldScore, newScore);
                     superClass.saveOntology(SCORE.SCORE_FILE_PATH);
                     //update superclasses score
                     updateSuperClassScore(classes, oldScore, newScore);
@@ -400,11 +400,10 @@ public interface ScoreJAVAInterface
         public void updateSuperClassScore(List<String> setName, float score) {
             //if the set of string is empty hence there is no super class the functions
             //automatically returns
-
             if (setName.isEmpty()) {
                 return;
             }
-            //for all the string
+            //for all the superClasses
             for (String name : setName) {
                 //define the MOR individual of such superclass
                 MORFullIndividual superClass = new MORFullIndividual(
@@ -413,11 +412,14 @@ public interface ScoreJAVAInterface
                 );
                 //read the ontology
                 superClass.readSemantic();
+                //store the old score
+                float oldScore = superClass.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
                 //update the subclasses score with the new one
                 float scoreSubClasses = superClass.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES).parseFloat();
                 scoreSubClasses += score;
                 superClass.removeData(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES);
                 superClass.addData(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES, scoreSubClasses);
+                //update the number of subclasses
                 int numberSubClasses = superClass.getLiteral(SCORE.SCORE_PROP_NUMBER_SUB_CLASSES).parseInteger();
                 numberSubClasses++;
                 superClass.removeData(SCORE.SCORE_PROP_NUMBER_SUB_CLASSES);
@@ -425,34 +427,39 @@ public interface ScoreJAVAInterface
                 superClass.writeSemantic();
                 //compute the new score
                 float newScore = computeScore(superClass);
-                //store the old score
-                float oldScore = superClass.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
                 //change the value of the data prop score
                 superClass.removeData(SCORE.SCORE_PROP_HAS_SCORE);
                 superClass.addData(SCORE.SCORE_PROP_HAS_SCORE, newScore);
                 //write the semantic
                 superClass.writeSemantic();
                 superClass.readSemantic();
-                //find the super classes of such element
+                //update total semantic score
+                UpdateTotalSemanticScore(oldScore, newScore);
+                //find the super classes of the superClass
                 MORAxioms.ObjectSemantics objProp = superClass.getObjectSemantics();
                 //check if there is any subclasses
                 List<String> classes = new ArrayList<>();
                 memory.objectPropertyValues(objProp, SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF, classes,SCORE.SCORE_IRI_ONTO);
-                //update total semantic score
-                UpdateTotalSemanticScore(oldScore, newScore);
                 //update superclasses score
                 updateSuperClassScore(classes, oldScore, newScore);
             }
         }
 
+        /**
+         * FUnction which delete  the influence of the score item from its superClasses
+         */
         public void deleteFromSuperClasses() {
             for (String sup : this.superClasses) {
                 //declare the object
                 MORFullIndividual Sup = new MORFullIndividual(sup, ontoRef);
                 //read the current ontology state
                 Sup.readSemantic();
-                //remove the objcet actribut is superclass of
+                scoreSemantic.readSemantic();
+                //storing the old score value of the superClass
+                float oldScore= Sup.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
+                //remove the objectProperty is superclass of
                 Sup.removeObject(SCORE.SCORE_OBJ_PROP_IS_SUPER_CLASS_OF, this.Name);
+                scoreSemantic.removeObject(SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF,sup);
                 //update the number of subclass
                 int numberSubClasses = Sup.getLiteral(SCORE.SCORE_PROP_NUMBER_SUB_CLASSES).parseInteger();
                 numberSubClasses--;
@@ -463,9 +470,9 @@ public interface ScoreJAVAInterface
                 Sup.addData(SCORE.SCORE_PROP_NUMBER_SUB_CLASSES, numberSubClasses);
                 Sup.removeData(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES);
                 Sup.addData(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES, scoreSubClasses);
+                //updating the ontology
                 Sup.writeSemantic();
-                //storing old score
-                float oldScore= Sup.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
+                scoreSemantic.writeSemantic();
                 //compute the new score
                 float newScore = computeScore(Sup);
                 //update the semantic with the new score
@@ -491,22 +498,34 @@ public interface ScoreJAVAInterface
          * @param score value of its score
          */
         public void deleteEpisodicItem(String s, float score) {
+            //Syncronize reasoner
             ontoRef.synchronizeReasoner();
+            //read the current state of the ontology
             scoreSemantic.readSemantic();
+            //storing the old score value
+            float oldScore = scoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
+            //removing the object property hasIndividual
             scoreSemantic.removeObject(SCORE.SCORE_OBJ_PROP_HAS_INDIVIDUAL, s);
+            //update the number of belonging individual
             int numberOfBelongingIndividual = scoreSemantic.getLiteral(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL).parseInteger() - 1;
+            //update the score of belonging individual
             float scoreOfBelongingIndividual = scoreSemantic.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL).parseFloat() - score;
             scoreSemantic.removeData(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL);
             scoreSemantic.addData(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL, numberOfBelongingIndividual);
             scoreSemantic.removeData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL);
             scoreSemantic.addData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL, scoreOfBelongingIndividual);
+            //update the ontology
             scoreSemantic.writeSemantic();
+            //compute the new score
             float newScore = computeScore(scoreSemantic);
-            UpdateTotalSemanticScore(scoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), newScore);
-            updateSuperClassScore(superClasses, scoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), newScore);
+            //update the ontology
             scoreSemantic.removeData(SCORE.SCORE_PROP_HAS_SCORE);
             scoreSemantic.addData(SCORE.SCORE_PROP_HAS_SCORE, newScore);
             scoreSemantic.writeSemantic();
+            //update total semantic score
+            UpdateTotalSemanticScore(oldScore, newScore);
+            //update super classes score
+            updateSuperClassScore(superClasses, oldScore, newScore);
         }
 
         /**
@@ -516,97 +535,28 @@ public interface ScoreJAVAInterface
             ontoRef.synchronizeReasoner();
             //read the current ontology state
             scoreSemantic.readSemantic();
+            //storing the score value
+            float score=scoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
             //Remove its score from the total semantic score
-            UpdateTotalSemanticScore(scoreSemantic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), 0);
-            // if there is no super class
-            //if (firstSuperClass.size() == 1 && firstSuperClass.get(0).equals(CLASS.SCENE)) {
+            UpdateTotalSemanticScore(score, 0);
+            BelongingIndividual();
             //delete the belonging individuals
             for (String s : belongingIndividuals) {
-                //update the score of the first superClass
                 EpisodicScore ep = new EpisodicScore(s, ontoRef);
                 ep.forgetItem();
             }
-            //deleting fromt the superClasses
+            //deleting from the superClasses
             deleteFromSuperClasses();
             ontoRef.removeIndividual(this.Name);
-
             return  belongingIndividuals;
-            //}
-            /*
-            //if there exist the first class --> Hyp it is unique
-            else {
-                //All its individual will belong to the first superclass
-                //for all the individuals
-                for (String i : belongingIndividuals) {
-                    //declaration of the object
-                    EpisodicScore episodicScore = new EpisodicScore(i, ontoRef);
-                    episodicScore.changeSemanticItem(firstSuperClass.get(0));
-                }
-                UpdateFirstSuperClassScore();
-            }
-            //this is done even if there is no superclass
-            //REMOVE THE SCORE AND THE CLASS TO THE OTHER CLASSES
-            deleteFromSuperClasses();
-            // the classes of which it was the first superclass now will have its first superclass as first superclass
-            UpdateFirstSuperClass();
-            //now that all the individual have been associated to the super class one can delete the individual
-            ontoRef.synchronizeReasoner();
-            ontoRef.removeIndividual(this.Name);
-        }
-        */
-        }
-
-        /**
-         * update the fist super classes score once the element has been deleted
-         */
-        private void UpdateFirstSuperClassScore() {
-            MORFullIndividual firstSup = new MORFullIndividual(firstSuperClass.get(0), ontoRef);
-            //update the number of belonging individuals
-            int numberBelongingIndividual = firstSup.getLiteral(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL).parseInteger() +
-                    scoreSemantic.getLiteral(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL).parseInteger();
-            //update the score of belonging individuals
-            float scoreBelongingIndividual = firstSup.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL).parseFloat() +
-                    scoreSemantic.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL).parseFloat();
-            //compute the newScore
-            firstSup.removeData(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL);
-            firstSup.addData(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL, numberBelongingIndividual);
-            firstSup.removeData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL);
-            firstSup.addData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL, scoreBelongingIndividual);
-            firstSup.writeSemantic();
-            float newScore = computeScore(firstSup);
-            //update the total semantic score
-            UpdateTotalSemanticScore(firstSup.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), newScore);
-            //update superClasses score
-            List<String> superCl = new ArrayList<>();
-            memory.objectPropertyValues(firstSup.getObjectSemantics(), SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF, superCl,SCORE.SCORE_IRI_ONTO);
-            updateSuperClassScore(superCl, firstSup.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), newScore);
-            //update the ontology
-            firstSup.removeData(SCORE.SCORE_PROP_HAS_SCORE);
-            firstSup.addData(SCORE.SCORE_PROP_HAS_SCORE, newScore);
-            firstSup.writeSemantic();
-            firstSup.saveOntology(SCORE.SCORE_FILE_PATH);
-        }
-
-        private void UpdateFirstSuperClass() {
-            //declaration of the object
-            for (String s : this.isFirstSuperCLassOf) {
-                MORFullIndividual subCl = new MORFullIndividual(s,
-                        ontoRef);
-                //read the current ontology state
-                subCl.readSemantic();
-                //update the first superclass object property
-                subCl.removeObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, this.Name);
-                subCl.addObject(SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, firstSuperClass.get(0));
-                //write the ontology
-                subCl.writeSemantic();
-            }
-
         }
 
         /**
          * function which update the object list of belonging individuals
          */
         private void BelongingIndividual() {
+            belongingIndividuals.clear();
+            scoreSemantic.readSemantic();
             memory.objectPropertyValues(scoreSemantic.getObjectSemantics(), SCORE.SCORE_OBJ_PROP_HAS_INDIVIDUAL, belongingIndividuals,SCORE.SCORE_IRI_ONTO);
 
         }
@@ -615,6 +565,8 @@ public interface ScoreJAVAInterface
          * function which update the object list of super classes
          */
         private void SuperClasses() {
+            superClasses.clear();
+            scoreSemantic.readSemantic();
             memory.objectPropertyValues(scoreSemantic.getObjectSemantics(), SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF, superClasses,SCORE.SCORE_IRI_ONTO);
             superClasses.remove(CLASS.SCENE);
         }
@@ -623,6 +575,8 @@ public interface ScoreJAVAInterface
          * function which update the object list of subclasses
          */
         private void SubClasses() {
+            subClasses.clear();
+            scoreSemantic.readSemantic();
             memory.objectPropertyValues(scoreSemantic.getObjectSemantics(), SCORE.SCORE_OBJ_PROP_IS_SUPER_CLASS_OF, subClasses,SCORE.SCORE_IRI_ONTO);
         }
 
@@ -630,7 +584,7 @@ public interface ScoreJAVAInterface
          * function which update the Object first super class name
          */
         private void FirstSuperClass() {
-
+            scoreSemantic.readSemantic();
             memory.objectPropertyValues(scoreSemantic.getObjectSemantics(), SCORE.SCORE_OBJ_PROP_FIRST_SUPERCLASS, this.firstSuperClass,SCORE.SCORE_IRI_ONTO);
         }
 
@@ -638,11 +592,9 @@ public interface ScoreJAVAInterface
          * function which update the Object first superClass NAME
          */
         private void IsFirstSuperClassOf() {
-
+            scoreSemantic.readSemantic();
             memory.objectPropertyValues(scoreSemantic.getObjectSemantics(), SCORE.SCORE_OBJ_PROP_IS_FIRST_SUPER_CLASS_OF,
                     isFirstSuperCLassOf,SCORE.SCORE_IRI_ONTO);
-
-
         }
 
         /**
@@ -715,7 +667,10 @@ public interface ScoreJAVAInterface
 
     }
 
-    public class EpisodicScore implements SITBase,MemoryInterface {
+    /**
+     * Class which manage the Episodic score initialization, update and removal;
+     */
+   class EpisodicScore implements SITBase,MemoryInterface {
         private String Name;
         private SemanticScore SemanticItem;
         MORFullIndividual scoreEpisodic;
@@ -741,7 +696,6 @@ public interface ScoreJAVAInterface
             SemanticItem = new SemanticScore(SemanticName, ontoRef);
             this.ontoRef = ontoRef;
             this.addTime = addTime;
-            episodicInitialization();
         }
 
         /**
@@ -766,9 +720,6 @@ public interface ScoreJAVAInterface
         public void episodicInitialization() {
             scoreEpisodic.readSemantic();
             scoreEpisodic.addTypeIndividual(SCORE.SCORE_CLASS_EPISODIC_SCORE);
-            scoreEpisodic.writeSemantic();
-            scoreEpisodic.readSemantic();
-            //assertSemantic();
             // add the corresponding data properties
             System.out.println("added individual to the class " + SCORE.SCORE_CLASS_EPISODIC_SCORE);
             scoreEpisodic.addData(SCORE.SCORE_PROP_NUMBER_EPISODIC_RETRIEVAL, 1);
@@ -790,10 +741,9 @@ public interface ScoreJAVAInterface
             //write the semantic
             scoreEpisodic.writeSemantic();
             scoreEpisodic.readSemantic();
-            System.out.println("added data property...");
-            scoreEpisodic.writeSemantic();
-            System.out.println("added score property...");
+            //update the total episodic score
             updateTotalEpisodicScore(scoreComputed);
+            //update the semantic score from the individual
             System.out.println("updating semantic from individual...");
             updateSemanticFromIndividual(Name, scoreComputed);
             ontoRef.synchronizeReasoner();
@@ -804,17 +754,22 @@ public interface ScoreJAVAInterface
          * function which update the episodic score if the episodic item has been retrieved
          */
         public void episodicRetrieval() {
+            //reading the ontology
             scoreEpisodic.readSemantic();
+            //store the score value
+            float oldScore= scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
+            //updating number retrievals
             int numberEpisodicRetrieval = scoreEpisodic.getLiteral(
                     SCORE.SCORE_PROP_NUMBER_EPISODIC_RETRIEVAL).parseInteger();
             numberEpisodicRetrieval++;
+            //computing the new score
             float newScore = computeScore(scoreEpisodic.getLiteral(SCORE.SCORE_PROP_NUMBER_SEMANTIC_RETRIEVAL).parseInteger(),
                     numberEpisodicRetrieval);
-            updateTotalEpisodicScore(scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(),
-                    newScore);
-            System.out.println("old score individual episodic " + scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat());
-            System.out.println("new score individual episodic" + newScore);
-            updateSemanticFromIndividual(scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), newScore);
+            //updating the total episodic score
+            updateTotalEpisodicScore(oldScore,newScore);
+            //update the semantic item
+            updateSemanticFromIndividual(oldScore, newScore);
+            //update the ontology
             scoreEpisodic.removeData(SCORE.SCORE_PROP_NUMBER_EPISODIC_RETRIEVAL);
             scoreEpisodic.addData(SCORE.SCORE_PROP_NUMBER_EPISODIC_RETRIEVAL, numberEpisodicRetrieval);
             scoreEpisodic.removeData(SCORE.SCORE_PROP_HAS_SCORE);
@@ -824,13 +779,20 @@ public interface ScoreJAVAInterface
         }
 
         /**
-         * fpnction which forget the episodic item hence delete it from the ontology
+         * function which forget the episodic item hence delete it from the ontology
          */
         public void forgetItem() {
+            //reading the ontology
+            scoreEpisodic.readSemantic();
+            //update total episodic score
             updateTotalEpisodicScore(scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), 0);
+            //update semantic item
             SemanticItem.deleteEpisodicItem(this.Name, scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat());
+            //remove individual
             ontoRef.removeIndividual(this.Name);
             ontoRef.synchronizeReasoner();
+            //saving the ontology
+            ontoRef.saveOntology(SCORE.SCORE_FILE_PATH);
 
         }
 
@@ -840,6 +802,8 @@ public interface ScoreJAVAInterface
          */
         public void episodicSemanticRetrieval() {
             scoreEpisodic.readSemantic();
+            //storing the old score value
+            float oldScore = scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
             //changing the number of semantic retrieval
             int semanticRetrieval = scoreEpisodic.getLiteral(SCORE.SCORE_PROP_NUMBER_SEMANTIC_RETRIEVAL).parseInteger();
             semanticRetrieval++;
@@ -848,13 +812,14 @@ public interface ScoreJAVAInterface
                     semanticRetrieval, scoreEpisodic.getLiteral(SCORE.SCORE_PROP_NUMBER_EPISODIC_RETRIEVAL).parseInteger());
 
             //update the total semantic score
-            updateTotalEpisodicScore(scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), newScore);
+            updateTotalEpisodicScore(oldScore, newScore);
             //update the score of the classes
-            updateSemanticFromIndividual(scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), newScore);
+            updateSemanticFromIndividual(oldScore, newScore);
             scoreEpisodic.removeData(SCORE.SCORE_PROP_NUMBER_SEMANTIC_RETRIEVAL);
             scoreEpisodic.addData(SCORE.SCORE_PROP_NUMBER_SEMANTIC_RETRIEVAL, semanticRetrieval);
             scoreEpisodic.removeData(SCORE.SCORE_PROP_HAS_SCORE);
             scoreEpisodic.addData(SCORE.SCORE_PROP_HAS_SCORE, newScore);
+            //update the ontology
             scoreEpisodic.writeSemantic();
             scoreEpisodic.saveOntology(SCORE.SCORE_FILE_PATH);
         }
@@ -896,9 +861,12 @@ public interface ScoreJAVAInterface
          * @param score value of the score of the new episodic item
          */
         public void updateTotalEpisodicScore(float score) {
+            //reading the ontology
             totalScoreEpisodic.readSemantic();
+            //update the total
             float total = totalScoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_VALUE).parseFloat();
             total += score;
+            //update the ontology
             totalScoreEpisodic.removeData(SCORE.SCORE_PROP_HAS_VALUE);
             totalScoreEpisodic.addData(SCORE.SCORE_PROP_HAS_VALUE, total);
             totalScoreEpisodic.writeSemantic();
@@ -912,11 +880,13 @@ public interface ScoreJAVAInterface
          * @param newScore new score of the episodic item
          */
         public void updateTotalEpisodicScore(float oldScore, float newScore) {
-
+            //reading the ontology
             totalScoreEpisodic.readSemantic();
+            //update the total
             float total = totalScoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_VALUE).parseFloat();
             total -= oldScore;
             total += newScore;
+            //update the ontology
             totalScoreEpisodic.removeData(SCORE.SCORE_PROP_HAS_VALUE);
             totalScoreEpisodic.addData(SCORE.SCORE_PROP_HAS_VALUE, total);
             totalScoreEpisodic.writeSemantic();
@@ -931,24 +901,36 @@ public interface ScoreJAVAInterface
          * @param Score        score of the item
          */
         public void updateSemanticFromIndividual(String episodicName, float Score) {
+            //taking the ontological individual
             MORFullIndividual semanticIndividual = SemanticItem.getScoreSemantic();
+            //reading the ontology
             semanticIndividual.readSemantic();
+            //storing the old score
+            float oldScoreSemantic= semanticIndividual.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
+            //updating score Belonging individuals
             float scoreBelongingIndividual = semanticIndividual.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL).parseFloat();
             scoreBelongingIndividual += Score;
             semanticIndividual.removeData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL);
             semanticIndividual.addData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL, scoreBelongingIndividual);
+            //update number belonging individuals
             int numberBelongingIndividual = semanticIndividual.getLiteral(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL).parseInteger();
             numberBelongingIndividual++;
             semanticIndividual.removeData(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL);
             semanticIndividual.addData(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL, numberBelongingIndividual);
+            //update the ontology
             semanticIndividual.writeSemantic();
+            semanticIndividual.readSemantic();
+            //computing the new score
             float newScoreSemantic = SemanticItem.computeScore(semanticIndividual);
-            SemanticItem.UpdateTotalSemanticScore(semanticIndividual.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), newScoreSemantic);
-            List<String> classes = new ArrayList<>();
-            memory.objectPropertyValues(semanticIndividual.getObjectSemantics(), SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF, classes,SCORE.SCORE_IRI_ONTO);
-            SemanticItem.updateSuperClassScore(classes,
-                    semanticIndividual.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(),
+            //update total semantic score
+            SemanticItem.UpdateTotalSemanticScore(oldScoreSemantic, newScoreSemantic);
+            //updating all the relations
+            SemanticItem.updateAllRelations();
+            //updating superClass score
+            SemanticItem.updateSuperClassScore(SemanticItem.getSuperClasses(),
+                    oldScoreSemantic,
                     newScoreSemantic);
+            //updating hte ontology
             semanticIndividual.removeData(SCORE.SCORE_PROP_HAS_SCORE);
             semanticIndividual.addData(SCORE.SCORE_PROP_HAS_SCORE, newScoreSemantic);
             semanticIndividual.addObject(SCORE.SCORE_OBJ_PROP_HAS_INDIVIDUAL, episodicName);
@@ -963,83 +945,45 @@ public interface ScoreJAVAInterface
          * @param newScore new score of the episodic item
          */
         public void updateSemanticFromIndividual(float oldScore, float newScore) {
-            System.out.println("IMPORTANTE dentro update semantic from individual");
+            //taking the ontological individual which described the semantic score
             MORFullIndividual semanticIndividual = SemanticItem.getScoreSemantic();
+            //read the  ontology
             semanticIndividual.readSemantic();
-            System.out.println("semantic item ");
-            System.out.println(semanticIndividual.toString());
+            //storing the old score value
+            float oldSemanticScore = semanticIndividual.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
+            //update scoreBelonginIndividual
             float scoreBelongingIndividual = semanticIndividual.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL).parseFloat();
-            System.out.println("IMPORTANTE \n\n\n\n\n");
-            System.out.println("before changing the score " + scoreBelongingIndividual);
             scoreBelongingIndividual -= oldScore;
             scoreBelongingIndividual += newScore;
-            System.out.println("after changing the score " + scoreBelongingIndividual);
             semanticIndividual.removeData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL);
             semanticIndividual.addData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL, scoreBelongingIndividual);
             semanticIndividual.writeSemantic();
             semanticIndividual.saveOntology(SCORE.SCORE_FILE_PATH);
-            System.out.println("Semantic Item before calling the compute score\n" + semanticIndividual.toString());
+            //computing the new score
             float newScoreSemantic = SemanticItem.computeScore(semanticIndividual.getLiteral(SCORE.SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL).parseInteger(),
                     semanticIndividual.getLiteral(SCORE.SCORE_PROP_NUMBER_SUB_CLASSES).parseInteger(),
                     semanticIndividual.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL).parseFloat(),
                     semanticIndividual.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_SUB_CLASSES).parseFloat(),
                     semanticIndividual.getLiteral(SCORE.SCORE_PROP_NUMBER_RETRIEVAL).parseInteger());
-            System.out.println("NewScore " + newScoreSemantic);
-
-            SemanticItem.UpdateTotalSemanticScore(semanticIndividual.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), newScoreSemantic);
-            List<String> classes = new ArrayList<>();
-            memory.objectPropertyValues(semanticIndividual.getObjectSemantics(), SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF, classes,SCORE.SCORE_IRI_ONTO);
-            SemanticItem.updateSuperClassScore(classes, semanticIndividual.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(),
-                    newScoreSemantic);
+            //updating the ontology with the new score
             semanticIndividual.removeData(SCORE.SCORE_PROP_HAS_SCORE);
             semanticIndividual.addData(SCORE.SCORE_PROP_HAS_SCORE, newScoreSemantic);
             semanticIndividual.writeSemantic();
             semanticIndividual.saveOntology(SCORE.SCORE_FILE_PATH);
-        }
-
-        /**
-         * Function which update the semantic score in case
-         * the episodic individual have changed values
-         *
-         * @param s        name of the semantic item
-         * @param oldScore old score of the episodic item
-         * @param newScore new score of the episodic item
-         */
-        public void updateSemanticFromIndividual(String s, float oldScore, float newScore) {
-            MORFullIndividual semanticIndividual = new MORFullIndividual(s, ontoRef);
-            semanticIndividual.readSemantic();
-            float scoreBelongingIndividual = semanticIndividual.getLiteral(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL).parseFloat();
-            scoreBelongingIndividual -= oldScore;
-            scoreBelongingIndividual += newScore;
-            semanticIndividual.removeData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL);
-            semanticIndividual.addData(SCORE.SCORE_PROP_SCORE_SUM_BELONGING_INDIVIDUAL, scoreBelongingIndividual);
-            semanticIndividual.writeSemantic();
-            float newScoreSemantic = SemanticItem.computeScore(semanticIndividual);
-            SemanticItem.UpdateTotalSemanticScore(semanticIndividual.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), newScoreSemantic);
-            List<String> classes = new ArrayList<>();
-            memory.objectPropertyValues(semanticIndividual.getObjectSemantics(), SCORE.SCORE_OBJ_PROP_IS_SUB_CLASS_OF, classes,SCORE.SCORE_IRI_ONTO);
-            SemanticItem.updateSuperClassScore(classes, semanticIndividual.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(),
+            //updating the total semantic score
+            SemanticItem.UpdateTotalSemanticScore(oldSemanticScore, newScoreSemantic);
+            //update the superClasses
+            SemanticItem.updateAllRelations();
+            SemanticItem.updateSuperClassScore(SemanticItem.getSuperClasses(),oldSemanticScore,
                     newScoreSemantic);
-            semanticIndividual.removeData(SCORE.SCORE_PROP_HAS_SCORE);
-            semanticIndividual.addData(SCORE.SCORE_PROP_HAS_SCORE, newScoreSemantic);
-            semanticIndividual.writeSemantic();
         }
 
-        /**
-         * change the Semantic Item which the episodic item belongs to
-         *
-         * @param newSemanticItem new semantic item
-         */
-        public void changeSemanticItem(String newSemanticItem) {
-            scoreEpisodic.readSemantic();
-            scoreEpisodic.removeData(SCORE.SCORE_OBJ_PROP_IS_INDIVIDUAL_OF);
-            scoreEpisodic.addData(SCORE.SCORE_OBJ_PROP_IS_INDIVIDUAL_OF, newSemanticItem);
-            scoreEpisodic.writeSemantic();
-            SemanticItem = new SemanticScore(newSemanticItem, ontoRef);
-        }
     }
 
-    public class Forgetting implements SITBase,MemoryInterface {
+    /**
+     * Class which manage the forgetting process
+     */
+    class Forgetting implements SITBase,MemoryInterface {
         private MORFullConcept forgotClassSemantic;
         private MORFullConcept toBeForgottenClassSemantic;
         private MORFullConcept lowScoreClassSemantic;
@@ -1079,6 +1023,9 @@ public interface ScoreJAVAInterface
 
         }
 
+        /**
+         * Function which deletes the episodic item stored in the forgot episodic List
+         */
         public void deleteEpisodic() {
             //for each episodic element that must be deleted
             for (String name : forgotEpisodic) {
@@ -1088,6 +1035,9 @@ public interface ScoreJAVAInterface
             }
         }
 
+        /**
+         * Function which deletes the semantic item stored in the forgot semantic list
+         */
         public void deleteSemantic() {
             //for all the semantic item that must be deleted
             for (String s : forgotSemantic) {
@@ -1096,6 +1046,11 @@ public interface ScoreJAVAInterface
             }
         }
 
+        /**
+         * Function which update the counters related to
+         * TimesToBeForgotten
+         * TimesLowScore
+         */
         public void updateTimes() {
             updateTimes(toBeForgottenEpisodic, SCORE.SCORE_PROP_TIMES_TO_BE_FORGOTTEN);
             updateTimes(toBeForgottenSemantic, SCORE.SCORE_PROP_TIMES_TO_BE_FORGOTTEN);
@@ -1105,114 +1060,114 @@ public interface ScoreJAVAInterface
 
         }
 
+        /**
+         * FUnction which read the ontology and update the list of ToBeForgotten Semantic and Episodi,
+         * LowScore semantic and Episodic and Forgot Semantic and Episodic
+         */
         public void updateLists() {
+            //syncronize the reasoner
             ontoRef.synchronizeReasoner();
+            //clear the Lists
             lowScoreEpisodic.clear();
             lowScoreSemantic.clear();
             forgotEpisodic.clear();
             forgotSemantic.clear();
             toBeForgottenEpisodic.clear();
             toBeForgottenSemantic.clear();
+            //read the ontology
             forgotClassSemantic.readSemantic();
+            //get the individual classified
             MORAxioms.Individuals indsForgotSemantic = forgotClassSemantic.getIndividualClassified();
-            System.out.println(forgotClassSemantic);
+            //Adding the individual to the list
             for (OWLNamedIndividual i : indsForgotSemantic) {
                 forgotSemantic.add(i.toStringID().substring(SCORE.SCORE_IRI_ONTO.length() + 1));
             }
 
+            //read the ontology
             forgotClassEpisodic.readSemantic();
-            System.out.println(forgotClassEpisodic);
+            //getting the individual classified
             MORAxioms.Individuals indsForgotEpisodic = forgotClassEpisodic.getIndividualClassified();
+            //adding the individuals to the list
             for (OWLNamedIndividual i : indsForgotEpisodic) {
                 forgotEpisodic.add(i.toStringID().substring(SCORE.SCORE_IRI_ONTO.length() + 1));
             }
-
+            //reading the ontology
             toBeForgottenClassEpisodic.readSemantic();
-            System.out.println(toBeForgottenClassEpisodic);
+            //Getting the individual classified
             MORAxioms.Individuals indsForgottenEpisodic = toBeForgottenClassEpisodic.getIndividualClassified();
+            //adding the individuals to the List
             for (OWLNamedIndividual i : indsForgottenEpisodic) {
                 toBeForgottenEpisodic.add(i.toStringID().substring(SCORE.SCORE_IRI_ONTO.length() + 1));
             }
-
+            //readint the ontology
             toBeForgottenClassSemantic.readSemantic();
-            System.out.println(toBeForgottenClassSemantic);
+            //Getting the individuals classified
             MORAxioms.Individuals indsForgottenSemantic = toBeForgottenClassSemantic.getIndividualClassified();
+            //adding the individuals to the list
             for (OWLNamedIndividual i : indsForgottenSemantic) {
                 toBeForgottenSemantic.add(i.toStringID().substring(SCORE.SCORE_IRI_ONTO.length() + 1));
             }
-
+            //reading the ontology
             lowScoreClassEpisodic.readSemantic();
-            System.out.println(lowScoreClassEpisodic);
+            //getting the individual classified
             MORAxioms.Individuals indsLowScoreEpisodic = lowScoreClassEpisodic.getIndividualClassified();
-            System.out.println(indsLowScoreEpisodic);
+            //adding them to the List
             for (OWLNamedIndividual i : indsLowScoreEpisodic) {
                 lowScoreEpisodic.add(i.toStringID().substring(SCORE.SCORE_IRI_ONTO.length() + 1));
             }
-
-            lowScoreClassSemantic.readSemantic();
-            System.out.println(lowScoreClassSemantic);
+            //readint the ontology
+           lowScoreClassSemantic.readSemantic();
+            //getting the individual classified
             MORAxioms.Individuals indsLowScoreSemantic = lowScoreClassSemantic.getIndividualClassified();
-            System.out.println(indsLowScoreSemantic);
+            //Affing the individuals to the list
             for (OWLNamedIndividual i : indsLowScoreSemantic) {
                 lowScoreSemantic.add(i.toStringID().substring(SCORE.SCORE_IRI_ONTO.length() + 1));
             }
             //removing the common elements to the lists
-            System.out.println("important, !!!!!!!!!!!Before removing common elements");
-            System.out.println("\n \n " +lowScoreSemantic);
-            System.out.println("\n \n " +lowScoreEpisodic);
-            System.out.println("\n \n " +toBeForgottenSemantic);
-            System.out.println("\n \n " +toBeForgottenEpisodic);
-            System.out.println("\n \n " +forgotEpisodic);
-            System.out.println("\n \n " +forgotSemantic);
-
             List<String> commonElementsSemanticLowScore= new ArrayList<>();
             commonElementsSemanticLowScore.addAll(toBeForgottenSemantic);
             commonElementsSemanticLowScore.retainAll(lowScoreSemantic);
-            System.out.println("common elements tobeforgotten low score semantic \n"+commonElementsSemanticLowScore);
             lowScoreSemantic.removeAll(commonElementsSemanticLowScore);
 
             List<String> commonElementsEpisodicLowScore= new ArrayList<>();
             commonElementsEpisodicLowScore.addAll(toBeForgottenEpisodic);
             commonElementsEpisodicLowScore.retainAll(lowScoreEpisodic);
-            System.out.println("common elements tobeforgotten low score episodic \n"+commonElementsEpisodicLowScore);
             lowScoreEpisodic.removeAll(commonElementsEpisodicLowScore);
 
 
             List<String> commonElementsSemantic= new ArrayList<>();
             commonElementsSemantic.addAll(toBeForgottenSemantic);
             commonElementsSemantic.retainAll(forgotSemantic);
-            System.out.println("common elements forgot tobeforgot semantic \n"+commonElementsSemantic);
             toBeForgottenSemantic.removeAll(commonElementsSemantic);
 
             List<String> commonElementsEpisodic= new ArrayList<>();
             commonElementsEpisodic.addAll(toBeForgottenEpisodic);
             commonElementsEpisodic.retainAll(forgotEpisodic);
-            System.out.println("common elements forgot tobeforgot episodic \n"+commonElementsEpisodic);
             toBeForgottenEpisodic.removeAll(commonElementsEpisodic);
-
-            //removing the common elements to the lists
-            System.out.println("important, !!!!!!!!!!!After removing common elements");
-            System.out.println("\n \n low Score Semantic " +lowScoreSemantic);
-            System.out.println("\n \n low Score Episoid " +lowScoreEpisodic);
-            System.out.println("\n \n to Be forgotten Semantic" +toBeForgottenSemantic);
-            System.out.println("\n \n to Be forgotten Episodic" +toBeForgottenEpisodic);
-            System.out.println("\n \n forgot Episodic " +forgotEpisodic);
-            System.out.println("\n \n forgot Semantic" +forgotSemantic);
-
         }
 
+        /**
+         * Function which update the counters
+         * @param names  Name of the item whom coutners must be update
+         * @param Property  Name of the property which stores the counter information
+         */
         public void updateTimes(List<String> names, String Property) {
             if (names.isEmpty()) {
                 System.out.println("nothing to update");
                 return;
             }
+            //for all the items
             for (String s : names) {
+                //definition of the ontological individual
                 MORFullIndividual ind = new MORFullIndividual(s,
                         ontoRef);
+                //read the ontology
                 ind.readSemantic();
+                //udpate the counter
                 int number = ind.getLiteral(
                         Property).parseInteger();
                 number++;
+                //update the ontology
                 ind.removeData(Property);
                 ind.addData(Property, number);
                 ind.writeSemantic();
@@ -1247,7 +1202,11 @@ public interface ScoreJAVAInterface
 
 
     }
-    public class ScoreCounter implements SITBase,MemoryInterface {
+
+    /**
+     * Class which define the score counter item
+     */
+    class ScoreCounter implements SITBase,MemoryInterface {
 
         private String scoreName;
         private float scoreValue;
@@ -1269,9 +1228,6 @@ public interface ScoreJAVAInterface
         public ScoreCounter(String name) {
             this.scoreName = name;
         }
-        /**
-         * @return the type of this object (described as an ontological class).
-         */
         public String getScoreName() {
             return scoreName;
         }
@@ -1314,8 +1270,16 @@ public interface ScoreJAVAInterface
 
 
     }
-    public class ScoreCounterArray extends HashSet<ScoreCounter> implements SITBase,MemoryInterface {
 
+    /**
+     * CLass which implements the score counter arrays
+     */
+    class ScoreCounterArray extends HashSet<ScoreCounter> implements SITBase,MemoryInterface {
+        /**
+         * Function which allows the ros mapping
+         * @param node
+         * @return List of sit_msgs.ScoreCOunter
+         */
         public ArrayList<sit_msgs.ScoreCounter> mapInROSMsg(ConnectedNode node){
             ArrayList<sit_msgs.ScoreCounter> rosToBeForgettingArray= new ArrayList<sit_msgs.ScoreCounter>();
             for ( ScoreCounter s : this){
