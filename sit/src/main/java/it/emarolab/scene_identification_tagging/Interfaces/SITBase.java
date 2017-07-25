@@ -568,12 +568,13 @@ public interface SITBase {
         String THIRTY_MINUTES_INDIVIDUAL="ThirtyMinutes";
         String HAS_TIME_CLOCK="has_time";
         String NO_TIME="noTime";
+        float DIVISION_TO_FIND_HOUR=(float)3.6*(float)Math.pow(10.0,6);
     }
     interface SCORE{
         String SCORE_ONTO_NAME="score-ontology";
         String SCORE_FILE_PATH="../catkin_ws/src/scene_identification_tagging/resources/t_box/carlotta/score-ontology.owl";
         String SCORE_IRI_ONTO="http://www.semanticweb.org/carlotta-sartore/scoreOntology";
-
+        String SCORE_PROP_TIME_BEGINNING="timeBeginning";
         String SCORE_PROP_HAS_TIME="hasTime";
         String SCORE_PROP_HAS_VALUE="hasValue";
         String SCORE_PROP_NUMBER_BELONGING_INDIVIDUAL="NumberBelongingIndividual";
@@ -623,8 +624,10 @@ public interface SITBase {
         double SCORE_SEMANTIC_WEIGHT_3=0.15;
         double SCORE_SEMANTIC_WEIGHT_4=0.15;
         double SCORE_SEMANTIC_WEIGHT_5=0.4;
-        double SCORE_EPISODIC_WEIGHT_1=0.4;
+        //todo you have changed it
+        double SCORE_EPISODIC_WEIGHT_1=0.2;
         double SCORE_EPISODIC_WEIGHT_2=0.6;
+        double SCORE_EPISODIC_WEIGHT_3=0.2;
 
     }
     interface FORGETTING{

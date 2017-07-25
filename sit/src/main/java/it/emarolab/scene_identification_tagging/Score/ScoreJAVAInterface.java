@@ -678,6 +678,7 @@ public interface ScoreJAVAInterface
         MORFullIndividual totalScoreEpisodic;
         boolean addTime = true;
         private Long time = System.currentTimeMillis();
+        private Long timeBeginning ;
         OWLReferences ontoRef;
 
         /**
@@ -695,6 +696,9 @@ public interface ScoreJAVAInterface
             totalScoreEpisodic = new MORFullIndividual(SCORE.SCORE_INDIVIDUAL_TOTAL_EPISODIC,
                     ontoRef);
             SemanticItem = new SemanticScore(SemanticName, ontoRef);
+            MORFullIndividual clock = new MORFullIndividual(TIME.CLOCK, ontoRef);
+            clock.readSemantic();
+            timeBeginning = (long) clock.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
             this.ontoRef = ontoRef;
             this.addTime = addTime;
         }
@@ -711,6 +715,9 @@ public interface ScoreJAVAInterface
             this.ontoRef = ontoRef;
             scoreEpisodic = new MORFullIndividual(Name, ontoRef);
             totalScoreEpisodic = new MORFullIndividual(SCORE.SCORE_INDIVIDUAL_TOTAL_EPISODIC, ontoRef);
+            MORFullIndividual clock = new MORFullIndividual(TIME.CLOCK, ontoRef);
+            clock.readSemantic();
+            timeBeginning = (long) clock.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
             UpdateSemanticItem();
 
         }
@@ -736,7 +743,7 @@ public interface ScoreJAVAInterface
             scoreEpisodic.addObject(SCORE.SCORE_OBJ_PROP_IS_INDIVIDUAL_OF, SemanticItem.getName());
             System.out.println("setting  object property...");
             //compute the score and add it to the individual
-            float scoreComputed = computeScore(0, 1);
+            float scoreComputed = computeScore(0, 1,time,timeBeginning);
             scoreEpisodic.addData(SCORE.SCORE_PROP_HAS_SCORE, scoreComputed);
             System.out.println("setting and added score...");
             //write the semantic
@@ -765,7 +772,7 @@ public interface ScoreJAVAInterface
             numberEpisodicRetrieval++;
             //computing the new score
             float newScore = computeScore(scoreEpisodic.getLiteral(SCORE.SCORE_PROP_NUMBER_SEMANTIC_RETRIEVAL).parseInteger(),
-                    numberEpisodicRetrieval);
+                   numberEpisodicRetrieval,(long) scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_TIME).parseFloat(),timeBeginning);
             //updating the total episodic score
             updateTotalEpisodicScore(oldScore,newScore);
             //update the semantic item
@@ -810,7 +817,8 @@ public interface ScoreJAVAInterface
             semanticRetrieval++;
             //compute the new score
             float newScore = computeScore(
-                    semanticRetrieval, scoreEpisodic.getLiteral(SCORE.SCORE_PROP_NUMBER_EPISODIC_RETRIEVAL).parseInteger());
+                    semanticRetrieval, scoreEpisodic.getLiteral(SCORE.SCORE_PROP_NUMBER_EPISODIC_RETRIEVAL).parseInteger(),
+                    (long)scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_TIME).parseFloat(),timeBeginning);
 
             //update the total semantic score
             updateTotalEpisodicScore(oldScore, newScore);
@@ -849,9 +857,9 @@ public interface ScoreJAVAInterface
          * @return episodic score
          */
         private float computeScore(int semantic_retrieval,
-                                   int episodic_retrieval) {
+                                   int episodic_retrieval,long time,long timeBeginning) {
             return ((float) (SCORE.SCORE_EPISODIC_WEIGHT_1 * semantic_retrieval +
-                    SCORE.SCORE_EPISODIC_WEIGHT_2 * episodic_retrieval));
+                    SCORE.SCORE_EPISODIC_WEIGHT_2 * episodic_retrieval+SCORE.SCORE_EPISODIC_WEIGHT_3*((time-timeBeginning)/TIME.DIVISION_TO_FIND_HOUR)));
 
 
         }
@@ -1066,7 +1074,7 @@ public interface ScoreJAVAInterface
          * LowScore semantic and Episodic and Forgot Semantic and Episodic
          */
         public void updateLists() {
-            //update the clock 
+            //update the clock
             long time = System.currentTimeMillis();
             MORFullIndividual clock = new MORFullIndividual(TIME.CLOCK,ontoRef);
             clock.readSemantic();
