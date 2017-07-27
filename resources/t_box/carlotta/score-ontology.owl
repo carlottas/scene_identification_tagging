@@ -139,6 +139,9 @@
         <DataProperty IRI="#hasValue"/>
     </Declaration>
     <Declaration>
+        <DataProperty IRI="#timeBeginning"/>
+    </Declaration>
+    <Declaration>
         <NamedIndividual IRI="#DefinesThreshold"/>
     </Declaration>
     <Declaration>
@@ -876,7 +879,12 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
         <NamedIndividual IRI="#clock"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501143187773</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#timeBeginning"/>
+        <NamedIndividual IRI="#clock"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">150000000</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasValue"/>
@@ -1090,6 +1098,10 @@
         <DataProperty IRI="#hasValue"/>
         <DataProperty abbreviatedIRI="owl:topDataProperty"/>
     </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#timeBeginning"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
     <DataPropertyDomain>
         <DataProperty IRI="#DefineFinalForgettingThreshold"/>
         <DataExactCardinality cardinality="1">
@@ -1230,6 +1242,13 @@
             <Datatype abbreviatedIRI="xsd:float"/>
         </DataExactCardinality>
     </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#timeBeginning"/>
+        <DataExactCardinality cardinality="1">
+            <DataProperty IRI="#timeBeginning"/>
+            <Datatype abbreviatedIRI="xsd:long"/>
+        </DataExactCardinality>
+    </DataPropertyDomain>
     <DataPropertyRange>
         <DataProperty IRI="#DefineFinalForgettingThreshold"/>
         <Datatype abbreviatedIRI="xsd:int"/>
@@ -1301,6 +1320,10 @@
     <DataPropertyRange>
         <DataProperty IRI="#UserNoForget"/>
         <Datatype abbreviatedIRI="xsd:boolean"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#timeBeginning"/>
+        <Datatype abbreviatedIRI="xsd:long"/>
     </DataPropertyRange>
     <DLSafeRule>
         <Annotation>

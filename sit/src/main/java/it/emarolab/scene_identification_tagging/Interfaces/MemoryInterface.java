@@ -727,13 +727,13 @@ public interface MemoryInterface
             return newCounter;
 
         }
-        public static void removeUserNoForgetEpisodic(String Name, OWLReferences ontoRef){
+        public static void removeUserNoForgetEpisodic(String Name, OWLReferences ontoRef,String ONTO_FILE){
             MORFullIndividual ind = new MORFullIndividual(Name,ontoRef);
             ind.readSemantic();
             ind.removeData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT);
             ind.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
             ind.writeSemantic();
-            ind.saveOntology(EPISODIC_ONTO_FILE);
+            ind.saveOntology(ONTO_FILE);
         }
         public static void addPrimitivesEpisodic( ArrayList<EpisodicPrimitive> Primitives){
             for (EpisodicPrimitive i : Primitives) {
@@ -762,6 +762,18 @@ public interface MemoryInterface
             //save the ontology
             ontoRef.saveOntology(EPISODIC_ONTO_FILE);
             }
+        public static void updateTimeEpisodic(MORFullIndividual ind){
+            ind.readSemantic();
+            ind.removeData(DATA_PROPERTY.TIME);
+            ind.addData(DATA_PROPERTY.TIME,System.currentTimeMillis());
+            ind.writeSemantic();
+            ind.saveOntology(EPISODIC_ONTO_FILE);
+
+        }
+        public static void updateTimeEpisodic(String s, OWLReferences ontoRef){
+            MORFullIndividual ind= new MORFullIndividual(s,ontoRef);
+            updateTimeEpisodic(ind);
+        }
     }
 
 }

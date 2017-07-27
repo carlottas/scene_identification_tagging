@@ -717,7 +717,7 @@ public interface ScoreJAVAInterface
             totalScoreEpisodic = new MORFullIndividual(SCORE.SCORE_INDIVIDUAL_TOTAL_EPISODIC, ontoRef);
             MORFullIndividual clock = new MORFullIndividual(TIME.CLOCK, ontoRef);
             clock.readSemantic();
-            timeBeginning = (long) clock.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
+            timeBeginning = (long) clock.getLiteral(SCORE.SCORE_PROP_TIME_BEGINNING).parseFloat();
             UpdateSemanticItem();
 
         }
