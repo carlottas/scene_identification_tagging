@@ -311,7 +311,6 @@ public interface ScoreJAVAInterface
             }
             //change the dataproperty value
             totalScoreSemantic.removeData(SCORE.SCORE_PROP_HAS_VALUE);
-            totalScoreSemantic.writeSemantic();
             totalScoreSemantic.addData(SCORE.SCORE_PROP_HAS_VALUE, Total);
             totalScoreSemantic.writeSemantic();
 
