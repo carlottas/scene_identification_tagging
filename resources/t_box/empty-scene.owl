@@ -538,6 +538,24 @@
     
 
 
+    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-cylinder_pointX -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-cylinder_pointX"/>
+    
+
+
+    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-cylinder_pointY -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-cylinder_pointY"/>
+    
+
+
+    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-cylinder_pointZ -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-cylinder_pointZ"/>
+    
+
+
     <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-cylinder_radius -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#has-cylinder_radius">
@@ -1060,27 +1078,11 @@
     
 
 
-    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#R0 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#R0">
-        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Cylinder"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#R1 -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#R1">
-        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Cylinder"/>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene-Counter -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene-Counter">
         <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Parameter"/>
-        <has-value rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</has-value>
+        <has-value rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</has-value>
     </owl:NamedIndividual>
     
 

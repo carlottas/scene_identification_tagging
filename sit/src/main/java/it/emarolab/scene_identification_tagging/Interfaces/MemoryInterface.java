@@ -742,6 +742,8 @@ public interface MemoryInterface
                         j.addDisjointIndividual(i.getInstance());
                 i.getObjectSemantics().clear(); // clean previus spatial relation
                 i.writeSemantic();
+                i.saveOntology(EPISODIC_ONTO_FILE);
+
             }
 
         }

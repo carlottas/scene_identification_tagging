@@ -238,7 +238,7 @@ public class EpisodicPrimitive extends SpatialIndividualDescriptor
     }
 
     public void ApplyRelations () {
-        this.readSemantic();
+        //this.readSemantic();
         for (Relation r : relations){
             for(String s : r.getObject()){
                 this.addObject(r.getRelation(),s,true);

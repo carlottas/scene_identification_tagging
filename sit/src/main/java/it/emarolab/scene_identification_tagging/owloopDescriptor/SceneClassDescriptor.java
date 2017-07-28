@@ -98,7 +98,6 @@ public class SceneClassDescriptor
         r.addAll( Classify.super.readSemantic());
         r.addAll(MORConcept.Disjoint.super.readSemantic());
         r.addAll( MORConcept.Equivalent.super.readSemantic());
-
         updateCardinality();
         return r;
     }

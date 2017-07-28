@@ -26,10 +26,10 @@
         <ObjectProperty IRI="#has-scene_isParallelTo"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#defines-th_alignedZ"/>
+        <DataProperty IRI="#has-geometric_axisZ"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_axisZ"/>
+        <DataProperty IRI="#defines-th_alignedZ"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#belong_to_Scene"/>
@@ -47,10 +47,10 @@
         <ObjectProperty IRI="#has-scene_yellow"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#is-support-of_scene"/>
+        <ObjectProperty IRI="#isLeftOf"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isLeftOf"/>
+        <ObjectProperty IRI="#is-support-of_scene"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#isInFrontOf"/>
@@ -62,10 +62,10 @@
         <ObjectProperty IRI="#isAboveOf"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_isInFrontOf"/>
+        <ObjectProperty IRI="#isAlongZ"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isAlongZ"/>
+        <ObjectProperty IRI="#has-scene_isInFrontOf"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#Define-Recognition"/>
@@ -101,16 +101,16 @@
         <Class IRI="#CylinderRadiusBiggerThanTen"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_isBelowOf"/>
-    </Declaration>
-    <Declaration>
         <DataProperty IRI="#has-geometric_pointX"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-color"/>
+        <ObjectProperty IRI="#has-scene_isBelowOf"/>
     </Declaration>
     <Declaration>
         <Class IRI="#CylinderHeightBiggerThanTen"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#has-color"/>
     </Declaration>
     <Declaration>
         <Class IRI="#SphereRadiusSmallerThanFive"/>
@@ -143,10 +143,10 @@
         <DataProperty IRI="#defines-th_perpendicularity"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_pointY"/>
+        <NamedIndividual IRI="#ThirtyMinutes"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#ThirtyMinutes"/>
+        <DataProperty IRI="#has-geometric_pointY"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Time"/>
@@ -158,10 +158,10 @@
         <Class IRI="#ConeHeightBiggerThanTen"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_centerZ"/>
+        <Class IRI="#ConeRadiusSmallerThanFive"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#ConeRadiusSmallerThanFive"/>
+        <DataProperty IRI="#has-geometric_centerZ"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#Cylinder-Counter"/>
@@ -194,10 +194,10 @@
         <DataProperty IRI="#defines-th_coaxiality"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Sphere"/>
+        <ObjectProperty IRI="#has-scene_Red"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_Red"/>
+        <Class IRI="#Sphere"/>
     </Declaration>
     <Declaration>
         <Class IRI="#OneHour"/>
@@ -254,10 +254,10 @@
         <Class IRI="#Orientable"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#CylinderRadiusIncludedInTenFive"/>
+        <DataProperty IRI="#timesRetrievalForgot"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#timesRetrievalForgot"/>
+        <Class IRI="#CylinderRadiusIncludedInTenFive"/>
     </Declaration>
     <Declaration>
         <ObjectProperty abbreviatedIRI="owl:differentFrom"/>
@@ -335,10 +335,10 @@
         <AnnotationProperty abbreviatedIRI="swrla:isRuleEnabled"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#ThirtyMinutes"/>
+        <ObjectProperty IRI="#isBehindOf"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isBehindOf"/>
+        <Class IRI="#ThirtyMinutes"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#has-scene_pink"/>
@@ -350,10 +350,10 @@
         <DataProperty IRI="#has-sphere_radius"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#toBeForgotten"/>
+        <Class IRI="#SphereRadiusBiggerThanTen"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#SphereRadiusBiggerThanTen"/>
+        <DataProperty IRI="#toBeForgotten"/>
     </Declaration>
     <EquivalentClasses>
         <Class IRI="#Cone"/>

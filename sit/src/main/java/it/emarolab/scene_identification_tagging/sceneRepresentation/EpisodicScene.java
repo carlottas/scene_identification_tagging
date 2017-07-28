@@ -88,26 +88,21 @@ public class EpisodicScene implements SITBase{
         }
         MORFullConcept SuperClass= new MORFullConcept(CLASS.SCENE,ontoRef);
         SuperClass.readSemantic();
-        System.out.println(SuperClass.getSubConcept().toString());
         if(SuperClass.getSubConcept().toString().contains(SemanticSceneName)){
             return false;
         }
         else {
             //TODO non ha senso usare mor full concept, devi definirne uno piu piccolo
             MORFullConcept currentClass= new MORFullConcept(SemanticSceneName,ontoRef);
-            /*for (String i : SubClasses) {
-                currentClass.addSubConcept(i);
-            }
-            for (String i :SuperClasses){
-                currentClass.addSuperConcept(i);
-            }
-            */
             currentClass.addSuperConcept(CLASS.SCENE);
-            //todo find a way to set that all the the subclasses of scene are disjoint
             currentClass.writeSemantic();
             Set<OWLClass> disj= new HashSet<OWLClass>();
             for(OWLClass c:SuperClass.getSubConcept()){
-                disj.add(c);
+                if(!c.getIRI().toString().contains("Nothing")) {
+                    System.out.println(c.getIRI().toString());
+                    System.out.println("qui non dovrei esserci");
+                    disj.add(c);
+                }
             }
             ontoRef.makeDisjointClasses(disj);
             return true;
@@ -179,9 +174,10 @@ public class EpisodicScene implements SITBase{
         if (addTime)
             scene.addData( DATA_PROPERTY.TIME, time, true);
         scene.addData(FORGETTING.NAME_SEMANTIC_DATA_PROPERTY_FORGOT,false,true);
-        scene.addData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT,0);
+        scene.addData(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT,(float)0.0);
         scene.addObject(SUPPORT.HAS_SCENE_SUPPORT,SupportName);
         scene.writeSemantic();
+        scene.saveOntology(EPISODIC_ONTO_FILE);
 
     }
     public int countNumberOfRelations(MORFullIndividual ind){
