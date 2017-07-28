@@ -125,6 +125,8 @@ public interface ScoreJAVAInterface
                 scoreSemantic.addData(SCORE.SCORE_PROP_HAS_TIME, time);
             }
             scoreSemantic.writeSemantic();
+            ontoRef.synchronizeReasoner();
+            scoreSemantic.saveOntology(SCORE.SCORE_FILE_PATH);
             scoreSemantic.readSemantic();
             //compute the score
             System.out.println("Computing and adding the score...");
@@ -697,7 +699,7 @@ public interface ScoreJAVAInterface
             SemanticItem = new SemanticScore(SemanticName, ontoRef);
             MORFullIndividual clock = new MORFullIndividual(TIME.CLOCK, ontoRef);
             clock.readSemantic();
-            timeBeginning = (long) clock.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat();
+            timeBeginning = (long) clock.getLiteral(SCORE.SCORE_PROP_HAS_TIME).parseFloat();
             this.ontoRef = ontoRef;
             this.addTime = addTime;
         }
