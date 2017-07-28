@@ -70,6 +70,7 @@ public interface ROSSemanticInterface {
          * to the {@link #getOntology()}.
          */
         protected void loadSemantics(String ontoName, String FilePath,String IRI){
+            /*
 
             // load abox
             OWLReferences ontoRef = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
@@ -78,15 +79,16 @@ public interface ROSSemanticInterface {
                     IRI,
                   true
             );
+            */
             // reinstanciate OWL reference
-            OWLReferencesInterface.OWLReferencesContainer.getOWLReferencesKeys().remove( ontoName);
+            //OWLReferencesInterface.OWLReferencesContainer.getOWLReferencesKeys().remove( ontoName);
             ontology = OWLReferencesInterface.OWLReferencesContainer.newOWLReferenceFromFileWithPellet(
                     ontoName,
                     FilePath,
                     IRI,
                     true
             );
-            ontology.setOWLManipulatorBuffering(true);
+            //ontology.setOWLManipulatorBuffering(true);
         }
 
         /**

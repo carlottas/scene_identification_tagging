@@ -125,12 +125,14 @@ public class EpisodicScene implements SITBase{
         }
         //Only for the spatial relation check
         MORFullConcept classes= new MORFullConcept(SemanticSceneName,ontoRef);
+        ontoRef.synchronizeReasoner();
         classes.readSemantic();
 
         //for all the individuals which belongs to the related class
         for(OWLNamedIndividual i : classes.getIndividualClassified()){
             int count =0 ;
             MORFullIndividual ind= new MORFullIndividual(i,ontoRef);
+            ontoRef.synchronizeReasoner();
             ind.readSemantic();
             if((description.size()+ColorDescription.size())==countNumberOfRelations(ind)) {
                 System.out.println("inside the if sizes are equal ");
@@ -195,7 +197,8 @@ public class EpisodicScene implements SITBase{
     }
     public int countNumberOfEqualObjectProperty(ArrayList<EpisodicLearn> relation,MORFullIndividual ind,OWLReferences ontoRef){
        int count = 0 ;
-
+        ontoRef.synchronizeReasoner();
+        ind.readSemantic();
         for (EpisodicLearn j : relation) {
             //For all the object property of the current scene Item
            for (MORAxioms.ObjectSemantic obj : ind.getObjectSemantics()){
