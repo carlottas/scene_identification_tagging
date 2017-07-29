@@ -1116,10 +1116,10 @@
     
 
 
-    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene55 -->
+    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene58 -->
 
 
-    <owl:Class rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene55">
+    <owl:Class rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene58">
         <owl:equivalentClass>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
@@ -1192,6 +1192,19 @@
     
 
 
+    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#retrievalSemantic -->
+
+
+    <owl:Class rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#retrievalSemantic">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -1219,21 +1232,11 @@
     
 
 
-    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Forgot54 -->
+    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Forgot58 -->
 
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Forgot54">
-        <timesRetrievalForgot rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</timesRetrievalForgot>
-        <toBeForgotten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</toBeForgotten>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Forgot55 -->
-
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Forgot55">
-        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene55"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Forgot58">
+        <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene58"/>
         <timesRetrievalForgot rdf:datatype="http://www.w3.org/2001/XMLSchema#float">0.0</timesRetrievalForgot>
         <toBeForgotten rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</toBeForgotten>
     </owl:NamedIndividual>
@@ -1245,7 +1248,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene-Counter">
         <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Parameter"/>
-        <has-value rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">56</has-value>
+        <has-value rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">59</has-value>
     </owl:NamedIndividual>
     
 
