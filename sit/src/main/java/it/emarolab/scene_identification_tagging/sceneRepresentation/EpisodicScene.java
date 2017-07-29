@@ -187,7 +187,9 @@ public class EpisodicScene implements SITBase{
         //plus one for the support (hence the minus 1)
         int count=0;
         for(MORAxioms.ObjectSemantic i : ind.getObjectSemantics()){
-            count+=i.getValues().size();
+            if(!i.toString().contains(OBJECT_PROPERTY.HAS_SCENE_PRIMITIVE)) {
+                count += i.getValues().size();
+            }
         }
 
         return count-1;

@@ -148,10 +148,10 @@
         <NamedIndividual IRI="#Scene"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#Scene58"/>
+        <NamedIndividual IRI="#Scene59"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#SnEp-46"/>
+        <NamedIndividual IRI="#SnEp-47"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#ThirtyMinutes"/>
@@ -226,11 +226,11 @@
     </ClassAssertion>
     <ClassAssertion>
         <Class IRI="#SemanticScore"/>
-        <NamedIndividual IRI="#Scene58"/>
+        <NamedIndividual IRI="#Scene59"/>
     </ClassAssertion>
     <ClassAssertion>
         <Class IRI="#EpisodicScore"/>
-        <NamedIndividual IRI="#SnEp-46"/>
+        <NamedIndividual IRI="#SnEp-47"/>
     </ClassAssertion>
     <ClassAssertion>
         <Class IRI="#TimeWindow"/>
@@ -254,8 +254,8 @@
     </DifferentIndividuals>
     <ObjectPropertyAssertion>
         <ObjectProperty IRI="#isIndividualOf"/>
-        <NamedIndividual IRI="#SnEp-46"/>
-        <NamedIndividual IRI="#Scene58"/>
+        <NamedIndividual IRI="#SnEp-47"/>
+        <NamedIndividual IRI="#Scene59"/>
     </ObjectPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#DefineFinalForgettingThreshold"/>
@@ -284,88 +284,88 @@
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#NumberBelongingIndividual"/>
-        <NamedIndividual IRI="#Scene58"/>
+        <NamedIndividual IRI="#Scene59"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#NumberRetrieval"/>
-        <NamedIndividual IRI="#Scene58"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">3</Literal>
+        <NamedIndividual IRI="#Scene59"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#NumberSubClasses"/>
-        <NamedIndividual IRI="#Scene58"/>
+        <NamedIndividual IRI="#Scene59"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#SumScoreBelongingIndividual"/>
-        <NamedIndividual IRI="#Scene58"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">83398.33</Literal>
+        <NamedIndividual IRI="#Scene59"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">83398.2</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#SumScoreSubClasses"/>
-        <NamedIndividual IRI="#Scene58"/>
+        <NamedIndividual IRI="#Scene59"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.0</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#TimesForgotten"/>
-        <NamedIndividual IRI="#Scene58"/>
+        <NamedIndividual IRI="#Scene59"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#TimesLowScore"/>
-        <NamedIndividual IRI="#Scene58"/>
+        <NamedIndividual IRI="#Scene59"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#UserNoForget"/>
-        <NamedIndividual IRI="#Scene58"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#hasScore"/>
-        <NamedIndividual IRI="#Scene58"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">12511.1</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#hasTime"/>
-        <NamedIndividual IRI="#Scene58"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501291128308</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#NumberEpisodicRetrieval"/>
-        <NamedIndividual IRI="#SnEp-46"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#NumberSemanticRetrieval"/>
-        <NamedIndividual IRI="#SnEp-46"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#TimesForgotten"/>
-        <NamedIndividual IRI="#SnEp-46"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#TimesLowScore"/>
-        <NamedIndividual IRI="#SnEp-46"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#UserNoForget"/>
-        <NamedIndividual IRI="#SnEp-46"/>
+        <NamedIndividual IRI="#Scene59"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">false</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasScore"/>
-        <NamedIndividual IRI="#SnEp-46"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">83398.33</Literal>
+        <NamedIndividual IRI="#Scene59"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">12510.681</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
-        <NamedIndividual IRI="#SnEp-46"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501291129902</Literal>
+        <NamedIndividual IRI="#Scene59"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501292343426</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#NumberEpisodicRetrieval"/>
+        <NamedIndividual IRI="#SnEp-47"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#NumberSemanticRetrieval"/>
+        <NamedIndividual IRI="#SnEp-47"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#TimesForgotten"/>
+        <NamedIndividual IRI="#SnEp-47"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#TimesLowScore"/>
+        <NamedIndividual IRI="#SnEp-47"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#UserNoForget"/>
+        <NamedIndividual IRI="#SnEp-47"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">false</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasScore"/>
+        <NamedIndividual IRI="#SnEp-47"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">83398.2</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasTime"/>
+        <NamedIndividual IRI="#SnEp-47"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501292344320</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
@@ -375,7 +375,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
         <NamedIndividual IRI="#clock"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501291508150</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501293202864</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#timeBeginning"/>
@@ -385,12 +385,12 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasValue"/>
         <NamedIndividual IRI="#totalEpisodic"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">833969.06</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">917367.25</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasValue"/>
         <NamedIndividual IRI="#totalSemantic"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">37549.484</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">50060.164</Literal>
     </DataPropertyAssertion>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#firstSuperClass"/>
