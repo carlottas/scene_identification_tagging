@@ -64,6 +64,12 @@ public interface ScoreJAVAInterface
                     ontoRef);
             totalScoreEpisodic = new MORFullIndividual(SCORE.SCORE_INDIVIDUAL_TOTAL_EPISODIC,
                     ontoRef);
+            MORFullIndividual clock = new MORFullIndividual(TIME.CLOCK,ontoRef);
+            clock.readSemantic();
+            clock.removeData(SCORE.SCORE_PROP_HAS_TIME);
+            clock.addData(SCORE.SCORE_PROP_HAS_TIME,System.currentTimeMillis());
+            clock.writeSemantic();
+
             this.ontoRef = ontoRef;
             this.Name = Name;
             SubClasses.remove("owlNothing");
@@ -89,6 +95,13 @@ public interface ScoreJAVAInterface
                     ontoRef);
             totalScoreEpisodic = new MORFullIndividual(SCORE.SCORE_INDIVIDUAL_TOTAL_EPISODIC,
                     ontoRef);
+
+            MORFullIndividual clock = new MORFullIndividual(TIME.CLOCK,ontoRef);
+            clock.readSemantic();
+            clock.removeData(SCORE.SCORE_PROP_HAS_TIME);
+            clock.addData(SCORE.SCORE_PROP_HAS_TIME,System.currentTimeMillis());
+            clock.writeSemantic();
+
             this.ontoRef = ontoRef;
             this.Name = Name;
             ontoRef.synchronizeReasoner();
@@ -872,6 +885,14 @@ public interface ScoreJAVAInterface
             ontoRef.synchronizeReasoner();
             clock.readSemantic();
             timeBeginning = (long) clock.getLiteral(SCORE.SCORE_PROP_HAS_TIME).parseFloat();
+            clock.readSemantic();
+            clock.removeData(SCORE.SCORE_PROP_HAS_TIME);
+            clock.addData(SCORE.SCORE_PROP_HAS_TIME,System.currentTimeMillis());
+            clock.writeSemantic();
+            clock.saveOntology(SCORE.SCORE_FILE_PATH);
+            clock.addData(SCORE.SCORE_PROP_HAS_TIME,System.currentTimeMillis());
+            clock.writeSemantic();
+            clock.saveOntology(SCORE.SCORE_FILE_PATH);
             this.ontoRef = ontoRef;
             this.addTime = addTime;
         }
@@ -1056,8 +1077,16 @@ public interface ScoreJAVAInterface
          */
         private float computeScore(int semantic_retrieval,
                                    int episodic_retrieval,long time,long timeBeginning) {
+            float timeDifferenceInHours=(float)(time-timeBeginning)/TIME.DIVISION_TO_FIND_HOUR;
+            float timeContribute;
+            if(timeDifferenceInHours==0.0){
+                timeContribute=0;
+            }
+            else{
+                timeContribute=(float)Math.log((double)timeDifferenceInHours);
+            }
             return ((float) (SCORE.SCORE_EPISODIC_WEIGHT_1 * semantic_retrieval +
-                    SCORE.SCORE_EPISODIC_WEIGHT_2 * episodic_retrieval+SCORE.SCORE_EPISODIC_WEIGHT_3*((time-timeBeginning)/TIME.DIVISION_TO_FIND_HOUR)));
+                    SCORE.SCORE_EPISODIC_WEIGHT_2 * episodic_retrieval+SCORE.SCORE_EPISODIC_WEIGHT_3*(Math.abs((double)timeContribute))));
 
 
         }
