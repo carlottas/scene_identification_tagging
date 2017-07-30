@@ -26,10 +26,10 @@
         <ObjectProperty IRI="#has-scene_isParallelTo"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_axisZ"/>
+        <DataProperty IRI="#defines-th_alignedZ"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#defines-th_alignedZ"/>
+        <DataProperty IRI="#has-geometric_axisZ"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#belong_to_Scene"/>
@@ -128,9 +128,6 @@
         <DataProperty IRI="#has-value"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#sn1"/>
-    </Declaration>
-    <Declaration>
         <Class IRI="#ConeRadiusBiggerThanTen"/>
     </Declaration>
     <Declaration>
@@ -161,10 +158,10 @@
         <Class IRI="#ConeHeightBiggerThanTen"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_centerZ"/>
+        <Class IRI="#ConeRadiusSmallerThanFive"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#ConeRadiusSmallerThanFive"/>
+        <DataProperty IRI="#has-geometric_centerZ"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#Cylinder-Counter"/>
@@ -257,10 +254,10 @@
         <Class IRI="#Orientable"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#timesRetrievalForgot"/>
+        <Class IRI="#CylinderRadiusIncludedInTenFive"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#CylinderRadiusIncludedInTenFive"/>
+        <DataProperty IRI="#timesRetrievalForgot"/>
     </Declaration>
     <Declaration>
         <ObjectProperty abbreviatedIRI="owl:differentFrom"/>
@@ -308,10 +305,10 @@
         <Class IRI="#Plane"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-cone_height"/>
+        <DataProperty IRI="#defines-th_alignedY"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#defines-th_alignedY"/>
+        <DataProperty IRI="#has-cone_height"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#has-geometric_axisY"/>
@@ -338,19 +335,19 @@
         <AnnotationProperty abbreviatedIRI="swrla:isRuleEnabled"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#ThirtyMinutes"/>
+        <ObjectProperty IRI="#isBehindOf"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isBehindOf"/>
+        <Class IRI="#ThirtyMinutes"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#has-scene_pink"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-sphere_radius"/>
+        <ObjectProperty IRI="#has-scene_support"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_support"/>
+        <DataProperty IRI="#has-sphere_radius"/>
     </Declaration>
     <Declaration>
         <Class IRI="#SphereRadiusBiggerThanTen"/>
@@ -671,10 +668,6 @@
         <Class IRI="#Time"/>
         <NamedIndividual IRI="#clock"/>
     </ClassAssertion>
-    <ClassAssertion>
-        <Class IRI="#Scene"/>
-        <NamedIndividual IRI="#sn1"/>
-    </ClassAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#has-value"/>
         <NamedIndividual IRI="#Cone-Counter"/>
@@ -748,12 +741,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#has_time"/>
         <NamedIndividual IRI="#clock"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501293769623</Literal>
-    </DataPropertyAssertion>
-    <DataPropertyAssertion>
-        <DataProperty IRI="#has_time"/>
-        <NamedIndividual IRI="#sn1"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501293769623</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501380385220</Literal>
     </DataPropertyAssertion>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#BelongToScene"/>

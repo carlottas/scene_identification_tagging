@@ -1082,7 +1082,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Scene-Counter">
         <rdf:type rdf:resource="http://www.semanticweb.org/emaroLab/luca-buoncompagni/sit#Parameter"/>
-        <has-value rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</has-value>
+        <has-value rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</has-value>
     </owl:NamedIndividual>
     
 

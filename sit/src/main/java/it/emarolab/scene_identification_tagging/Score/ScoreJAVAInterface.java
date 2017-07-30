@@ -1175,6 +1175,11 @@ public interface ScoreJAVAInterface
                     this.ontoRef);
             forgotClassSemantic = new MORFullConcept(SCORE.SCORE_CLASS_FORGOTTEN_SEMANTIC,
                     this.ontoRef);
+            MORFullIndividual clock = new MORFullIndividual(TIME.CLOCK,this.ontoRef);
+            clock.readSemantic();
+            clock.removeData(SCORE.SCORE_PROP_HAS_TIME);
+            clock.addData(SCORE.SCORE_PROP_HAS_TIME,System.currentTimeMillis());
+            clock.writeSemantic();
             toBeForgottenEpisodic= new ArrayList<>();
             toBeForgottenSemantic= new ArrayList<>();
             lowScoreSemantic= new ArrayList<>();

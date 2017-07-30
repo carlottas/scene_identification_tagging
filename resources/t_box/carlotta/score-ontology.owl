@@ -76,10 +76,10 @@
         <DataProperty IRI="#UserNoForget"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#firstSuperClass"/>
+        <Class IRI="#EpisodicScore"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#EpisodicScore"/>
+        <ObjectProperty IRI="#firstSuperClass"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#TimesForgotten"/>
@@ -127,10 +127,10 @@
         <Class IRI="#EpisodicScoreLow"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#totalSemantic"/>
+        <NamedIndividual IRI="#clock"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#clock"/>
+        <NamedIndividual IRI="#totalSemantic"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#DefineFinalForgettingThreshold"/>
@@ -271,7 +271,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
         <NamedIndividual IRI="#clock"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">60000</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501380396827</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#timeBeginning"/>
@@ -281,12 +281,12 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasValue"/>
         <NamedIndividual IRI="#totalEpisodic"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">1.5468597</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.0</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasValue"/>
         <NamedIndividual IRI="#totalSemantic"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.782029</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.0</Literal>
     </DataPropertyAssertion>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#firstSuperClass"/>

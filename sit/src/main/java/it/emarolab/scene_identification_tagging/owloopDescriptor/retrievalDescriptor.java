@@ -61,9 +61,11 @@ public class retrievalDescriptor
         names.addAll(equivalentClasses);
         ontoRef.removeClass(name);
         ontoRef.saveOntology(ONTO_FILE);
+        ontoRef.synchronizeReasoner();
         learned.readSemantic();
         learned.delete();
         learned.writeSemantic();
+        ontoRef.synchronizeReasoner();
         learned.saveOntology(ONTO_FILE);
         Set<String> forgotten= new HashSet<>();
         //check whether they have already been forgotten
