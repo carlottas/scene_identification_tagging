@@ -58,10 +58,10 @@
         <DataProperty IRI="#DefinesFalse"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Parameters"/>
+        <DataProperty IRI="#hasTime"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#hasTime"/>
+        <Class IRI="#Parameters"/>
     </Declaration>
     <Declaration>
         <Class IRI="#SemanticToBeForgotten"/>
@@ -76,10 +76,10 @@
         <DataProperty IRI="#UserNoForget"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#EpisodicScore"/>
+        <ObjectProperty IRI="#firstSuperClass"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#firstSuperClass"/>
+        <Class IRI="#EpisodicScore"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#TimesForgotten"/>
@@ -127,10 +127,10 @@
         <Class IRI="#EpisodicScoreLow"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#clock"/>
+        <NamedIndividual IRI="#totalSemantic"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#totalSemantic"/>
+        <NamedIndividual IRI="#clock"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#DefineFinalForgettingThreshold"/>
@@ -266,12 +266,12 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
         <NamedIndividual IRI="#ThirtyMinutes"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1800000</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
         <NamedIndividual IRI="#clock"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501293772924</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">60000</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#timeBeginning"/>
@@ -281,12 +281,12 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasValue"/>
         <NamedIndividual IRI="#totalEpisodic"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.0</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">1.5468597</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasValue"/>
         <NamedIndividual IRI="#totalSemantic"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.0</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.782029</Literal>
     </DataPropertyAssertion>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#firstSuperClass"/>
@@ -574,7 +574,7 @@
         <DataProperty IRI="#hasTime"/>
         <DataExactCardinality cardinality="1">
             <DataProperty IRI="#hasTime"/>
-            <Datatype abbreviatedIRI="xsd:dateTimeStamp"/>
+            <Datatype abbreviatedIRI="xsd:long"/>
         </DataExactCardinality>
     </DataPropertyDomain>
     <DataPropertyDomain>
@@ -664,6 +664,10 @@
         <Datatype abbreviatedIRI="xsd:boolean"/>
     </DataPropertyRange>
     <DataPropertyRange>
+        <DataProperty IRI="#hasTime"/>
+        <Datatype abbreviatedIRI="xsd:long"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
         <DataProperty IRI="#timeBeginning"/>
         <Datatype abbreviatedIRI="xsd:long"/>
     </DataPropertyRange>
@@ -719,9 +723,29 @@
                 <Variable IRI="#e"/>
                 <Variable IRI="#u"/>
             </DataPropertyAtom>
-            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#equal">
-                <Variable IRI="#f"/>
-                <Variable IRI="#u"/>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasTime"/>
+                <NamedIndividual IRI="#ThirtyMinutes"/>
+                <Variable IRI="#m"/>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasTime"/>
+                <Variable IRI="#e"/>
+                <Variable IRI="#k"/>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasTime"/>
+                <NamedIndividual IRI="#clock"/>
+                <Variable IRI="#c"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#subtract">
+                <Variable IRI="#n"/>
+                <Variable IRI="#c"/>
+                <Variable IRI="#k"/>
+            </BuiltInAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#greaterThanOrEqual">
+                <Variable IRI="#n"/>
+                <Variable IRI="#m"/>
             </BuiltInAtom>
         </Body>
         <Head>
@@ -880,6 +904,30 @@
             <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#equal">
                 <Variable IRI="#f"/>
                 <Variable IRI="#u"/>
+            </BuiltInAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasTime"/>
+                <NamedIndividual IRI="#ThirtyMinutes"/>
+                <Variable IRI="#m"/>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasTime"/>
+                <Variable IRI="#s"/>
+                <Variable IRI="#k"/>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasTime"/>
+                <NamedIndividual IRI="#clock"/>
+                <Variable IRI="#c"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#subtract">
+                <Variable IRI="#n"/>
+                <Variable IRI="#c"/>
+                <Variable IRI="#k"/>
+            </BuiltInAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#greaterThanOrEqual">
+                <Variable IRI="#n"/>
+                <Variable IRI="#m"/>
             </BuiltInAtom>
         </Body>
         <Head>

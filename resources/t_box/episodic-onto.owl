@@ -26,10 +26,10 @@
         <ObjectProperty IRI="#has-scene_isParallelTo"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#defines-th_alignedZ"/>
+        <DataProperty IRI="#has-geometric_axisZ"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_axisZ"/>
+        <DataProperty IRI="#defines-th_alignedZ"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#belong_to_Scene"/>
@@ -47,10 +47,10 @@
         <ObjectProperty IRI="#has-scene_yellow"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isLeftOf"/>
+        <ObjectProperty IRI="#is-support-of_scene"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#is-support-of_scene"/>
+        <ObjectProperty IRI="#isLeftOf"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#has-scene_isPerpendicularTo"/>
@@ -71,10 +71,10 @@
         <NamedIndividual IRI="#Define-Recognition"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Parameter"/>
+        <DataProperty IRI="#has_time"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has_time"/>
+        <Class IRI="#Parameter"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#has_id"/>
@@ -89,10 +89,10 @@
         <Class IRI="#ConeRadiusIncludedInTenFive"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_isCoaxialWith"/>
+        <ObjectProperty IRI="#has-scene_green"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_green"/>
+        <ObjectProperty IRI="#has-scene_isCoaxialWith"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#has-geometric_hessian"/>
@@ -107,10 +107,10 @@
         <DataProperty IRI="#has-geometric_pointX"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-color"/>
+        <Class IRI="#CylinderHeightBiggerThanTen"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#CylinderHeightBiggerThanTen"/>
+        <DataProperty IRI="#has-color"/>
     </Declaration>
     <Declaration>
         <Class IRI="#SphereRadiusSmallerThanFive"/>
@@ -119,13 +119,16 @@
         <DataProperty IRI="#has-cone_apexZ"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_isRightOf"/>
-    </Declaration>
-    <Declaration>
         <Class IRI="#Scene"/>
     </Declaration>
     <Declaration>
+        <ObjectProperty IRI="#has-scene_isRightOf"/>
+    </Declaration>
+    <Declaration>
         <DataProperty IRI="#has-value"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#sn1"/>
     </Declaration>
     <Declaration>
         <Class IRI="#ConeRadiusBiggerThanTen"/>
@@ -188,16 +191,16 @@
         <NamedIndividual IRI="#Cone-Counter"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#SphereRadiusIncludedInTenFive"/>
-    </Declaration>
-    <Declaration>
         <DataProperty IRI="#defines-th_coaxiality"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Sphere"/>
+        <Class IRI="#SphereRadiusIncludedInTenFive"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#has-scene_Red"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Sphere"/>
     </Declaration>
     <Declaration>
         <Class IRI="#OneHour"/>
@@ -206,10 +209,10 @@
         <DataProperty IRI="#has-geometric_radius"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#clock"/>
+        <DataProperty IRI="#has-geometric_centerY"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_centerY"/>
+        <NamedIndividual IRI="#clock"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#has-cone_apexX"/>
@@ -305,13 +308,13 @@
         <Class IRI="#Plane"/>
     </Declaration>
     <Declaration>
+        <DataProperty IRI="#has-cone_height"/>
+    </Declaration>
+    <Declaration>
         <DataProperty IRI="#defines-th_alignedY"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#has-geometric_axisY"/>
-    </Declaration>
-    <Declaration>
-        <DataProperty IRI="#has-cone_height"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#isAlongX"/>
@@ -668,6 +671,10 @@
         <Class IRI="#Time"/>
         <NamedIndividual IRI="#clock"/>
     </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Scene"/>
+        <NamedIndividual IRI="#sn1"/>
+    </ClassAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#has-value"/>
         <NamedIndividual IRI="#Cone-Counter"/>
@@ -741,6 +748,11 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#has_time"/>
         <NamedIndividual IRI="#clock"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501293769623</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#has_time"/>
+        <NamedIndividual IRI="#sn1"/>
         <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501293769623</Literal>
     </DataPropertyAssertion>
     <SubObjectPropertyOf>
@@ -1531,7 +1543,7 @@
                 <Variable IRI="#s"/>
             </ClassAtom>
             <DataPropertyAtom>
-                <DataProperty IRI="#has-time"/>
+                <DataProperty IRI="#has_time"/>
                 <NamedIndividual IRI="#OneHour"/>
                 <Variable IRI="#t"/>
             </DataPropertyAtom>
@@ -1541,7 +1553,7 @@
                 <Variable IRI="#f"/>
             </DataPropertyAtom>
             <DataPropertyAtom>
-                <DataProperty IRI="#has-time"/>
+                <DataProperty IRI="#has_time"/>
                 <NamedIndividual IRI="#clock"/>
                 <Variable IRI="#c"/>
             </DataPropertyAtom>
@@ -1581,7 +1593,7 @@
                 <Variable IRI="#s"/>
             </ClassAtom>
             <DataPropertyAtom>
-                <DataProperty IRI="#has-time"/>
+                <DataProperty IRI="#has_time"/>
                 <NamedIndividual IRI="#TenMinutes"/>
                 <Variable IRI="#t"/>
             </DataPropertyAtom>
@@ -1591,7 +1603,7 @@
                 <Variable IRI="#f"/>
             </DataPropertyAtom>
             <DataPropertyAtom>
-                <DataProperty IRI="#has-time"/>
+                <DataProperty IRI="#has_time"/>
                 <NamedIndividual IRI="#clock"/>
                 <Variable IRI="#c"/>
             </DataPropertyAtom>
@@ -1631,7 +1643,7 @@
                 <Variable IRI="#s"/>
             </ClassAtom>
             <DataPropertyAtom>
-                <DataProperty IRI="#has-time"/>
+                <DataProperty IRI="#has_time"/>
                 <NamedIndividual IRI="#ThirtyMinutes"/>
                 <Variable IRI="#t"/>
             </DataPropertyAtom>
@@ -1641,7 +1653,7 @@
                 <Variable IRI="#f"/>
             </DataPropertyAtom>
             <DataPropertyAtom>
-                <DataProperty IRI="#has-time"/>
+                <DataProperty IRI="#has_time"/>
                 <NamedIndividual IRI="#clock"/>
                 <Variable IRI="#c"/>
             </DataPropertyAtom>
