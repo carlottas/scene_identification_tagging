@@ -98,9 +98,8 @@ public class EpisodicScene implements SITBase{
             currentClass.writeSemantic();
             Set<OWLClass> disj= new HashSet<OWLClass>();
             for(OWLClass c:SuperClass.getSubConcept()){
-                if(!c.getIRI().toString().contains("Nothing")) {
+                if(!c.getIRI().toString().contains("Nothing")&&!c.getIRI().toString().contains("Thing")) {
                     System.out.println(c.getIRI().toString());
-                    System.out.println("qui non dovrei esserci");
                     disj.add(c);
                 }
             }

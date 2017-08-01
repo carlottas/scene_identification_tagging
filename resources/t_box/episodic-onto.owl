@@ -29,10 +29,10 @@
         <DataProperty IRI="#defines-th_alignedZ"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_axisZ"/>
+        <DataProperty IRI="#belong_to_Scene"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#belong_to_Scene"/>
+        <DataProperty IRI="#has-geometric_axisZ"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Support"/>
@@ -47,10 +47,10 @@
         <ObjectProperty IRI="#has-scene_yellow"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#is-support-of_scene"/>
+        <ObjectProperty IRI="#isLeftOf"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isLeftOf"/>
+        <ObjectProperty IRI="#is-support-of_scene"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#has-scene_isPerpendicularTo"/>
@@ -62,19 +62,19 @@
         <ObjectProperty IRI="#isAboveOf"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_isInFrontOf"/>
+        <ObjectProperty IRI="#isAlongZ"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isAlongZ"/>
+        <ObjectProperty IRI="#has-scene_isInFrontOf"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#Define-Recognition"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has_time"/>
+        <Class IRI="#Parameter"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Parameter"/>
+        <DataProperty IRI="#has_time"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#has_id"/>
@@ -89,28 +89,28 @@
         <Class IRI="#ConeRadiusIncludedInTenFive"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_green"/>
+        <ObjectProperty IRI="#has-scene_isCoaxialWith"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_isCoaxialWith"/>
+        <ObjectProperty IRI="#has-scene_green"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#has-geometric_hessian"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_isBelowOf"/>
+        <DataProperty IRI="#has-geometric_pointX"/>
     </Declaration>
     <Declaration>
         <Class IRI="#CylinderRadiusBiggerThanTen"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_pointX"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#CylinderHeightBiggerThanTen"/>
+        <ObjectProperty IRI="#has-scene_isBelowOf"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#has-color"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CylinderHeightBiggerThanTen"/>
     </Declaration>
     <Declaration>
         <Class IRI="#SphereRadiusSmallerThanFive"/>
@@ -119,10 +119,10 @@
         <DataProperty IRI="#has-cone_apexZ"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Scene"/>
+        <ObjectProperty IRI="#has-scene_isRightOf"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_isRightOf"/>
+        <Class IRI="#Scene"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#has-value"/>
@@ -143,10 +143,10 @@
         <DataProperty IRI="#defines-th_perpendicularity"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_pointY"/>
+        <NamedIndividual IRI="#ThirtyMinutes"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#ThirtyMinutes"/>
+        <DataProperty IRI="#has-geometric_pointY"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Time"/>
@@ -158,10 +158,10 @@
         <Class IRI="#ConeHeightBiggerThanTen"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#ConeRadiusSmallerThanFive"/>
+        <DataProperty IRI="#has-geometric_centerZ"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_centerZ"/>
+        <Class IRI="#ConeRadiusSmallerThanFive"/>
     </Declaration>
     <Declaration>
         <NamedIndividual IRI="#Cylinder-Counter"/>
@@ -188,16 +188,16 @@
         <NamedIndividual IRI="#Cone-Counter"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#defines-th_coaxiality"/>
-    </Declaration>
-    <Declaration>
         <Class IRI="#SphereRadiusIncludedInTenFive"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_Red"/>
+        <DataProperty IRI="#defines-th_coaxiality"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Sphere"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has-scene_Red"/>
     </Declaration>
     <Declaration>
         <Class IRI="#OneHour"/>
@@ -305,13 +305,13 @@
         <Class IRI="#Plane"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#defines-th_alignedY"/>
+        <DataProperty IRI="#has-geometric_axisY"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#has-cone_height"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#has-geometric_axisY"/>
+        <DataProperty IRI="#defines-th_alignedY"/>
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#isAlongX"/>
@@ -344,16 +344,16 @@
         <ObjectProperty IRI="#has-scene_pink"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#has-scene_support"/>
-    </Declaration>
-    <Declaration>
         <DataProperty IRI="#has-sphere_radius"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#SphereRadiusBiggerThanTen"/>
+        <ObjectProperty IRI="#has-scene_support"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#toBeForgotten"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SphereRadiusBiggerThanTen"/>
     </Declaration>
     <EquivalentClasses>
         <Class IRI="#Cone"/>
@@ -741,7 +741,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#has_time"/>
         <NamedIndividual IRI="#clock"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501380385220</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501479414204</Literal>
     </DataPropertyAssertion>
     <SubObjectPropertyOf>
         <ObjectProperty IRI="#BelongToScene"/>

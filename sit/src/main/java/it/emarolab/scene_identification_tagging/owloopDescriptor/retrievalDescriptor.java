@@ -35,6 +35,12 @@ public class retrievalDescriptor
         this.relations=relations;
         this.ontoRef=ontoRef;
         this.name= RETRIEVAL.SEMANTIC_RETRIEVAL_NAME;
+        MORFullIndividual clock = new MORFullIndividual(TIME.CLOCK,this.ontoRef);
+        clock.readSemantic();
+        clock.removeData(TIME.HAS_TIME_CLOCK);
+        clock.addData(TIME.HAS_TIME_CLOCK,System.currentTimeMillis());
+        clock.writeSemantic();
+        clock.saveOntology(EPISODIC_ONTO_FILE);
         retrieval();
     }
 

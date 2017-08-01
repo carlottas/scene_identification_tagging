@@ -25,10 +25,10 @@
         <ObjectProperty IRI="#isSubClassOf"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#ToBeForgotten"/>
+        <DataProperty IRI="#TimesLowScore"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#TimesLowScore"/>
+        <Class IRI="#ToBeForgotten"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#ScoreSubClasses"/>
@@ -37,10 +37,10 @@
         <ObjectProperty IRI="#isSuperClassOf"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#EpisodicForgotten"/>
+        <Class IRI="#SemanticScoreLow"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#SemanticScoreLow"/>
+        <Class IRI="#EpisodicForgotten"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#timeBeginning"/>
@@ -58,10 +58,10 @@
         <DataProperty IRI="#DefinesFalse"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#hasTime"/>
+        <Class IRI="#Parameters"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#Parameters"/>
+        <DataProperty IRI="#hasTime"/>
     </Declaration>
     <Declaration>
         <Class IRI="#SemanticToBeForgotten"/>
@@ -85,10 +85,10 @@
         <DataProperty IRI="#TimesForgotten"/>
     </Declaration>
     <Declaration>
-        <ObjectProperty IRI="#isFirstSuperCLassOf"/>
+        <DataProperty IRI="#DefinesForgettingThreshold"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#DefinesForgettingThreshold"/>
+        <ObjectProperty IRI="#isFirstSuperCLassOf"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#LowerBoundTime"/>
@@ -148,16 +148,13 @@
         <Class IRI="#Forgotten"/>
     </Declaration>
     <Declaration>
-        <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
-    </Declaration>
-    <Declaration>
         <Class IRI="#EpisodicToBeForgotten"/>
     </Declaration>
     <Declaration>
-        <DataProperty IRI="#NumberBelongingIndividual"/>
+        <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
     </Declaration>
     <Declaration>
-        <NamedIndividual IRI="#Scene"/>
+        <DataProperty IRI="#NumberBelongingIndividual"/>
     </Declaration>
     <Declaration>
         <DataProperty IRI="#SumScoreSubClasses"/>
@@ -215,10 +212,6 @@
         <NamedIndividual IRI="#DefinesThreshold"/>
     </ClassAssertion>
     <ClassAssertion>
-        <Class IRI="#SemanticScore"/>
-        <NamedIndividual IRI="#Scene"/>
-    </ClassAssertion>
-    <ClassAssertion>
         <Class IRI="#TimeWindow"/>
         <NamedIndividual IRI="#ThirtyMinutes"/>
     </ClassAssertion>
@@ -251,7 +244,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#DefinesForgettingThreshold"/>
         <NamedIndividual IRI="#DefinesThreshold"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#int">5</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#int">7</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#DefinesHigherThreshold"/>
@@ -261,7 +254,7 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#DefinesLowerThreshold"/>
         <NamedIndividual IRI="#DefinesThreshold"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.08</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#float">0.2</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
@@ -271,12 +264,12 @@
     <DataPropertyAssertion>
         <DataProperty IRI="#hasTime"/>
         <NamedIndividual IRI="#clock"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501380396827</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501484303627</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#timeBeginning"/>
         <NamedIndividual IRI="#clock"/>
-        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">150000000</Literal>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#long">1501479414204</Literal>
     </DataPropertyAssertion>
     <DataPropertyAssertion>
         <DataProperty IRI="#hasValue"/>

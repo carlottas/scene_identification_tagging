@@ -311,6 +311,7 @@ public interface MemoryInterface
             else {
                 return null;
             }
+            ontoRef.synchronizeReasoner();
             MORFullIndividual counter = new MORFullIndividual(Counter,
                     ontoRef);
             counter.readSemantic();
@@ -318,6 +319,7 @@ public interface MemoryInterface
             counter.removeData(COUNTER.VALUE_DATA_PROPERTY);
             counter.addData(COUNTER.VALUE_DATA_PROPERTY,current_count+1);
             counter.writeSemantic();
+            counter.saveOntology(EPISODIC_ONTO_FILE);
 
             return Prefix +current_count;
         }
@@ -554,6 +556,7 @@ public interface MemoryInterface
             ArrayList<EpisodicPrimitive> Primitives = new ArrayList<>();
             for (Atom a : object){
                 if(a.getType().equals(CLASS.SPHERE)){
+                    System.out.println("inside the class sphere");
                     EpisodicSphere s= new EpisodicSphere(memory.ComputeName(CLASS.SPHERE,ontoRef),ontoRef);
                     s.setColor(a.getColor());
                     s.setRadius(a.getCoefficients().get(0));
