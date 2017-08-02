@@ -13,7 +13,7 @@ import org.ros.namespace.GraphName;
 import org.ros.node.AbstractNodeMain;
 import org.ros.node.Node;
 import org.ros.node.parameter.ParameterTree;
-
+import java.util.Set;
 
 import it.emarolab.amor.owlInterface.OWLReferences;
 import it.emarolab.amor.owlInterface.OWLReferencesInterface;
@@ -181,7 +181,9 @@ public interface ScoreJAVAInterface
             scoreSemantic.readSemantic();
             //updating The score of the belonging individuals
             System.out.println("updating score of the belonging individual for the semantic item "+Name);
-            for (String s : belongingIndividuals) {
+            Set<String> BI= new HashSet<>();
+            BI.addAll(belongingIndividuals);
+            for (String s : BI) {
                 EpisodicScore ep = new EpisodicScore(s, ontoRef);
                 ArrayList<Float> values=ep.episodicSemanticRetrieval();
                 updateSemanticFromIndividual(values.get(0),values.get(1));
@@ -1173,6 +1175,7 @@ public interface ScoreJAVAInterface
         public void deleteEpisodic() {
             //for each episodic element that must be deleted
             for (String name : forgotEpisodic) {
+                System.out.println(name);
                 //declaration of the object
                 EpisodicScore ind = new EpisodicScore(name, ontoRef);
                 ind.forgetItem();
@@ -1297,6 +1300,16 @@ public interface ScoreJAVAInterface
             commonElementsEpisodic.addAll(toBeForgottenEpisodic);
             commonElementsEpisodic.retainAll(forgotEpisodic);
             toBeForgottenEpisodic.removeAll(commonElementsEpisodic);
+            System.out.println("IMPROTANT");
+            System.out.println("toBeForgotten");
+            System.out.println(toBeForgottenEpisodic);
+            System.out.println(toBeForgottenSemantic);
+            System.out.println("forgot");
+            System.out.println(forgotEpisodic);
+            System.out.println(forgotSemantic);
+            System.out.println("lowScore");
+            System.out.println(lowScoreEpisodic);
+            System.out.println(lowScoreSemantic);
         }
 
         /**

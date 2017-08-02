@@ -674,6 +674,8 @@ public interface MemoryInterface
         }
         public static List<String> RetrievalSemanticEpisodic(List<String> classes, OWLReferences ontoRef,Set<String> forgotten ){
             List<String > individuals = new ArrayList<>();
+            System.out.println("IMPORTANT.INSIDE RETRIEVAL EPISODIC FROM SEMANTIC");
+            System.out.println("ontology"+ontoRef);
             for (String s : classes) {
                 if (!s.equals("owlNothing")) {
                     //defining the ontological class
