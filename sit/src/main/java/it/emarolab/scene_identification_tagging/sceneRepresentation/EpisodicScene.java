@@ -133,6 +133,10 @@ public class EpisodicScene implements SITBase{
             MORFullIndividual ind= new MORFullIndividual(i,ontoRef);
             ontoRef.synchronizeReasoner();
             ind.readSemantic();
+            System.out.println("IMPORTANTE");
+            System.out.println(ind);
+            System.out.println(description);
+            System.out.println(ColorDescription);
             if((description.size()+ColorDescription.size())==countNumberOfRelations(ind)) {
                 System.out.println("inside the if sizes are equal ");
                 count = countNumberOfEqualObjectProperty(description, ind, ontoRef);

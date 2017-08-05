@@ -982,6 +982,7 @@ public interface ScoreJAVAInterface
             scoreEpisodic.readSemantic();
             //update total episodic score
             updateTotalEpisodicScore(scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat(), 0);
+            UpdateSemanticItem();
             //update semantic item
             SemanticItem.deleteEpisodicItem(this.Name, scoreEpisodic.getLiteral(SCORE.SCORE_PROP_HAS_SCORE).parseFloat());
             //remove individual

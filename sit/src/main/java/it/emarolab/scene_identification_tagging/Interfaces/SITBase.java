@@ -637,6 +637,9 @@ public interface SITBase {
         float INCREMENT_ONE=(float) 0.1;
         float INCREMENT_TWO=(float) 0.2;
         float INCREMENT_THREE=(float) 0.4;
+        float FIRST_THRESHOLD=(float) 0.5;   //1.0
+        float SECOND_THRESHOLD=(float) 1.0; //2.0
+        float THIRD_THRESHOLD=(float) 1.5;  //3.0
 
 
     }

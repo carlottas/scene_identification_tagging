@@ -704,22 +704,22 @@ public interface MemoryInterface
             ind.readSemantic();
             float counter = ind.getLiteral(FORGETTING.NAME_DATA_PROPERTY_RETRIEVAL_FORGOT).parseFloat();
             float newCounter = 0;
-            if (counter<1){
+            if (counter<FORGETTING.FIRST_THRESHOLD){
                 newCounter=counter+FORGETTING.INCREMENT_ONE;
-                if (newCounter>=1){
+                if (newCounter>=FORGETTING.FIRST_THRESHOLD){
                     resetCounter.add(Name);
 
                 }
 
             }
-            else if (counter<2 && counter>=1){
+            else if (counter<FORGETTING.SECOND_THRESHOLD && counter>=FORGETTING.FIRST_THRESHOLD){
                 newCounter=counter+FORGETTING.INCREMENT_TWO;
-                if(newCounter>=2){
+                if(newCounter>=FORGETTING.SECOND_THRESHOLD){
                     resetCounter.add(Name);
                 }
 
             }
-            else if (counter<3&&counter>=2){
+            else if (counter<FORGETTING.THIRD_THRESHOLD &&counter>=FORGETTING.SECOND_THRESHOLD){
                 newCounter=counter+FORGETTING.INCREMENT_THREE;
                 if(newCounter>=3){
                     userNoForget.add(Name);
